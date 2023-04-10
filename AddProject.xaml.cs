@@ -20,13 +20,12 @@ namespace WpfTaskManager
     /// </summary>
     public partial class AddProject : Window
     {
-        AppContext db;
+        AppContext db = new AppContext();
 
         public AddProject()
         {
             InitializeComponent();
 
-            db = new AppContext();
             Deadline_datepicker.BlackoutDates.AddDatesInPast();
         }
 
@@ -40,7 +39,6 @@ namespace WpfTaskManager
         {
             if (Name_textbox.Text.Trim().Length != 0 && Deadline_datepicker.Text.Trim().Length != 0)
             {
-                string deadline = string.Format("{0:yyyy-MM-dd}", Deadline_datepicker.SelectedDate);
                 bool isUnique = true;
 
                 foreach (Project pr in db.Projects)
@@ -57,11 +55,6 @@ namespace WpfTaskManager
 
                 if (isUnique)
                 {
-                    Project p = new Project(Name_textbox.Text.Trim(), Description_textbox.Text, deadline);
-
-                    db.Projects.Add(p);
-                    db.SaveChanges();
-
                     this.Owner.Opacity = 1;
                     this.DialogResult = true;
                 }

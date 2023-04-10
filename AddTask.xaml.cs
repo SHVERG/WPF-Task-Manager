@@ -48,12 +48,6 @@ namespace WpfTaskManager
         {
             if (Name_textbox.Text.Trim().Length != 0 && Deadline_datepicker.Text.Trim().Length != 0)
             {
-                string deadline = string.Format("{0:yyyy-MM-dd}", Deadline_datepicker.SelectedDate);
-                Task t = new Task(id, Name_textbox.Text.Trim(), Description_textbox.Text, deadline);
-
-                db.Tasks.Add(t);
-                db.SaveChanges();
-
                 this.Owner.Opacity = 1;
                 this.DialogResult = true;
             }

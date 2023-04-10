@@ -40,11 +40,30 @@
                             <MenuItem x:Name="Refresh_db_menuitem" 
                                 Header="Refresh" 
                                 Click="Refresh_db_menuitem_Click"/>
-                            <!--<Separator/>-->
+                            
+                            <MenuItem x:Name="AddProject_menuitem" 
+                                      Header="Add Project"
+                                      Click="AddProject_button_Click"/>
+                            <Separator/>
+                            
                             <MenuItem x:Name="Exit_menuitem" 
                                 Header="Exit" 
                                 Click="Exit_menuitem_Click"/>
                     
+                        </MenuItem>
+
+                        <MenuItem Header="Edit" FontWeight="SemiBold">
+
+                            <MenuItem x:Name="EditProject_menuitem"
+                                      Header="Edit Project"
+                                      IsEnabled="False"
+                                      Click="EditProject_menuitem_Click"/>
+
+                            <MenuItem x:Name="EditTask_menuitem"
+                                      Header="Edit Task"
+                                      IsEnabled="False"
+                                      Click="EditTask_menuitem_Click"/>
+
                         </MenuItem>
 
                         <MenuItem Header="About" FontWeight="SemiBold"/>
@@ -112,6 +131,7 @@
                             <ListBox x:Name="UncompProjs_listbox" 
                                      FontWeight="SemiBold"
                                      FontSize="12"
+                                     DisplayMemberPath="Name"
                                      SelectionChanged="Projs_listbox_SelectionChanged"/>
                         </ScrollViewer>
                     </Grid>
@@ -135,6 +155,7 @@
                             <ListBox x:Name="CompProjs_listbox" 
                                      FontWeight="SemiBold"
                                      FontSize="12"
+                                     DisplayMemberPath="Name"
                                      SelectionChanged="Projs_listbox_SelectionChanged"/>
                         </ScrollViewer>
                     </Grid>
@@ -200,6 +221,7 @@
                             <ListBox x:Name="Tasks_listbox"
                                      FontWeight="SemiBold"
                                      FontSize="12"
+                                     DisplayMemberPath="Name"
                                      SelectionChanged="Tasks_listbox_SelectionChanged"/>
                         </ScrollViewer>
                     </Grid>
