@@ -38,16 +38,19 @@
                        Foreground="{StaticResource PrimaryHueMidBrush}" 
                        FontWeight="Bold"
                        FontSize="14"/>
-                
-                <TextBox x:Name="Description_textbox" 
-                         VerticalContentAlignment="Top" 
-                         Background="WhiteSmoke" 
-                         FontWeight="SemiBold"
-                         FontSize="12"
-                         AcceptsReturn="True"
-                         AcceptsTab="True"
-                         Margin="10, 0"
-                         Height="235"/>
+
+                <ScrollViewer Margin="10, 0"
+                              Height="235">
+                    
+                    <TextBox x:Name="Description_textbox" 
+                             VerticalContentAlignment="Top" 
+                             Background="WhiteSmoke" 
+                             FontWeight="SemiBold"
+                             FontSize="12"
+                             AcceptsReturn="True"
+                             AcceptsTab="True"/>
+                    
+                </ScrollViewer>
                 
                 <Grid Margin="3">
                     <Grid.ColumnDefinitions>

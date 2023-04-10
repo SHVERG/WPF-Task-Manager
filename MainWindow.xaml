@@ -132,7 +132,15 @@
                                      FontWeight="SemiBold"
                                      FontSize="12"
                                      DisplayMemberPath="Name"
-                                     SelectionChanged="Projs_listbox_SelectionChanged"/>
+                                     SelectionChanged="Projs_listbox_SelectionChanged">
+
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem x:Name="EditUncompProject_contextmenuitem" Header="Edit" IsEnabled="False" Click="EditProject_menuitem_Click"/>
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+                                
+                            </ListBox>
                         </ScrollViewer>
                     </Grid>
                     
@@ -156,7 +164,15 @@
                                      FontWeight="SemiBold"
                                      FontSize="12"
                                      DisplayMemberPath="Name"
-                                     SelectionChanged="Projs_listbox_SelectionChanged"/>
+                                     SelectionChanged="Projs_listbox_SelectionChanged">
+
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem x:Name="EditCompProject_contextmenuitem" Header="Edit" IsEnabled="False" Click="EditProject_menuitem_Click"/>
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+                                
+                            </ListBox>
                         </ScrollViewer>
                     </Grid>
                     
@@ -222,7 +238,17 @@
                                      FontWeight="SemiBold"
                                      FontSize="12"
                                      DisplayMemberPath="Name"
-                                     SelectionChanged="Tasks_listbox_SelectionChanged"/>
+                                     SelectionChanged="Tasks_listbox_SelectionChanged">
+
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem x:Name="StartTask_contextmenuitem" Header="Start" IsEnabled="False"/>
+                                        <MenuItem x:Name="EditTask_contextmenuitem" Header="Edit" IsEnabled="False" Click="EditTask_menuitem_Click"/>
+                                        <MenuItem x:Name="CompleteTask_contextmenuitem" Header="Complete" IsEnabled="False" Click="CompleteTask_button_Click"/>
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+                                
+                            </ListBox>
                         </ScrollViewer>
                     </Grid>
                     

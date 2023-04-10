@@ -14,6 +14,7 @@ namespace WpfTaskManager
         public string Name { get; set; }
         public string Description { get; set; }
         public string Deadline { get; set; }
+        public string Completed { get; set; }
         public int State { get; set; }
         
         public Project() { }

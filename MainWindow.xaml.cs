@@ -61,6 +61,8 @@ namespace WpfTaskManager
         private void Refresh_db()
         {
 
+            Project sel = null;
+
             foreach (Project p in db.Projects)
             {
                 bool iscomp = true;
@@ -77,26 +79,79 @@ namespace WpfTaskManager
                 }
 
                 if (iscomp)
+                {
                     p.State = 1;
+
+                    DateTime date = DateTime.MinValue;
+                    DateTime taskdate = new DateTime();
+
+                    foreach (Task t in db.Tasks)
+                    {
+                        if (t.IdProject == p.IdProject)
+                            taskdate = DateTime.ParseExact(t.Completed, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+
+                        if (taskdate > date)
+                            date = taskdate;
+                    }
+
+                    p.Completed = string.Format("{0:yyyy-MM-dd}", date);
+                }
                 else
+                {
                     p.State = 0;
+
+                    p.Completed = null;
+                }
 
                 db.SaveChanges();
 
                 if (p.State == 0 && !uncomp_projects.Contains(p))
                 {
+                    if (CompProjs_listbox.SelectedItem == p)
+                        sel = p;
+
                     comp_projects.Remove(p);
                     uncomp_projects.Insert(0, p);
+
+                    UncompProjs_listbox.SelectedItem = sel;
                 }
                 else if (p.State == 1 && !comp_projects.Contains(p))
                 {
+                    if (UncompProjs_listbox.SelectedItem == p)
+                        sel = p;
+
                     uncomp_projects.Remove(p);
                     comp_projects.Insert(0, p);
+
+                    CompProjs_listbox.SelectedItem = sel;
                 }
             }
 
-            UncompProjs_listbox.Items.Refresh();
-            CompProjs_listbox.Items.Refresh();
+            if (UncompProjs_listbox.SelectedItem != null)
+            {
+                Project p = UncompProjs_listbox.SelectedItem as Project;
+                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline} ({DaysLeft(p.Deadline)})";
+            }
+            else if (CompProjs_listbox.SelectedItem != null)
+            {
+                Project p = CompProjs_listbox.SelectedItem as Project;
+                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline} ({DaysLeft(p.Deadline)})";
+            }
+
+            if (Tasks_listbox.SelectedItem != null)
+            {
+                Task t = Tasks_listbox.SelectedItem as Task;
+
+                string state;
+
+                if (t.State == 0)
+                    state = "Uncompleted";
+                else
+                    state = $"Completed ({t.Completed})";
+
+                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
+            }
+
         }
 
         // Обновление списка задач выбранного проекта
@@ -162,9 +217,17 @@ namespace WpfTaskManager
             if (lb.SelectedIndex != -1)
             {
                 if (lb == UncompProjs_listbox)
+                {
+                    EditUncompProject_contextmenuitem.IsEnabled = true;
+                    EditCompProject_contextmenuitem.IsEnabled = false;
                     CompProjs_listbox.SelectedIndex = -1;
+                }
                 else
+                {
+                    EditCompProject_contextmenuitem.IsEnabled = true;
+                    EditUncompProject_contextmenuitem.IsEnabled = false;
                     UncompProjs_listbox.SelectedIndex = -1;
+                }
 
                 Project p = (Project)lb.SelectedItem;
 
@@ -181,6 +244,8 @@ namespace WpfTaskManager
             {
                 AddTask_button.IsEnabled = false;
                 EditProject_menuitem.IsEnabled = false;
+                EditCompProject_contextmenuitem.IsEnabled = false;
+                EditUncompProject_contextmenuitem.IsEnabled = false;
             }
         }
 
@@ -221,7 +286,7 @@ namespace WpfTaskManager
                 if (t.State == 0)
                     state = "Uncompleted";
                 else
-                    state = "Completed";
+                    state = $"Completed ({t.Completed})";
 
                 TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
 
@@ -230,12 +295,20 @@ namespace WpfTaskManager
                     CompleteTask_button.IsEnabled = true;
                     StartTask_button.IsEnabled = true;
                     EditTask_menuitem.IsEnabled = true;
+
+                    CompleteTask_contextmenuitem.IsEnabled = true;
+                    StartTask_contextmenuitem.IsEnabled = true;
+                    EditTask_contextmenuitem.IsEnabled = true;
                 }
                 else
                 {
                     CompleteTask_button.IsEnabled = false;
                     StartTask_button.IsEnabled = false;
                     EditTask_menuitem.IsEnabled = false;
+
+                    CompleteTask_contextmenuitem.IsEnabled = false;
+                    StartTask_contextmenuitem.IsEnabled = false;
+                    EditTask_contextmenuitem.IsEnabled = false;
                 }
             }
             else
@@ -243,13 +316,21 @@ namespace WpfTaskManager
                 CompleteTask_button.IsEnabled = false;
                 StartTask_button.IsEnabled = false;
                 EditTask_menuitem.IsEnabled = false;
+
+                CompleteTask_contextmenuitem.IsEnabled = false;
+                StartTask_contextmenuitem.IsEnabled = false;
+                EditTask_contextmenuitem.IsEnabled = false;
             }
         }
 
         // Событие для кнопки завершения задачи
         private void CompleteTask_button_Click(object sender, RoutedEventArgs e)
         {
-
+            Task t = db.Tasks.Find(((Task)Tasks_listbox.SelectedItem).IdTask);
+            t.State = 1;
+            t.Completed = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+            db.SaveChanges();
+            Refresh_db();
         }
 
         // Событие для кнопки редактирования проекта
@@ -276,8 +357,6 @@ namespace WpfTaskManager
                 db.SaveChanges();
 
                 Refresh_db();
-
-                ProjectInfo_textbox.Text = $"Name: {edit.Name}\n\nDescription: {edit.Description}\n\nDeadline: {edit.Deadline} ({DaysLeft(edit.Deadline)})";
             }
         }
 
@@ -296,21 +375,12 @@ namespace WpfTaskManager
 
                 Task edit = db.Tasks.Find(t.IdTask);
 
-                string state;
-
-                if (edit.State == 0)
-                    state = "Uncompleted";
-                else
-                    state = "Completed";
-
                 edit.Name = w.Name_textbox.Text.Trim();
                 edit.Description = w.Description_textbox.Text.Trim();
 
                 db.SaveChanges();
 
                 Refresh_db();
-
-                TaskInfo_textbox.Text = $"Name: {edit.Name}\n\nDescription: {edit.Description}\n\nDeadline: {edit.Deadline} ({DaysLeft(edit.Deadline)})\n\nState: {state}\n\nTime spent: {edit.Timespent}";
             }
         }
 
