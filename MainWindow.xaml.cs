@@ -1,21 +1,10 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Configuration;
-using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WpfTaskManager
 {
@@ -88,13 +77,13 @@ namespace WpfTaskManager
                     foreach (Task t in db.Tasks)
                     {
                         if (t.IdProject == p.IdProject)
-                            taskdate = DateTime.ParseExact(t.Completed, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                            taskdate = (DateTime)t.Completed;
 
                         if (taskdate > date)
                             date = taskdate;
                     }
 
-                    p.Completed = string.Format("{0:yyyy-MM-dd}", date);
+                    p.Completed = date;
                 }
                 else
                 {
@@ -130,12 +119,12 @@ namespace WpfTaskManager
             if (UncompProjs_listbox.SelectedItem != null)
             {
                 Project p = UncompProjs_listbox.SelectedItem as Project;
-                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline} ({DaysLeft(p.Deadline)})";
+                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {string.Format("{0:dd.MM.yyyy}", p.Deadline)} ({DaysLeft(p.Deadline)})";
             }
             else if (CompProjs_listbox.SelectedItem != null)
             {
                 Project p = CompProjs_listbox.SelectedItem as Project;
-                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline} ({DaysLeft(p.Deadline)})";
+                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {string.Format("{0:dd.MM.yyyy}", p.Deadline)} ({DaysLeft(p.Deadline)})";
             }
 
             if (Tasks_listbox.SelectedItem != null)
@@ -149,7 +138,7 @@ namespace WpfTaskManager
                 else
                     state = $"Completed ({t.Completed})";
 
-                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
+                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {string.Format("{0:dd.MM.yyyy}", t.Deadline)} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
             }
 
         }
@@ -171,10 +160,8 @@ namespace WpfTaskManager
         }
 
         // Рассчет оставшегося времени до дедлайна в днях
-        private string DaysLeft(string deadline_string)
+        private string DaysLeft(DateTime deadline)
         {
-            DateTime deadline = DateTime.ParseExact(deadline_string, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-
             if (deadline.AddDays(1) > DateTime.Now)
                 return (deadline - DateTime.Now).Days.ToString() + " day(s) left";
             else
@@ -197,8 +184,7 @@ namespace WpfTaskManager
 
             if (w.DialogResult.Value)
             {
-                string deadline = string.Format("{0:yyyy-MM-dd}", w.Deadline_datepicker.SelectedDate);
-                Project p = new Project(w.Name_textbox.Text.Trim(), w.Description_textbox.Text, deadline);
+                Project p = new Project(w.Name_textbox.Text.Trim(), w.Description_textbox.Text, (DateTime)w.Deadline_datepicker.SelectedDate);
 
                 db.Projects.Add(p);
                 db.SaveChanges();
@@ -233,7 +219,7 @@ namespace WpfTaskManager
 
                 idProj = p.IdProject;
 
-                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline} ({DaysLeft(p.Deadline)})";
+                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {string.Format("{0:dd.MM.yyyy}", p.Deadline)} ({DaysLeft(p.Deadline)})";
 
                 Refresh_tasks(p);
 
@@ -259,9 +245,7 @@ namespace WpfTaskManager
 
             if (w.DialogResult.Value)
             {
-
-                string deadline = string.Format("{0:yyyy-MM-dd}", w.Deadline_datepicker.SelectedDate);
-                Task t = new Task(idProj, w.Name_textbox.Text.Trim(), w.Description_textbox.Text, deadline);
+                Task t = new Task(idProj, w.Name_textbox.Text.Trim(), w.Description_textbox.Text, (DateTime)w.Deadline_datepicker.SelectedDate);
 
                 db.Tasks.Add(t);
                 db.SaveChanges();
@@ -288,7 +272,7 @@ namespace WpfTaskManager
                 else
                     state = $"Completed ({t.Completed})";
 
-                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
+                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {string.Format("{0:dd.MM.yyyy}", t.Deadline)} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
 
                 if (t.State == 0)
                 {
@@ -328,7 +312,7 @@ namespace WpfTaskManager
         {
             Task t = db.Tasks.Find(((Task)Tasks_listbox.SelectedItem).IdTask);
             t.State = 1;
-            t.Completed = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
+            t.Completed = DateTime.Now.Date;
             db.SaveChanges();
             Refresh_db();
         }

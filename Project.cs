@@ -13,20 +13,20 @@ namespace WpfTaskManager
         [Key] public int IdProject { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Deadline { get; set; }
-        public string Completed { get; set; }
+        public DateTime Deadline { get; set; }
+        public DateTime? Completed { get; set; }
         public int State { get; set; }
         
         public Project() { }
         
-        public Project(string name, string description, string deadline)
+        public Project(string name, string description, DateTime deadline)
         {
             Name = name;
             Description = description;
             Deadline = deadline;
         }
 
-        public Project(string name, string deadline)
+        public Project(string name, DateTime deadline)
         {
             Name = name;
             Description = null;
