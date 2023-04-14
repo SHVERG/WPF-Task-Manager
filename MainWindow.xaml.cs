@@ -119,12 +119,12 @@ namespace WpfTaskManager
             if (UncompProjs_listbox.SelectedItem != null)
             {
                 Project p = UncompProjs_listbox.SelectedItem as Project;
-                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {string.Format("{0:dd.MM.yyyy}", p.Deadline)} ({DaysLeft(p.Deadline)})";
+                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} ({DaysLeft(p.Deadline)})";
             }
             else if (CompProjs_listbox.SelectedItem != null)
             {
                 Project p = CompProjs_listbox.SelectedItem as Project;
-                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {string.Format("{0:dd.MM.yyyy}", p.Deadline)} ({DaysLeft(p.Deadline)})";
+                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} ({DaysLeft(p.Deadline)})";
             }
 
             if (Tasks_listbox.SelectedItem != null)
@@ -138,7 +138,7 @@ namespace WpfTaskManager
                 else
                     state = $"Completed ({t.Completed})";
 
-                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {string.Format("{0:dd.MM.yyyy}", t.Deadline)} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
+                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline.ToShortDateString()} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
             }
 
         }
@@ -219,7 +219,7 @@ namespace WpfTaskManager
 
                 idProj = p.IdProject;
 
-                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {string.Format("{0:dd.MM.yyyy}", p.Deadline)} ({DaysLeft(p.Deadline)})";
+                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} ({DaysLeft(p.Deadline)})";
 
                 Refresh_tasks(p);
 
@@ -270,9 +270,9 @@ namespace WpfTaskManager
                 if (t.State == 0)
                     state = "Uncompleted";
                 else
-                    state = $"Completed ({t.Completed})";
+                    state = $"Completed ({((DateTime)t.Completed).ToShortDateString()})";
 
-                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {string.Format("{0:dd.MM.yyyy}", t.Deadline)} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
+                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline.ToShortDateString()} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
 
                 if (t.State == 0)
                 {
@@ -288,11 +288,11 @@ namespace WpfTaskManager
                 {
                     CompleteTask_button.IsEnabled = false;
                     StartTask_button.IsEnabled = false;
-                    EditTask_menuitem.IsEnabled = false;
+                    EditTask_menuitem.IsEnabled = true;
 
                     CompleteTask_contextmenuitem.IsEnabled = false;
                     StartTask_contextmenuitem.IsEnabled = false;
-                    EditTask_contextmenuitem.IsEnabled = false;
+                    EditTask_contextmenuitem.IsEnabled = true;
                 }
             }
             else
@@ -315,6 +315,12 @@ namespace WpfTaskManager
             t.Completed = DateTime.Now.Date;
             db.SaveChanges();
             Refresh_db();
+
+            CompleteTask_button.IsEnabled = false;
+            StartTask_button.IsEnabled = false;
+            
+            CompleteTask_contextmenuitem.IsEnabled = false;
+            StartTask_contextmenuitem.IsEnabled = false;
         }
 
         // Событие для кнопки редактирования проекта
@@ -371,7 +377,10 @@ namespace WpfTaskManager
         // Перемещение окна
         private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if (e.ClickCount == 2)
+                Restore_button_Click(null, null);
+            else
+                this.DragMove();
         }
 
         // Выход из приложения
@@ -386,5 +395,20 @@ namespace WpfTaskManager
             this.WindowState = WindowState.Minimized;
         }
 
+        private void Restore_button_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Normal)
+                this.WindowState = WindowState.Maximized;
+            else
+                this.WindowState = WindowState.Normal;
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == WindowState.Normal)
+                Restore_button.Content = "1";
+            else
+                Restore_button.Content = "2";
+        }
     }
 }

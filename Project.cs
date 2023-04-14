@@ -13,7 +13,9 @@ namespace WpfTaskManager
         [Key] public int IdProject { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        [DataType(DataType.Date)]
         public DateTime Deadline { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? Completed { get; set; }
         public int State { get; set; }
         
