@@ -17,7 +17,6 @@ namespace WpfTaskManager
         public DateTime Deadline { get; set; }
         [DataType(DataType.Date)]
         public DateTime? Completed { get; set; }
-        public int State { get; set; }
         
         public Project() { }
         

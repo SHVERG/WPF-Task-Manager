@@ -110,6 +110,8 @@
 
                         </MenuItem>
 
+                        <MenuItem Header="Report" FontWeight="SemiBold"/>
+
                         <MenuItem Header="About" FontWeight="SemiBold"/>
                 
                     </Menu>

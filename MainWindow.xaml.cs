@@ -16,11 +16,9 @@ namespace WpfTaskManager
         // Для работы с БД
         AppContext db = new AppContext();
 
-        ObservableCollection<Project> projects;
         ObservableCollection<Project> uncomp_projects = new ObservableCollection<Project>();
         ObservableCollection<Project> comp_projects = new ObservableCollection<Project>();
 
-        ObservableCollection<Task> tasks;
         ObservableCollection<Task> proj_tasks = new ObservableCollection<Task>();
 
         // id выделенного проекта
@@ -36,9 +34,6 @@ namespace WpfTaskManager
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            projects = new ObservableCollection<Project>(db.Projects);
-            tasks = new ObservableCollection<Task>(db.Tasks);
-
             UncompProjs_listbox.ItemsSource = uncomp_projects;
             CompProjs_listbox.ItemsSource = comp_projects;
             Tasks_listbox.ItemsSource = proj_tasks;
@@ -63,14 +58,12 @@ namespace WpfTaskManager
 
                 foreach (Task t in db.Tasks)
                 {
-                    if (t.IdProject == p.IdProject && t.State == 0)
+                    if (t.IdProject == p.IdProject && t.Completed == null)
                         iscomp = false;
                 }
 
                 if (iscomp)
                 {
-                    p.State = 1;
-
                     DateTime date = DateTime.MinValue;
                     DateTime taskdate = new DateTime();
 
@@ -87,14 +80,12 @@ namespace WpfTaskManager
                 }
                 else
                 {
-                    p.State = 0;
-
                     p.Completed = null;
                 }
 
                 db.SaveChanges();
 
-                if (p.State == 0 && !uncomp_projects.Contains(p))
+                if (p.Completed == null && !uncomp_projects.Contains(p))
                 {
                     if (CompProjs_listbox.SelectedItem == p)
                         sel = p;
@@ -104,7 +95,7 @@ namespace WpfTaskManager
 
                     UncompProjs_listbox.SelectedItem = sel;
                 }
-                else if (p.State == 1 && !comp_projects.Contains(p))
+                else if (p.Completed != null && !comp_projects.Contains(p))
                 {
                     if (UncompProjs_listbox.SelectedItem == p)
                         sel = p;
@@ -119,12 +110,12 @@ namespace WpfTaskManager
             if (UncompProjs_listbox.SelectedItem != null)
             {
                 Project p = UncompProjs_listbox.SelectedItem as Project;
-                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} ({DaysLeft(p.Deadline)})";
+                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} {p.Deadline.ToShortTimeString()}\n({DaysLeft(p.Deadline)})";
             }
             else if (CompProjs_listbox.SelectedItem != null)
             {
                 Project p = CompProjs_listbox.SelectedItem as Project;
-                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} ({DaysLeft(p.Deadline)})";
+                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} {p.Deadline.ToShortTimeString()}\n({DaysLeft(p.Deadline)})";
             }
 
             if (Tasks_listbox.SelectedItem != null)
@@ -133,12 +124,12 @@ namespace WpfTaskManager
 
                 string state;
 
-                if (t.State == 0)
+                if (t.Completed == null)
                     state = "Uncompleted";
                 else
                     state = $"Completed ({t.Completed})";
 
-                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline.ToShortDateString()} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
+                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline.ToShortDateString()} {t.Deadline.ToShortTimeString()}\n({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
             }
 
         }
@@ -162,8 +153,8 @@ namespace WpfTaskManager
         // Рассчет оставшегося времени до дедлайна в днях
         private string DaysLeft(DateTime deadline)
         {
-            if (deadline.AddDays(1) > DateTime.Now)
-                return (deadline - DateTime.Now).Days.ToString() + " day(s) left";
+            if (deadline > DateTime.Now)
+                return (deadline - DateTime.Now).Days.ToString() + " day(s) " + (deadline - DateTime.Now).Hours + " hour(s) " + (deadline - DateTime.Now).Minutes + " minute(s) left";
             else
                 return "Expired";
         }
@@ -184,8 +175,17 @@ namespace WpfTaskManager
 
             if (w.DialogResult.Value)
             {
-                Project p = new Project(w.Name_textbox.Text.Trim(), w.Description_textbox.Text, (DateTime)w.Deadline_datepicker.SelectedDate);
+                TimeSpan time = new TimeSpan(23, 59, 59);
 
+                if (w.Deadline_timepicker.SelectedTime != null)
+                {
+                    time = ((DateTime)w.Deadline_timepicker.SelectedTime).TimeOfDay;
+                }
+
+                DateTime date = ((DateTime)w.Deadline_datepicker.SelectedDate).Add(time);
+                
+                Project p = new Project(w.Name_textbox.Text.Trim(), w.Description_textbox.Text, date);
+                
                 db.Projects.Add(p);
                 db.SaveChanges();
 
@@ -219,7 +219,7 @@ namespace WpfTaskManager
 
                 idProj = p.IdProject;
 
-                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} ({DaysLeft(p.Deadline)})";
+                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} {p.Deadline.ToShortTimeString()}\n({DaysLeft(p.Deadline)})";
 
                 Refresh_tasks(p);
 
@@ -245,7 +245,16 @@ namespace WpfTaskManager
 
             if (w.DialogResult.Value)
             {
-                Task t = new Task(idProj, w.Name_textbox.Text.Trim(), w.Description_textbox.Text, (DateTime)w.Deadline_datepicker.SelectedDate);
+                TimeSpan time = new TimeSpan(23, 59, 59);
+
+                if (w.Deadline_timepicker.SelectedTime != null)
+                {
+                    time = ((DateTime)w.Deadline_timepicker.SelectedTime).TimeOfDay;
+                }
+
+                DateTime date = ((DateTime)w.Deadline_datepicker.SelectedDate).Add(time);
+
+                Task t = new Task(idProj, w.Name_textbox.Text.Trim(), w.Description_textbox.Text, date);
 
                 db.Tasks.Add(t);
                 db.SaveChanges();
@@ -255,7 +264,6 @@ namespace WpfTaskManager
                 Refresh_tasks(db.Projects.Find(idProj));
 
                 Tasks_listbox.SelectedItem = t;
-
             }
         }
 
@@ -267,14 +275,14 @@ namespace WpfTaskManager
                 Task t = (Task)Tasks_listbox.SelectedItem;
                 string state;
 
-                if (t.State == 0)
+                if (t.Completed == null)
                     state = "Uncompleted";
                 else
                     state = $"Completed ({((DateTime)t.Completed).ToShortDateString()})";
 
-                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline.ToShortDateString()} ({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
+                TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline.ToShortDateString()} {t.Deadline.ToShortTimeString()}\n({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
 
-                if (t.State == 0)
+                if (t.Completed == null)
                 {
                     CompleteTask_button.IsEnabled = true;
                     StartTask_button.IsEnabled = true;
@@ -311,7 +319,6 @@ namespace WpfTaskManager
         private void CompleteTask_button_Click(object sender, RoutedEventArgs e)
         {
             Task t = db.Tasks.Find(((Task)Tasks_listbox.SelectedItem).IdTask);
-            t.State = 1;
             t.Completed = DateTime.Now.Date;
             db.SaveChanges();
             Refresh_db();
