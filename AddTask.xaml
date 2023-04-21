@@ -32,6 +32,7 @@
                          Background="WhiteSmoke"
                          FontWeight="SemiBold"
                          FontSize="12"
+                         TextChanged="NameChanged"
                          Margin="10, 0"/>
 
                 <Label Content="DESCRIPTION" 
@@ -63,6 +64,7 @@
                     <DatePicker x:Name="Deadline_datepicker"  
                                 FontWeight="SemiBold"
                                 FontSize="12"
+                                SelectedDateChanged="Deadline_SelectedDateChanged"
                                 FirstDayOfWeek="Monday"/>
 
                     <materialDesign:TimePicker x:Name="Deadline_timepicker" 
@@ -88,6 +90,7 @@
                             Content="ADD TASK" 
                             Margin="20, 0" 
                             Width="150" 
+                            IsEnabled="False"
                             Click="AddTask_button_Click"/>
 
                 </StackPanel>

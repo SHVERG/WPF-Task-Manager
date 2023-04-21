@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -51,96 +52,91 @@ namespace WpfTaskManager
         {
             projs.Clear();
             tasks.Clear();
+        
+            string comp;
 
-            if (StartDate.SelectedDate != null && EndDate.SelectedDate != null)
+            foreach (Project p in db.Projects)
             {
-                string comp;
-
-                foreach (Project p in db.Projects)
+                if (p.Deadline >= StartDate.SelectedDate && p.Deadline <= EndDate.SelectedDate)
                 {
-                    if (p.Deadline >= StartDate.SelectedDate && p.Deadline <= EndDate.SelectedDate)
+                    if (ProjectsBox.SelectedIndex == 0)
                     {
-                        if (ProjectsBox.SelectedIndex == 0)
+                        if (p.Completed != null)
                         {
-                            if (p.Completed != null)
-                            {
-                                if (p.Completed > p.Deadline)
-                                    comp = "Completed in bad time";
-                                else
-                                    comp = "Completed in time";
-                            }
-                            else 
-                                comp = "Not completed";
+                            if (p.Completed > p.Deadline)
+                                comp = "Completed in bad time";
+                            else
+                                comp = "Completed in time";
+                        }
+                        else 
+                            comp = "Not completed";
+
+                        projs.Add(new ReportProject(p.Name, p.Deadline, comp));
+                    }
+                    else if (ProjectsBox.SelectedIndex == 1)
+                    {
+                        if (p.Completed != null)
+                        {
+                            if (p.Completed > p.Deadline)
+                                comp = "Completed in bad time";
+                            else
+                                comp = "Completed in time";
 
                             projs.Add(new ReportProject(p.Name, p.Deadline, comp));
                         }
-                        else if (ProjectsBox.SelectedIndex == 1)
-                        {
-                            if (p.Completed != null)
-                            {
-                                if (p.Completed > p.Deadline)
-                                    comp = "Completed in bad time";
-                                else
-                                    comp = "Completed in time";
-
-                                projs.Add(new ReportProject(p.Name, p.Deadline, comp));
-                            }
-                        }
-                        else
-                        {
-                            if (p.Completed == null)
-                            {
-                                comp = "Not completed";
-                                projs.Add(new ReportProject(p.Name, p.Deadline, comp));
-                            }
-                        }
                     }
-                }
-
-                foreach (Task t in db.Tasks)
-                {
-                    if (t.Deadline >= StartDate.SelectedDate && t.Deadline <= EndDate.SelectedDate)
+                    else
                     {
-                        if (ProjectsBox.SelectedIndex == 0)
-                        {
-                            if (t.Completed != null)
-                            {
-                                if (t.Completed > t.Deadline)
-                                    comp = "Completed in bad time";
-                                else
-                                    comp = "Completed in time";
-                            }
-                            else
-                                comp = "Not completed";
-
-                            tasks.Add(new ReportTask(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, comp));
-                        }
-                        else if (ProjectsBox.SelectedIndex == 1)
-                        {
-                            if (t.Completed != null)
-                            {
-                                if (t.Completed > t.Deadline)
-                                    comp = "Completed in bad time";
-                                else
-                                    comp = "Completed in time";
-
-                                tasks.Add(new ReportTask(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, comp));
-                            }
-                        }
-                        else
+                        if (p.Completed == null)
                         {
                             comp = "Not completed";
-                            tasks.Add(new ReportTask(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, comp));
+                            projs.Add(new ReportProject(p.Name, p.Deadline, comp));
                         }
                     }
                 }
             }
-            else
+
+            foreach (Task t in db.Tasks)
             {
-                MessageBox mb = new MessageBox();
-                mb.Owner = this;
-                mb.Show("Error!", "\"Start Date\" or \"End Date\" fields are not filled!", MessageBoxButton.OK); 
+                if (t.Deadline >= StartDate.SelectedDate && t.Deadline <= EndDate.SelectedDate)
+                {
+                    if (ProjectsBox.SelectedIndex == 0)
+                    {
+                        if (t.Completed != null)
+                        {
+                            if (t.Completed > t.Deadline)
+                                comp = "Completed in bad time";
+                            else
+                                comp = "Completed in time";
+                        }
+                        else
+                            comp = "Not completed";
+
+                        tasks.Add(new ReportTask(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, comp));
+                    }
+                    else if (ProjectsBox.SelectedIndex == 1)
+                    {
+                        if (t.Completed != null)
+                        {
+                            if (t.Completed > t.Deadline)
+                                comp = "Completed in bad time";
+                            else
+                                comp = "Completed in time";
+
+                            tasks.Add(new ReportTask(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, comp));
+                        }
+                    }
+                    else
+                    {
+                        comp = "Not completed";
+                        tasks.Add(new ReportTask(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, comp));
+                    }
+                }
             }
+            if (Report_datagrid.Items.Count > 0)
+                Save_button.IsEnabled = true;
+            else
+                Save_button.IsEnabled = false;
         }
 
         private void Save_button_Click(object sender, RoutedEventArgs e)
@@ -148,24 +144,24 @@ namespace WpfTaskManager
             SaveFileDialog save = new SaveFileDialog();
             save.Filter = "CSV file|*.csv";
 
-            save.ShowDialog();
-            IDataObject objectSave = Clipboard.GetDataObject();
-
-
-            Report_datagrid.SelectAllCells();
-            Report_datagrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader; 
-            ApplicationCommands.Copy.Execute(null, Report_datagrid);
-            Report_datagrid.UnselectAllCells();
-
-            string pattern = @"^;(.*)$";
-            //System.Windows.MessageBox.Show(Clipboard.GetText(TextDataFormat.Text));
-            string str = (Clipboard.GetText(TextDataFormat.Text)).Replace("\t", ";");
-            str = Regex.Replace(str, pattern, "$1", RegexOptions.Multiline);
-            File.WriteAllText(save.FileName, str, Encoding.UTF8);
-
-            if (objectSave != null)
+            if (save.ShowDialog() == true)
             {
-                Clipboard.SetDataObject(objectSave);
+                IDataObject objectSave = Clipboard.GetDataObject();
+
+                Report_datagrid.SelectAllCells();
+                Report_datagrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader; 
+                ApplicationCommands.Copy.Execute(null, Report_datagrid);
+                Report_datagrid.UnselectAllCells();
+
+                string pattern = @"^;(.*)$";
+                string str = (Clipboard.GetText(TextDataFormat.Text)).Replace("\t", ";");
+                str = Regex.Replace(str, pattern, "$1", RegexOptions.Multiline);
+                File.WriteAllText(save.FileName, str, Encoding.UTF8);
+
+                if (objectSave != null)
+                {
+                    Clipboard.SetDataObject(objectSave);
+                }
             }
 
         }
@@ -174,6 +170,14 @@ namespace WpfTaskManager
         {
             this.Owner.Opacity = 1;
             Close();
+        }
+
+        private void Date_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (StartDate.SelectedDate != null && EndDate.SelectedDate != null)
+                Show_button.IsEnabled = true;
+            else
+                Show_button.IsEnabled = false;
         }
     }
 }

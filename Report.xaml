@@ -50,13 +50,15 @@
                            Foreground="{StaticResource PrimaryHueMidBrush}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
-                    <DatePicker x:Name="StartDate"/>
+                    <DatePicker x:Name="StartDate" 
+                                SelectedDateChanged="Date_SelectedDateChanged"/>
 
                     <Label Content="Deadline End Date"
                            Foreground="{StaticResource PrimaryHueMidBrush}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
-                    <DatePicker x:Name="EndDate"/>
+                    <DatePicker x:Name="EndDate"
+                                SelectedDateChanged="Date_SelectedDateChanged"/>
                     
                 </StackPanel>
 
@@ -83,12 +85,14 @@
                             Content="SHOW" 
                             Margin="20, 0" 
                             Width="150" 
+                            IsEnabled="False"
                             Click="Show_button_Click"/>
 
                     <Button x:Name="Save_button" 
                             Content="SAVE AS..." 
                             Margin="20, 0" 
                             Width="150" 
+                            IsEnabled="False"
                             Click="Save_button_Click"/>
 
                 </StackPanel>

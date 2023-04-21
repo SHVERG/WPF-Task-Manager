@@ -32,7 +32,8 @@
                          Background="WhiteSmoke" 
                          FontWeight="SemiBold"
                          FontSize="12"
-                         Margin="10, 0"/>
+                         Margin="10, 0"
+                         TextChanged="NameChanged"/>
 
                 <Label Content="DESCRIPTION" 
                        HorizontalAlignment="Center" 
@@ -63,7 +64,8 @@
                     <DatePicker x:Name="Deadline_datepicker"  
                                 FontWeight="SemiBold"
                                 FontSize="12"
-                                FirstDayOfWeek="Monday"/>
+                                FirstDayOfWeek="Monday"
+                                SelectedDateChanged="Deadline_SelectedDateChanged"/>
 
                     <materialDesign:TimePicker x:Name="Deadline_timepicker" 
                                                 Grid.Column="1"
@@ -79,15 +81,16 @@
                             Margin="14">
 
                     <Button x:Name="Close_button" 
-                            Content="CLOSE" 
+                            Content="Close" 
                             Margin="20, 0" 
                             Width="150" 
                             Click="Close_button_Click"/>
 
                     <Button x:Name="AddProject_button" 
-                            Content="ADD PROJECT" 
+                            Content="Add Project" 
                             Margin="20, 0" 
                             Width="150" 
+                            IsEnabled="False"
                             Click="AddProject_button_Click"/>
 
                 </StackPanel>
