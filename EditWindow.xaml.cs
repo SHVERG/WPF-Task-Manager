@@ -66,27 +66,22 @@ namespace WpfTaskManager
 
         private void Edit_button_Click(object sender, RoutedEventArgs e)
         {
+            this.Owner.Opacity = 1;
+            this.DialogResult = true;
+        }
+
+        private void NameChanged(object sender, TextChangedEventArgs e)
+        {
             if (isProject)
             {
-                using (AppContext db  = new AppContext())
+                using (AppContext db = new AppContext())
                 {
-                    if (db.Projects.Where(x => x.IdProject != p.IdProject && x.Name == p.Name).Any())
-                    {
-                        MessageBox mb = new MessageBox();
-                        mb.Owner = this;
-                        mb.Show("Error!", "\"Name\" field must be unique!", MessageBoxButton.OK);
-                    }
+                    if (db.Projects.Where(x => x.IdProject != p.IdProject && x.Name == Name_textbox.Text.Trim()).Any())
+                        Edit_button.IsEnabled = false;
                     else
-                    {
-                        this.Owner.Opacity = 1;
-                        this.DialogResult = true;
-                    }
+                        Edit_button.IsEnabled = true;
                 }
-            }
-            else
-            {
-                this.Owner.Opacity = 1;
-                this.DialogResult = true;
+
             }
         }
     }

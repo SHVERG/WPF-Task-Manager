@@ -32,7 +32,8 @@
                          Background="WhiteSmoke"
                          FontWeight="SemiBold"
                          FontSize="12"
-                         Margin="10, 0"/>
+                         Margin="10, 0"
+                         TextChanged="NameChanged"/>
 
                 <Label Content="DESCRIPTION" 
                        HorizontalAlignment="Center" 
@@ -66,6 +67,7 @@
                             Content="EDIT " 
                             Margin="20, 0" 
                             Width="150" 
+                            IsEnabled="False"
                             Click="Edit_button_Click"/>
 
                 </StackPanel>
