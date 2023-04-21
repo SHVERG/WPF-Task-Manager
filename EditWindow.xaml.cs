@@ -39,13 +39,13 @@ namespace WpfTaskManager
 
             if (t != null)
             {
-                ChangeName("Task");
+                ChangeName("TASK");
                 Name_textbox.Text = t.Name;
                 Description_textbox.Text = t.Description;
             }
             else
             {
-                ChangeName("Project");
+                ChangeName("PROJECT");
                 Name_textbox.Text = p.Name;
                 Description_textbox.Text = p.Description;
                 isProject = true;

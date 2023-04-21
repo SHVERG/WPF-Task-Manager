@@ -20,9 +20,6 @@ namespace WpfTaskManager
         ObservableCollection<Project> comp_projects = new ObservableCollection<Project>();
 
         ObservableCollection<Task> proj_tasks = new ObservableCollection<Task>();
-
-        // id выделенного проекта
-        int idProj;
         
         // Конструктор
         public MainWindow()
@@ -132,6 +129,9 @@ namespace WpfTaskManager
                 TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline.ToShortDateString()} {t.Deadline.ToShortTimeString()}\n({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
             }
 
+            UncompProjs_listbox.Items.Refresh();
+            CompProjs_listbox.Items.Refresh();
+            Tasks_listbox.Items.Refresh();
         }
 
         // Обновление списка задач выбранного проекта
@@ -182,6 +182,14 @@ namespace WpfTaskManager
                     time = ((DateTime)w.Deadline_timepicker.SelectedTime).TimeOfDay;
                 }
 
+                if (w.Deadline_datepicker.SelectedDate == DateTime.Now.Date && time < DateTime.Now.TimeOfDay)
+                {
+                    MessageBox mb = new MessageBox();
+                    mb.Owner = this;
+                    mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
+                    return;
+                }
+
                 DateTime date = ((DateTime)w.Deadline_datepicker.SelectedDate).Add(time);
                 
                 Project p = new Project(w.Name_textbox.Text.Trim(), w.Description_textbox.Text, date);
@@ -217,8 +225,6 @@ namespace WpfTaskManager
 
                 Project p = (Project)lb.SelectedItem;
 
-                idProj = p.IdProject;
-
                 ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} {p.Deadline.ToShortTimeString()}\n({DaysLeft(p.Deadline)})";
 
                 Refresh_tasks(p);
@@ -235,10 +241,20 @@ namespace WpfTaskManager
             }
         }
 
+        private int idProj()
+        {
+            if (UncompProjs_listbox.SelectedIndex != -1)
+                return ((Project)UncompProjs_listbox.SelectedItem).IdProject;
+            else if (CompProjs_listbox.SelectedIndex != -1)
+                return ((Project)CompProjs_listbox.SelectedItem).IdProject;
+            else
+                return 0;
+        }
+
         // Событие для кнопки добавления задачи
         private void AddTask_button_Click(object sender, RoutedEventArgs e)
         {
-            AddTask w = new AddTask(idProj);
+            AddTask w = new AddTask(idProj());
             w.Owner = this;
             this.Opacity = 0.5;
             w.ShowDialog();
@@ -252,16 +268,27 @@ namespace WpfTaskManager
                     time = ((DateTime)w.Deadline_timepicker.SelectedTime).TimeOfDay;
                 }
 
+                if ( db.Projects.Find(idProj()).Deadline.Date == w.Deadline_datepicker.SelectedDate && time > db.Projects.Find(idProj()).Deadline.TimeOfDay)
+                    time = db.Projects.Find(idProj()).Deadline.TimeOfDay;
+                
+                if (w.Deadline_datepicker.SelectedDate == DateTime.Now.Date && time < DateTime.Now.TimeOfDay)
+                {
+                    MessageBox mb = new MessageBox();
+                    mb.Owner = this;
+                    mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
+                    return;
+                }
+
                 DateTime date = ((DateTime)w.Deadline_datepicker.SelectedDate).Add(time);
 
-                Task t = new Task(idProj, w.Name_textbox.Text.Trim(), w.Description_textbox.Text, date);
+                Task t = new Task(idProj(), w.Name_textbox.Text.Trim(), w.Description_textbox.Text, date);
 
                 db.Tasks.Add(t);
                 db.SaveChanges();
 
                 Refresh_db();
 
-                Refresh_tasks(db.Projects.Find(idProj));
+                Refresh_tasks(db.Projects.Find(idProj()));
 
                 Tasks_listbox.SelectedItem = t;
             }
@@ -319,7 +346,7 @@ namespace WpfTaskManager
         private void CompleteTask_button_Click(object sender, RoutedEventArgs e)
         {
             Task t = db.Tasks.Find(((Task)Tasks_listbox.SelectedItem).IdTask);
-            t.Completed = DateTime.Now.Date;
+            t.Completed = DateTime.Now;
             db.SaveChanges();
             Refresh_db();
 
@@ -369,7 +396,6 @@ namespace WpfTaskManager
 
             if (w.DialogResult.Value)
             {
-
                 Task edit = db.Tasks.Find(t.IdTask);
 
                 edit.Name = w.Name_textbox.Text.Trim();
@@ -379,6 +405,22 @@ namespace WpfTaskManager
 
                 Refresh_db();
             }
+        }
+
+        // События для меню отчета
+        private void ReportProject_menuitem_Click(object sender, RoutedEventArgs e)
+        {
+            Report w = new Report(true);
+            w.Owner = this;
+            this.Opacity = 0.5;
+            w.ShowDialog();
+        }
+        private void ReportTask_menuitem_Click(object sender, RoutedEventArgs e)
+        {
+            Report w = new Report(false);
+            w.Owner = this;
+            this.Opacity = 0.5;
+            w.ShowDialog();
         }
 
         // Перемещение окна
@@ -402,6 +444,7 @@ namespace WpfTaskManager
             this.WindowState = WindowState.Minimized;
         }
 
+        // Разворачивание на весь экран
         private void Restore_button_Click(object sender, RoutedEventArgs e)
         {
             if (this.WindowState == WindowState.Normal)
@@ -410,6 +453,7 @@ namespace WpfTaskManager
                 this.WindowState = WindowState.Normal;
         }
 
+        // Событие при изменении статуса окна
         private void Window_StateChanged(object sender, EventArgs e)
         {
             if (this.WindowState == WindowState.Normal)
@@ -417,5 +461,6 @@ namespace WpfTaskManager
             else
                 Restore_button.Content = "2";
         }
+
     }
 }

@@ -99,20 +99,30 @@
                         <MenuItem Header="Edit" FontWeight="SemiBold">
 
                             <MenuItem x:Name="EditProject_menuitem"
-                                      Header="Edit Project"
+                                      Header="Project"
                                       IsEnabled="False"
                                       Click="EditProject_menuitem_Click"/>
 
                             <MenuItem x:Name="EditTask_menuitem"
-                                      Header="Edit Task"
+                                      Header="Task"
                                       IsEnabled="False"
                                       Click="EditTask_menuitem_Click"/>
 
                         </MenuItem>
 
-                        <MenuItem Header="Report" FontWeight="SemiBold"/>
+                        <MenuItem Header="Report" FontWeight="SemiBold">
+                            <MenuItem x:Name="ReportProject_menuitem" 
+                                      Header="Project" 
+                                      Click="ReportProject_menuitem_Click"/>
+                            
+                            <MenuItem x:Name="ReportTask_menuitem" 
+                                      Header="Task"
+                                      Click="ReportTask_menuitem_Click"/>
+                        </MenuItem>
 
-                        <MenuItem Header="About" FontWeight="SemiBold"/>
+                        <MenuItem x:Name="About_menuitem"
+                                  Header="About"
+                                  FontWeight="SemiBold"/>
                 
                     </Menu>
                 </StackPanel>
@@ -176,7 +186,7 @@
                         Margin="3">
                     
                     <Grid>
-                        <Label Content="Uncompleted Projects" 
+                        <Label Content="UNCOMPLETED PROJECTS" 
                                HorizontalAlignment="Center" 
                                Foreground="{StaticResource PrimaryHueMidBrush}" 
                                FontWeight="Bold"
@@ -208,7 +218,7 @@
                         Margin="3">
                     
                     <Grid>
-                        <Label Content="Completed Projects" 
+                        <Label Content="COMPLETED PROJECTS" 
                                HorizontalAlignment="Center"  
                                Foreground="{StaticResource PrimaryHueMidBrush}" 
                                FontWeight="Bold"
@@ -235,7 +245,7 @@
 
                 <Button x:Name="AddProject_button" 
                         Grid.Row="2" 
-                        Content="Add Project" 
+                        Content="ADD PROJECT" 
                         VerticalContentAlignment="Top" 
                         Margin="3" 
                         Click="AddProject_button_Click"/>
@@ -258,11 +268,11 @@
                     
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="230"/>
-                            <RowDefinition/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="4*"/>
                         </Grid.RowDefinitions>
 
-                        <Label Content="Project Info" 
+                        <Label Content="PROJECT INFO" 
                                HorizontalAlignment="Center"  
                                Foreground="{StaticResource PrimaryHueMidBrush}" 
                                FontWeight="Bold"
@@ -279,7 +289,7 @@
                         </ScrollViewer>
 
                         <Label x:Name="Tasks_label" 
-                               Content="Tasks" 
+                               Content="TASKS" 
                                Grid.Row="1" 
                                HorizontalAlignment="Center"  
                                Foreground="{StaticResource PrimaryHueMidBrush}" 
@@ -311,7 +321,7 @@
 
                 <Button x:Name="AddTask_button" 
                         Grid.Row="1" 
-                        Content="Add Task" 
+                        Content="ADD TASK" 
                         IsEnabled="False" 
                         VerticalContentAlignment="Top" 
                         Margin="3" 
@@ -333,7 +343,7 @@
                         Margin="3">
                     
                     <Grid>
-                        <Label Content="Task Info" 
+                        <Label Content="TASK INFO" 
                                HorizontalAlignment="Center" 
                                Foreground="{StaticResource PrimaryHueMidBrush}" 
                                FontWeight="Bold"
@@ -357,24 +367,24 @@
                 <Grid x:Name="TaskEventButtons_brid" 
                       Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="4*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="StartTask_button" 
-                            Content="Start" 
-                            IsEnabled="False" 
-                            VerticalContentAlignment="Top" 
-                            Grid.Column="1" 
-                            Margin="3"/>
-                    
                     <Button x:Name="CompleteTask_button" 
-                            Content="Complete" 
+                            Content="COMPLETE TASK" 
                             IsEnabled="False" 
                             VerticalContentAlignment="Top" 
                             Grid.Column="0" 
                             Margin="3"
                             Click="CompleteTask_button_Click"/>
+                    
+                    <Button x:Name="StartTask_button" 
+                            Content="START TASK" 
+                            IsEnabled="False" 
+                            VerticalContentAlignment="Top" 
+                            Grid.Column="1"
+                            Margin="3"/>
                     
                 </Grid>
 

@@ -31,7 +31,7 @@ namespace WpfTaskManager
             db = new AppContext();
 
             CalendarDateRange range = new CalendarDateRange();
-            range.Start = db.Projects.Find(id).Deadline;
+            range.Start = db.Projects.Find(id).Deadline.AddDays(1);
             range.End = DateTime.MaxValue;
 
             Deadline_datepicker.BlackoutDates.AddDatesInPast();

@@ -97,6 +97,12 @@
     <Compile Include="MessageBox.xaml.cs">
       <DependentUpon>MessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProjectList.cs" />
+    <Compile Include="Report.xaml.cs">
+      <DependentUpon>Report.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReportProject.cs" />
+    <Compile Include="ReportTask.cs" />
     <Compile Include="Task.cs" />
     <Page Include="AddProject.xaml">
       <SubType>Designer</SubType>
@@ -123,6 +129,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Report.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

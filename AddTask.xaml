@@ -22,7 +22,7 @@
                 Background="{StaticResource MaterialDesignBackground}">
 
             <StackPanel>
-                <Label Content="Task Name" 
+                <Label Content="TASK NAME" 
                        HorizontalAlignment="Center" 
                        Foreground="{StaticResource PrimaryHueMidBrush}" 
                        FontWeight="Bold"
@@ -34,7 +34,7 @@
                          FontSize="12"
                          Margin="10, 0"/>
 
-                <Label Content="Description" 
+                <Label Content="DESCRIPTION" 
                        HorizontalAlignment="Center" 
                        Foreground="{StaticResource PrimaryHueMidBrush}" 
                        FontWeight="Bold"
@@ -55,7 +55,7 @@
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="3">
 
-                    <Label Content="Deadline" 
+                    <Label Content="DEADLINE" 
                             Foreground="{StaticResource PrimaryHueMidBrush}" 
                             FontWeight="Bold"
                             FontSize="14"/>
@@ -79,13 +79,13 @@
                             Margin="14">
 
                     <Button x:Name="Close_button" 
-                            Content="Close" 
+                            Content="CLOSE" 
                             Margin="20, 0" 
                             Width="150" 
                             Click="Close_button_Click"/>
 
                     <Button x:Name="AddTask_button" 
-                            Content="Add Task" 
+                            Content="ADD TASK" 
                             Margin="20, 0" 
                             Width="150" 
                             Click="AddTask_button_Click"/>

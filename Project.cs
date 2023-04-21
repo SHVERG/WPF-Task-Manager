@@ -27,12 +27,5 @@ namespace WpfTaskManager
             Deadline = deadline;
         }
 
-        public Project(string name, DateTime deadline)
-        {
-            Name = name;
-            Description = null;
-            Deadline = deadline;
-        }
-
     }
 }
