@@ -8,44 +8,39 @@ using System.Windows.Input;
 
 namespace WpfTaskManager
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         // Для работы с БД
-        AppContext db = new AppContext();
+        //AppContext db = new AppContext();
 
-        ObservableCollection<Project> uncomp_projects = new ObservableCollection<Project>();
-        ObservableCollection<Project> comp_projects = new ObservableCollection<Project>();
-
-        ObservableCollection<Task> proj_tasks = new ObservableCollection<Task>();
+        //ObservableCollection<Task> proj_tasks = new ObservableCollection<Task>();
         
         // Конструктор
         public MainWindow()
         {
             InitializeComponent();
 
+            //Tasks_listbox.ItemsSource = proj_tasks;
+            DataContext = new AppViewModel();
+
             Loaded += MainWindow_Loaded;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            UncompProjs_listbox.ItemsSource = uncomp_projects;
-            CompProjs_listbox.ItemsSource = comp_projects;
-            Tasks_listbox.ItemsSource = proj_tasks;
-
-            Refresh_db();
+            //Refresh_db();
         }
 
         // Обновление данных из БД
-        private void Refresh_db()
+        /*private void Refresh_db()
         {
-
-            Project sel = null;
+            Projs_datagrid.ItemsSource = new ObservableCollection<Project>(db.Projects);
+            Projs_datagrid.Columns[0].Visibility = Visibility.Hidden;
+            Projs_datagrid.Columns[2].Visibility = Visibility.Hidden;
 
             foreach (Project p in db.Projects)
             {
+
                 bool iscomp = true;
 
                 if (db.Tasks.Where(x => x.IdProject == p.IdProject).FirstOrDefault() == null) 
@@ -82,37 +77,8 @@ namespace WpfTaskManager
 
                 db.SaveChanges();
 
-                if (p.Completed == null && !uncomp_projects.Contains(p))
-                {
-                    if (CompProjs_listbox.SelectedItem == p)
-                        sel = p;
+                Projs_datagrid.Items.Refresh();
 
-                    comp_projects.Remove(p);
-                    uncomp_projects.Insert(0, p);
-
-                    UncompProjs_listbox.SelectedItem = sel;
-                }
-                else if (p.Completed != null && !comp_projects.Contains(p))
-                {
-                    if (UncompProjs_listbox.SelectedItem == p)
-                        sel = p;
-
-                    uncomp_projects.Remove(p);
-                    comp_projects.Insert(0, p);
-
-                    CompProjs_listbox.SelectedItem = sel;
-                }
-            }
-
-            if (UncompProjs_listbox.SelectedItem != null)
-            {
-                Project p = UncompProjs_listbox.SelectedItem as Project;
-                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} {p.Deadline.ToShortTimeString()}\n({DaysLeft(p.Deadline)})";
-            }
-            else if (CompProjs_listbox.SelectedItem != null)
-            {
-                Project p = CompProjs_listbox.SelectedItem as Project;
-                ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} {p.Deadline.ToShortTimeString()}\n({DaysLeft(p.Deadline)})";
             }
 
             if (Tasks_listbox.SelectedItem != null)
@@ -129,11 +95,12 @@ namespace WpfTaskManager
                 TaskInfo_textbox.Text = $"Name: {t.Name}\n\nDescription: {t.Description}\n\nDeadline: {t.Deadline.ToShortDateString()} {t.Deadline.ToShortTimeString()}\n({DaysLeft(t.Deadline)})\n\nState: {state}\n\nTime spent: {t.Timespent}";
             }
 
-            UncompProjs_listbox.Items.Refresh();
-            CompProjs_listbox.Items.Refresh();
+            Projs_datagrid.Items.Refresh();
             Tasks_listbox.Items.Refresh();
         }
+        */
 
+        /*
         // Обновление списка задач выбранного проекта
         private void Refresh_tasks(Project p)
         {
@@ -149,8 +116,10 @@ namespace WpfTaskManager
                     proj_tasks.Remove(t);
             }
         }
+        */
 
         // Рассчет оставшегося времени до дедлайна в днях
+        /*
         private string DaysLeft(DateTime deadline)
         {
             if (deadline > DateTime.Now)
@@ -158,14 +127,18 @@ namespace WpfTaskManager
             else
                 return "Expired";
         }
+        */
 
         // Событие для кнопки меню "Обновить"
+        /*
         private void Refresh_db_menuitem_Click(object sender, RoutedEventArgs e)
         {
             Refresh_db();
         }
+        */
 
         // Событие для кнопки добавления проекта
+        /*
         public void AddProject_button_Click(object sender, RoutedEventArgs e)
         {
             AddProject w = new AddProject();
@@ -198,37 +171,25 @@ namespace WpfTaskManager
                 db.SaveChanges();
 
                 Refresh_db();
-
-                UncompProjs_listbox.SelectedItem = p;
             }
         }
+        */
 
         // Событие при выделении проекта из списков
-        private void Projs_listbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        /*
+        private void Projs_datagrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ListBox lb = (ListBox)sender;
-
-            if (lb.SelectedIndex != -1)
+            DataGrid dg = (DataGrid)sender;
+            
+            if (dg.SelectedIndex != -1)
             {
-                if (lb == UncompProjs_listbox)
-                {
-                    EditUncompProject_contextmenuitem.IsEnabled = true;
-                    EditCompProject_contextmenuitem.IsEnabled = false;
-                    CompProjs_listbox.SelectedIndex = -1;
-                }
-                else
-                {
-                    EditCompProject_contextmenuitem.IsEnabled = true;
-                    EditUncompProject_contextmenuitem.IsEnabled = false;
-                    UncompProjs_listbox.SelectedIndex = -1;
-                }
-
-                Project p = (Project)lb.SelectedItem;
+                Project p = (Project)dg.SelectedItem;
 
                 ProjectInfo_textbox.Text = $"Name: {p.Name}\n\nDescription: {p.Description}\n\nDeadline: {p.Deadline.ToShortDateString()} {p.Deadline.ToShortTimeString()}\n({DaysLeft(p.Deadline)})";
 
                 Refresh_tasks(p);
 
+                EditProject_contextmenuitem.IsEnabled = true;
                 AddTask_button.IsEnabled = true;
                 EditProject_menuitem.IsEnabled = true;
             }
@@ -236,22 +197,23 @@ namespace WpfTaskManager
             {
                 AddTask_button.IsEnabled = false;
                 EditProject_menuitem.IsEnabled = false;
-                EditCompProject_contextmenuitem.IsEnabled = false;
-                EditUncompProject_contextmenuitem.IsEnabled = false;
+                EditProject_contextmenuitem.IsEnabled = false;
             }
         }
+        */
 
+        /*
         private int idProj()
         {
-            if (UncompProjs_listbox.SelectedIndex != -1)
-                return ((Project)UncompProjs_listbox.SelectedItem).IdProject;
-            else if (CompProjs_listbox.SelectedIndex != -1)
-                return ((Project)CompProjs_listbox.SelectedItem).IdProject;
+            if (Projs_datagrid.SelectedIndex != -1)
+                return ((Project)Projs_datagrid.SelectedItem).IdProject;
             else
                 return 0;
         }
+        */
 
         // Событие для кнопки добавления задачи
+        /*
         private void AddTask_button_Click(object sender, RoutedEventArgs e)
         {
             AddTask w = new AddTask(idProj());
@@ -293,8 +255,10 @@ namespace WpfTaskManager
                 Tasks_listbox.SelectedItem = t;
             }
         }
+        */
 
         // Событие при выделении задачи из списка
+        /*
         private void Tasks_listbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Tasks_listbox.SelectedIndex != -1)
@@ -341,8 +305,10 @@ namespace WpfTaskManager
                 EditTask_contextmenuitem.IsEnabled = false;
             }
         }
+        */
 
         // Событие для кнопки завершения задачи
+        /*
         private void CompleteTask_button_Click(object sender, RoutedEventArgs e)
         {
             Task t = db.Tasks.Find(((Task)Tasks_listbox.SelectedItem).IdTask);
@@ -360,12 +326,8 @@ namespace WpfTaskManager
         // Событие для кнопки редактирования проекта
         private void EditProject_menuitem_Click(object sender, RoutedEventArgs e)
         {
-            Project p = null;
-            if (UncompProjs_listbox.SelectedIndex != -1)
-                p = UncompProjs_listbox.SelectedItem as Project;
-            else
-                p = CompProjs_listbox.SelectedItem as Project;
-
+            Project p = Projs_datagrid.SelectedItem as Project;
+            
             EditWindow w = new EditWindow(p);
             w.Owner = this;
             this.Opacity = 0.5;
@@ -383,8 +345,10 @@ namespace WpfTaskManager
                 Refresh_db();
             }
         }
+        */
 
         // Событие для кнопки редактирования задачи
+        /*
         private void EditTask_menuitem_Click(object sender, RoutedEventArgs e)
         {
             Task t = Tasks_listbox.SelectedItem as Task;
@@ -406,6 +370,7 @@ namespace WpfTaskManager
                 Refresh_db();
             }
         }
+        */
 
         // События для меню отчета
         private void ReportProject_menuitem_Click(object sender, RoutedEventArgs e)

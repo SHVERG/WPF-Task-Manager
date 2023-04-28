@@ -40,30 +40,29 @@ namespace WpfTaskManager
 
         private void Close_button_Click(object sender, RoutedEventArgs e)
         {
-            this.Owner.Opacity = 1;
+            //this.Owner.Opacity = 1;
             Close();
         }
 
         private void AddTask_button_Click(object sender, RoutedEventArgs e)
         {
-            this.Owner.Opacity = 1;
+            //this.Owner.Opacity = 1;
             this.DialogResult = true;
+        }
+
+        private void Check()
+        {
+            AddTask_button.IsEnabled = (Name_textbox.Text.Trim().Length != 0 && Name_textbox.Text.Trim().Length <= 30 && Description_textbox.Text.Length <= 150 && Deadline_datepicker.SelectedDate != null);
         }
 
         private void NameChanged(object sender, TextChangedEventArgs e)
         {
-            if (Name_textbox.Text.Trim().Length != 0 && Deadline_datepicker.SelectedDate != null)
-                AddTask_button.IsEnabled = true;
-            else
-                AddTask_button.IsEnabled = false;
+            Check();
         }
 
         private void Deadline_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Name_textbox.Text.Trim().Length != 0 && Deadline_datepicker.SelectedDate != null)
-                AddTask_button.IsEnabled = true;
-            else
-                AddTask_button.IsEnabled = false;
+            Check();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace WpfTaskManager
 {
@@ -18,7 +19,7 @@ namespace WpfTaskManager
 
         private void Close_button_Click(object sender, RoutedEventArgs e)
         {
-            this.Owner.Opacity = 1;
+            //this.Owner.Opacity = 1;
             Close();
         }
 
@@ -40,25 +41,24 @@ namespace WpfTaskManager
 
             if (isUnique)
             {
-                this.Owner.Opacity = 1;
+                //this.Owner.Opacity = 1;
                 this.DialogResult = true;
             }
         }
 
-        private void NameChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void Check()
         {
-            if (Name_textbox.Text.Trim().Length != 0 && Deadline_datepicker.SelectedDate != null)
-                AddProject_button.IsEnabled = true;
-            else
-                AddProject_button.IsEnabled = false;
+            AddProject_button.IsEnabled = (Name_textbox.Text.Trim().Length != 0 && Name_textbox.Text.Trim().Length <= 30 && Description_textbox.Text.Length <= 150 && Deadline_datepicker.SelectedDate != null);
         }
 
-        private void Deadline_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void NameChanged(object sender, TextChangedEventArgs e)
         {
-            if (Name_textbox.Text.Trim().Length != 0 && Deadline_datepicker.SelectedDate != null)
-                AddProject_button.IsEnabled = true;
-            else
-                AddProject_button.IsEnabled = false;
+            Check();
+        }
+
+        private void Deadline_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Check();
         }
     }
 }
