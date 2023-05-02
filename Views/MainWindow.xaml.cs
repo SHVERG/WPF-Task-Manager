@@ -10,25 +10,9 @@ namespace WpfTaskManager
 {
     public partial class MainWindow : Window
     {
-        // Для работы с БД
-        //AppContext db = new AppContext();
-
-        //ObservableCollection<Task> proj_tasks = new ObservableCollection<Task>();
-        
-        // Конструктор
         public MainWindow()
         {
             InitializeComponent();
-
-            //Tasks_listbox.ItemsSource = proj_tasks;
-            DataContext = new AppViewModel();
-
-            Loaded += MainWindow_Loaded;
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            //Refresh_db();
         }
 
         // Обновление данных из БД
@@ -370,7 +354,6 @@ namespace WpfTaskManager
                 Refresh_db();
             }
         }
-        */
 
         // События для меню отчета
         private void ReportProject_menuitem_Click(object sender, RoutedEventArgs e)
@@ -387,6 +370,7 @@ namespace WpfTaskManager
             this.Opacity = 0.5;
             w.ShowDialog();
         }
+        */
 
         // Перемещение окна
         private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

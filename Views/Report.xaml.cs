@@ -168,7 +168,6 @@ namespace WpfTaskManager
 
         private void Close_button_Click(object sender, RoutedEventArgs e)
         {
-            this.Owner.Opacity = 1;
             Close();
         }
 

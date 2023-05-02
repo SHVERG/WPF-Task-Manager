@@ -1,0 +1,111 @@
+﻿<Window x:Class="WpfTaskManager.AddProject"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:WpfTaskManager"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        mc:Ignorable="d"
+        Title="Add Project"
+        Height="400"
+        Width="400"
+        x:Name="addProject"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="{x:Null}"
+        WindowStyle="None"
+        ShowInTaskbar="False">
+
+    <Window.DataContext>
+        <local:AddProjectVM/>
+    </Window.DataContext>
+    
+    <Grid x:Name="Main_grid">
+
+        <Border x:Name="AddProject_border" 
+                CornerRadius="5" 
+                Background="{StaticResource MaterialDesignBackground}">
+
+            <StackPanel>
+                <Label Content="PROJECT NAME" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{StaticResource PrimaryHueMidBrush}" 
+                       FontWeight="Bold"
+                       FontSize="14"/>
+
+                <TextBox x:Name="Name_textbox" 
+                         Background="WhiteSmoke" 
+                         FontWeight="SemiBold"
+                         FontSize="12"
+                         Margin="10, 0"
+                         Text="{Binding Name}"/>
+
+                <Label Content="DESCRIPTION" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{StaticResource PrimaryHueMidBrush}" 
+                       FontWeight="Bold"
+                       FontSize="14"/>
+
+                <ScrollViewer Margin="10, 0"
+                              Height="235">
+
+                    <TextBox x:Name="Description_textbox" 
+                             VerticalContentAlignment="Top" 
+                             Background="WhiteSmoke" 
+                             FontWeight="SemiBold"
+                             FontSize="12"
+                             AcceptsReturn="True"
+                             Text="{Binding Description}"/>
+
+                </ScrollViewer>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="3">
+                        
+                    <Label Content="DEADLINE" 
+                            Foreground="{StaticResource PrimaryHueMidBrush}" 
+                            FontWeight="Bold"
+                            FontSize="14"/>
+
+                    <DatePicker x:Name="Deadline_datepicker"  
+                                FontWeight="SemiBold"
+                                FontSize="12"
+                                FirstDayOfWeek="Monday"
+                                SelectedDate="{Binding Deadline}">
+                    </DatePicker>
+
+                    <materialDesign:TimePicker x:Name="Deadline_timepicker" 
+                                                Grid.Column="1"
+                                                FontWeight="SemiBold"
+                                                FontSize="12"
+                                                Is24Hours="True"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" 
+                            VerticalAlignment="Center" 
+                            Orientation="Horizontal" 
+                            HorizontalAlignment="Center" 
+                            Margin="14">
+
+                    <Button x:Name="Close_button" 
+                            Content="Close" 
+                            Margin="20, 0" 
+                            Width="150"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding ElementName=addProject}"/>
+
+                    <Button x:Name="AddProject_button" 
+                            Content="Add Project" 
+                            Margin="20, 0" 
+                            Width="150"
+                            Command="{Binding AddCommand}"
+                            CommandParameter="{Binding ElementName=addProject}"/>
+
+                </StackPanel>
+
+            </StackPanel>
+
+        </Border>
+
+    </Grid>
+</Window>

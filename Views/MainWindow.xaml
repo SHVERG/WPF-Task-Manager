@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:WpfTaskManager"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
         Title="Project Manager"
         Width="1000" 
         Height="600" 
@@ -16,6 +16,8 @@
         ResizeMode="CanResize"
         Background="{StaticResource MaterialDesignDarkBackground}"
         Icon="/images/icon.ico"
+        x:Name="mainWindow"
+        Opacity="{Binding Opacity}"
         StateChanged="Window_StateChanged">
 
     <Window.Resources>
@@ -58,7 +60,11 @@
             </Style>
         </ResourceDictionary>
     </Window.Resources>
-    
+
+    <Window.DataContext>
+        <local:AppViewModel/>
+    </Window.DataContext>
+
     <Grid x:Name="Main_grid" 
           Background="{StaticResource MaterialDesignDarkBackground}">
         
@@ -88,7 +94,8 @@
                             
                             <MenuItem x:Name="AddProject_menuitem" 
                                       Header="Add Project"
-                                      Command="{Binding AddProjCommand}"/>
+                                      Command="{Binding AddProjCommand}"
+                                      CommandParameter="{Binding ElementName=mainWindow}"/>
                             <Separator/>
                             
                             <MenuItem x:Name="Exit_menuitem" 
@@ -101,22 +108,24 @@
 
                             <MenuItem x:Name="EditProject_menuitem"
                                       Header="Project"
-                                      IsEnabled="{Binding IsProjSelected}"/>
+                                      Command="{Binding EditProjCommand}"/>
 
                             <MenuItem x:Name="EditTask_menuitem"
                                       Header="Task"
-                                      IsEnabled="False"/>
+                                      Command="{Binding EditTaskCommand}"/>
 
                         </MenuItem>
 
                         <MenuItem Header="Report" FontWeight="SemiBold">
                             <MenuItem x:Name="ReportProject_menuitem" 
-                                      Header="Projects" 
-                                      Click="ReportProject_menuitem_Click"/>
+                                      Header="Projects"
+                                      Command="{Binding ReportCommand}"
+                                      CommandParameter="True"/>
                             
                             <MenuItem x:Name="ReportTask_menuitem" 
                                       Header="Tasks"
-                                      Click="ReportTask_menuitem_Click"/>
+                                      Command="{Binding ReportCommand}"
+                                      CommandParameter="False"/>
                         </MenuItem>
 
                         <MenuItem x:Name="About_menuitem"
@@ -200,19 +209,17 @@
                                       AutoGenerateColumns="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Project Name" Binding="{Binding Name}"/>
-                                    <DataGridTextColumn Header="Deadline" Binding="{Binding SDeadline}"/>
-                                    <DataGridTextColumn Header="Completed" Binding="{Binding SCompleted}"/>
+                                    <DataGridTextColumn Header="Deadline" Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                    <DataGridTextColumn Header="Completed" Binding="{Binding Completed, StringFormat={}{0:dd.MM.yyyy}}"/>
                                 </DataGrid.Columns>
                                 
                                 <DataGrid.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem x:Name="EditProject_contextmenuitem"
                                                   Header="Edit"
-                                                  IsEnabled="{Binding IsProjSelected}"
                                                   Command="{Binding EditProjCommand}"/>
                                     </ContextMenu>
                                 </DataGrid.ContextMenu>
-                                
                             </DataGrid>
                         </ScrollViewer>
                     </Grid>
@@ -224,10 +231,11 @@
                         Content="ADD PROJECT" 
                         VerticalContentAlignment="Top" 
                         Margin="3"
-                        Command="{Binding AddProjCommand}"/>
+                        Command="{Binding AddProjCommand}"
+                        CommandParameter="{Binding ElementName=mainWindow}"/>
             </Grid>
 
-            <!-- Сетка информации и задач -->
+            <!-- Сетка инфы о проекте и его задач -->
             <Grid x:Name="Info_grid" 
                   Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -239,7 +247,8 @@
                         Grid.Row="0" 
                         CornerRadius="5" 
                         Background="{StaticResource MaterialDesignBackground}" 
-                        Margin="3">
+                        Margin="3"
+                        IsEnabled="{Binding SelectedProj, TargetNullValue=False}">
                     
                     <Grid>
                         <Grid.RowDefinitions>
@@ -247,50 +256,44 @@
                             <RowDefinition Height="4*"/>
                         </Grid.RowDefinitions>
 
-                        <StackPanel Margin="3">
-                            
-                            <Label Content="PROJECT INFO" 
-                                   HorizontalAlignment="Center"  
-                                   Foreground="{StaticResource PrimaryHueMidBrush}" 
-                                   FontWeight="Bold"
-                                   FontSize="14"/>
-                            <!--
-                            <ScrollViewer Margin="5,25,5,5" Background="WhiteSmoke">
-                                <TextBox x:Name="ProjectInfo_textbox" 
-                                         materialDesign:HintAssist.Hint="Project is not selected" 
-                                         VerticalContentAlignment="Top" 
-                                         FontWeight="SemiBold"
-                                         FontSize="12"
-                                         IsReadOnly="True"
-                                         TextWrapping="WrapWithOverflow"/>
-                            </ScrollViewer>
-                            -->
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Name:" FontWeight="SemiBold"/>
-                                <TextBlock x:Name="ProjName_textblock" 
-                                           Text="{Binding Path=SelectedProj.Name}"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
+                        <Label Content="PROJECT INFO" 
+                               HorizontalAlignment="Center"  
+                               Foreground="{StaticResource PrimaryHueMidBrush}" 
+                               FontWeight="Bold"
+                               FontSize="14"/>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="3, 25, 3, 3">
+                            <StackPanel>
 
-                            <Label Content="Description:" FontWeight="SemiBold"/>
-                            <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                                          Background="WhiteSmoke"
-                                          MaxHeight="110">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Name:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="ProjName_textblock" 
+                                               Text="{Binding SelectedProj.Name}"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <Label Content="Description:" FontWeight="Bold"/>
                                 <TextBox x:Name="ProjDesc_textbox" 
-                                         Text="{Binding Path=SelectedProj.Description}"
-                                         HorizontalAlignment="Left"
-                                         VerticalAlignment="Top"
-                                         IsReadOnly="True"/>
-                            </ScrollViewer>
+                                             Text="{Binding SelectedProj.Description}"
+                                             HorizontalAlignment="Left"
+                                             VerticalAlignment="Top"
+                                             IsReadOnly="True"/>
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Deadline:" FontWeight="SemiBold"/>
-                                <TextBlock x:Name="ProjDeadline_textblock" 
-                                           Text="{Binding Path=SelectedProj.SDeadline}"
-                                           VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Deadline:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="ProjDeadline_textblock" 
+                                               Text="{Binding SelectedProj.Deadline, StringFormat={}{0:dd.MM.yyyy H:mm:ss}}"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Completed:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="ProjCompleted_textblock"
+                                               Text="{Binding SelectedProj.Completed, StringFormat={}{0:dd.MM.yyyy}}"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+
                             </StackPanel>
-
-                        </StackPanel>
+                        </ScrollViewer>
 
                         <Label x:Name="Tasks_label" 
                                Content="TASKS" 
@@ -314,23 +317,23 @@
 
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Task Name" Binding="{Binding Name}"/>
-                                    <DataGridTextColumn Header="Deadline" Binding="{Binding SDeadline}"/>
-                                    <DataGridTextColumn Header="Completed" Binding="{Binding SCompleted}"/>
+                                    <DataGridTextColumn Header="Deadline" Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                    <DataGridTextColumn Header="Completed" Binding="{Binding Completed, StringFormat={}{0:dd.MM.yyyy}}"/>
                                 </DataGrid.Columns>
 
                                 <DataGrid.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem x:Name="StartTask_contextmenuitem" 
-                                                Header="Start" 
-                                                IsEnabled="False"/>
+                                                  Header="Start"
+                                                  Command="{Binding StartTaskCommand}"/>
 
                                         <MenuItem x:Name="EditTask_contextmenuitem" 
-                                                Header="Edit" 
-                                                IsEnabled="False"/>
+                                                  Header="Edit"
+                                                  Command="{Binding EditTaskCommand}"/>
 
                                         <MenuItem x:Name="CompleteTask_contextmenuitem" 
-                                                Header="Complete" 
-                                                IsEnabled="False"/>
+                                                  Header="Complete"
+                                                  Command="{Binding CompleteTaskCommand}"/>
                                     </ContextMenu>
                                 </DataGrid.ContextMenu>
                             </DataGrid>
@@ -342,10 +345,10 @@
                 <Button x:Name="AddTask_button" 
                         Grid.Row="1" 
                         Content="ADD TASK"
-                        IsEnabled="{Binding IsProjSelected}"
                         VerticalContentAlignment="Top" 
                         Margin="3"
-                        Command="{Binding AddTaskCommand}"/>
+                        Command="{Binding AddTaskCommand}"
+                        CommandParameter="{Binding ElementName=mainWindow}"/>
                 
             </Grid>
 
@@ -360,43 +363,54 @@
                 <Border x:Name="TaskInfo_border" 
                         Grid.Row="0" CornerRadius="5" 
                         Background="{StaticResource MaterialDesignBackground}" 
-                        Margin="3">
-                    
+                        Margin="3"
+                        IsEnabled="{Binding SelectedTask, TargetNullValue=False}">
+
                     <Grid>
-                        <StackPanel Margin="3">
+                        <Label Content="TASK INFO" 
+                               HorizontalAlignment="Center"  
+                               Foreground="{StaticResource PrimaryHueMidBrush}" 
+                               FontWeight="Bold"
+                               FontSize="14"/>
+                        
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="3, 25, 3, 3">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Name:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="TaskName_textblock" 
+                                               Text="{Binding SelectedTask.Name}"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Name:" FontWeight="SemiBold"/>
-                                <TextBlock x:Name="TaskName_textblock" 
-                                           Text="{Binding Path=SelectedTask.Name}"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
+                                <Label Content="Description:" FontWeight="Bold"/>
+                                    <TextBox x:Name="TaskDesc_textbox"
+                                             Text="{Binding SelectedTask.Description}"
+                                             HorizontalAlignment="Left"
+                                             VerticalAlignment="Top"
+                                             IsReadOnly="True"/>
 
-                            <Label Content="Description:" FontWeight="SemiBold"/>
-                            <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                                          Background="WhiteSmoke"
-                                          MaxHeight="110">
-                                <TextBox x:Name="TaskDesc_textbox"
-                                         Text="{Binding Path=SelectedTask.Description}"
-                                         HorizontalAlignment="Left"
-                                         VerticalAlignment="Top"
-                                         IsReadOnly="True"/>
-                            </ScrollViewer>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Deadline:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="TaskDeadline_textblock" 
+                                               Text="{Binding SelectedTask.Deadline, StringFormat={}{0:dd.MM.yyyy H:mm.ss}}"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Deadline:" FontWeight="SemiBold"/>
-                                <TextBlock x:Name="TaskDeadline_textblock" 
-                                           Text="{Binding Path=SelectedTask.SDeadline}"
-                                           VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Completed:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="TaskCompleted_textblock"
+                                               Text="{Binding SelectedTask.Completed, StringFormat={}{0:dd.MM.yyyy H:mm:ss}}"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Time spent:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="TaskTimespend_textblock"
+                                               Text="{Binding SelectedTask.TSTimespent}"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
                             </StackPanel>
-                            
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Time spent:" FontWeight="SemiBold"/>
-                                <TextBlock x:Name="TaskTimespend_textblock"
-                                           Text="{Binding Path=SelectedTask.TSTimespent}"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </StackPanel>
+                        </ScrollViewer>
                         
                     </Grid>
 
@@ -411,18 +425,18 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="CompleteTask_button" 
-                            Content="COMPLETE TASK" 
-                            IsEnabled="{Binding IsTaskIncompleted}" 
+                            Content="COMPLETE TASK"
                             VerticalContentAlignment="Top" 
                             Grid.Column="0" 
-                            Margin="3"/>
+                            Margin="3"
+                            Command="{Binding CompleteTaskCommand}"/>
 
                     <Button x:Name="StartTask_button" 
-                            Content="START TASK" 
-                            IsEnabled="{Binding IsTaskIncompleted}" 
+                            Content="START TASK"
                             VerticalContentAlignment="Top" 
                             Grid.Column="1"
-                            Margin="3"/>
+                            Margin="3"
+                            Command="{Binding StartTaskCommand}"/>
                 </Grid>
 
             </Grid>

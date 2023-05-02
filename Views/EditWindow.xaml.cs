@@ -66,7 +66,7 @@ namespace WpfTaskManager
 
         private void Edit_button_Click(object sender, RoutedEventArgs e)
         {
-            //this.Owner.Opacity = 1;
+            this.Owner.Opacity = 1;
             this.DialogResult = true;
         }
 
@@ -78,7 +78,6 @@ namespace WpfTaskManager
                 {
                     Edit_button.IsEnabled = (Name_textbox.Text.Trim().Length != 0 && Name_textbox.Text.Trim().Length <= 30 && Description_textbox.Text.Length <= 150)&&!(db.Projects.Where(x => x.IdProject != p.IdProject && x.Name == Name_textbox.Text.Trim()).Any());
                 }
-
             }
             else
                 Edit_button.IsEnabled = (Name_textbox.Text.Trim().Length != 0 && Name_textbox.Text.Trim().Length <= 30 && Description_textbox.Text.Length <= 150);

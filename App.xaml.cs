@@ -11,8 +11,10 @@ namespace WpfTaskManager
 {
     public partial class App : Application
     {
+        /*
         public static Window FocusedWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsFocused);
         public static Window ActiveWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsActive);
         public static Window CurrentWindow => FocusedWindow ?? ActiveWindow ?? Current.MainWindow;
+        */
     }
 }

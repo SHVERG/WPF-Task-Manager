@@ -3,23 +3,21 @@ using System.Windows.Controls;
 
 namespace WpfTaskManager
 {
-    /// <summary>
-    /// Логика взаимодействия для AddProject.xaml
-    /// </summary>
     public partial class AddProject : Window
     {
-        AppContext db = new AppContext();
+        //AppContext db = new AppContext();
 
         public AddProject()
         {
             InitializeComponent();
-
             Deadline_datepicker.BlackoutDates.AddDatesInPast();
         }
 
+        /*
+
         private void Close_button_Click(object sender, RoutedEventArgs e)
         {
-            //this.Owner.Opacity = 1;
+            this.Owner.Opacity = 1;
             Close();
         }
 
@@ -41,7 +39,7 @@ namespace WpfTaskManager
 
             if (isUnique)
             {
-                //this.Owner.Opacity = 1;
+                this.Owner.Opacity = 1;
                 this.DialogResult = true;
             }
         }
@@ -60,5 +58,6 @@ namespace WpfTaskManager
         {
             Check();
         }
+        */
     }
 }

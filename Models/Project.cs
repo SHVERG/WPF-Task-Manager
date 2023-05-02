@@ -99,20 +99,5 @@ namespace WpfTaskManager
                 return deadline.ToString();
             }
         }
-
-        public string SCompleted
-        {
-            get
-            {
-                if (completed != null)
-                {
-                    return completed.ToString();
-                }
-                else
-                {
-                    return "Not Completed";
-                }
-            }
-        }
     }
 }

@@ -91,40 +91,41 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AddProject.xaml.cs">
+    <Compile Include="ViewModels\AddProjectVM.cs" />
+    <Compile Include="Views\AddProject.xaml.cs">
       <DependentUpon>AddProject.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddTask.xaml.cs">
+    <Compile Include="Views\AddTask.xaml.cs">
       <DependentUpon>AddTask.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AppContext.cs" />
-    <Compile Include="AppViewModel.cs" />
-    <Compile Include="EditWindow.xaml.cs">
+    <Compile Include="Models\AppContext.cs" />
+    <Compile Include="ViewModels\AppViewModel.cs" />
+    <Compile Include="Views\EditWindow.xaml.cs">
       <DependentUpon>EditWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MessageBox.xaml.cs">
+    <Compile Include="Views\MessageBox.xaml.cs">
       <DependentUpon>MessageBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="Report.xaml.cs">
+    <Compile Include="Views\Report.xaml.cs">
       <DependentUpon>Report.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReportProject.cs" />
-    <Compile Include="ReportTask.cs" />
-    <Compile Include="Task.cs" />
-    <Page Include="AddProject.xaml">
+    <Compile Include="Models\ReportProject.cs" />
+    <Compile Include="Models\ReportTask.cs" />
+    <Compile Include="Models\Task.cs" />
+    <Page Include="Views\AddProject.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddTask.xaml">
+    <Page Include="Views\AddTask.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
-    <Page Include="EditWindow.xaml">
+    <Page Include="Views\EditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -132,21 +133,21 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MessageBox.xaml">
+    <Page Include="Views\MessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Report.xaml">
+    <Page Include="Views\Report.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Project.cs" />
+    <Compile Include="Models\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

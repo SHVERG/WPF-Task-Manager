@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Remoting.Proxies;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -11,18 +13,19 @@ namespace WpfTaskManager
     {
         AppContext db = new AppContext();
         RelayCommand refreshCommand;
+        RelayCommand reportCommand;
+
         RelayCommand addProjCommand;
         RelayCommand editProjCommand;
+        
         RelayCommand addTaskCommand;
-        RelayCommand EditTaskCommand;
-        RelayCommand StartTaskCommand;
-        RelayCommand CompleteTaskCommand;
+        RelayCommand editTaskCommand;
+        RelayCommand startTaskCommand;
+        RelayCommand completeTaskCommand;
 
+        private double opacity = 1;
         private Project selectedProj;
-        private bool isProjSelected = false;
         private Task selectedTask;
-        private bool isTaskSelected = false;
-        private bool isTaskIncompleted = false;
 
         public ObservableCollection<Project> Projects { get; set; }
         public ObservableCollection<Task> Tasks { get; set; }
@@ -35,41 +38,15 @@ namespace WpfTaskManager
             ProjTasks = new ObservableCollection<Task>();
         }
 
-        public bool IsProjSelected
-        {
-            get 
-            { 
-                return isProjSelected; 
-            }
-            set
-            {
-                isProjSelected = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsTaskSelected
-        {
-            get 
-            { 
-                return isTaskSelected; 
-            }
-            set
-            {
-                isTaskSelected = value; 
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsTaskIncompleted
+        public double Opacity
         {
             get
-            { 
-                return isTaskIncompleted; 
+            {
+                return opacity;
             }
             set
             {
-                isTaskIncompleted = value; 
+                opacity = value;
                 OnPropertyChanged();
             }
         }
@@ -86,7 +63,6 @@ namespace WpfTaskManager
 
                 if (selectedProj != null)
                 {
-                    IsProjSelected = true;
                     foreach (Task t in db.Tasks)
                     {
                         if (t.IdProject == SelectedProj.IdProject && !ProjTasks.Contains(t))
@@ -94,10 +70,6 @@ namespace WpfTaskManager
                         else if (t.IdProject != SelectedProj.IdProject && ProjTasks.Contains(t))
                             ProjTasks.Remove(t);
                     }
-                }
-                else
-                {
-                    IsProjSelected = false;
                 }
 
                 OnPropertyChanged();
@@ -113,44 +85,38 @@ namespace WpfTaskManager
             set
             {
                 selectedTask = value; 
-                
-                if (selectedTask != null)
-                {
-                    IsTaskSelected = true;
-                    if (SelectedTask.Completed != null)
-                        IsTaskIncompleted = false;
-                    else
-                        IsTaskIncompleted = true;
-                }
-                else
-                {
-                    IsTaskSelected = false;
-                    IsTaskIncompleted = false;
-                }
-
                 OnPropertyChanged();
             }
         }
 
-        /*
-        private string DaysLeft(DateTime deadline)
-        {
-            if (deadline > DateTime.Now)
-                return (deadline - DateTime.Now).Days.ToString() + " day(s) " + (deadline - DateTime.Now).Hours + " hour(s) " + (deadline - DateTime.Now).Minutes + " minute(s) left";
-            else
-                return "Expired";
-        }
-        */
-
-        public void Refresh()
-        {
-        }
-
-        public RelayCommand RefreshCommand { 
+        public RelayCommand RefreshCommand 
+        { 
             get {
                 return refreshCommand ?? (refreshCommand = new RelayCommand((o) =>
                 {
                     ((DataGrid)o).Items.Refresh();
+                }));
+            }
+        }
+
+        public RelayCommand ReportCommand
+        {
+            get
+            {
+                return reportCommand ?? (reportCommand = new RelayCommand((o) =>
+                {
+                    string param = o as string;
+                    if (param != null)
+                    {
+                        bool.TryParse(param, out bool isProj);
+
+                        Report w = new Report(isProj);
+                        Opacity = 0.5;
+                        w.ShowDialog();
+
+                        if (w.DialogResult.HasValue) 
+                            Opacity = 1;
+                    }
                 }));
             }
         }
@@ -162,8 +128,11 @@ namespace WpfTaskManager
                 return addProjCommand ?? (addProjCommand = new RelayCommand((o) =>
                 {
                     AddProject w = new AddProject();
-                    //this.Opacity = 0.5;
+                    Opacity = 0.5;
                     w.ShowDialog();
+
+                    if (w.DialogResult.HasValue)
+                        Opacity = 1;
 
                     if (w.DialogResult.Value)
                     {
@@ -188,7 +157,6 @@ namespace WpfTaskManager
 
                         db.Projects.Add(p);
                         db.SaveChanges();
-                        //RefreshProjs();
                     }
                 }));
             }
@@ -200,10 +168,12 @@ namespace WpfTaskManager
             {
                 return editProjCommand ?? (editProjCommand = new RelayCommand((o) =>
                 {
-                    EditWindow w = new EditWindow(selectedProj);
-                    //w.Owner = this;
-                    //this.Opacity = 0.5;
+                    EditWindow w = new EditWindow(SelectedProj);
+                    Opacity = 0.5;
                     w.ShowDialog();
+
+                    if (w.DialogResult.HasValue)
+                        Opacity = 1;
 
                     if (w.DialogResult.Value)
                     {
@@ -213,10 +183,8 @@ namespace WpfTaskManager
                         edit.Description = w.Description_textbox.Text.Trim();
 
                         db.SaveChanges();
-
-                        //Refresh_db();
                     }
-                }));
+                }, o => SelectedProj != null));
             }
         }
 
@@ -226,9 +194,11 @@ namespace WpfTaskManager
                 return addTaskCommand ?? (addTaskCommand = new RelayCommand((o) =>
                 {
                     AddTask w = new AddTask(SelectedProj.IdProject);
-                    //w.Owner = this;
-                    //this.Opacity = 0.5;
+                    Opacity = 0.5;
                     w.ShowDialog();
+
+                    if (w.DialogResult.HasValue)
+                        Opacity = 1;
 
                     if (w.DialogResult.Value)
                     {
@@ -245,7 +215,7 @@ namespace WpfTaskManager
                         if (w.Deadline_datepicker.SelectedDate == DateTime.Now.Date && time < DateTime.Now.TimeOfDay)
                         {
                             MessageBox mb = new MessageBox();
-                            //mb.Owner = this;
+                            mb.Owner = w;
                             mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
                             return;
                         }
@@ -255,15 +225,70 @@ namespace WpfTaskManager
                         Task t = new Task(SelectedProj.IdProject, w.Name_textbox.Text.Trim(), w.Description_textbox.Text, date);
 
                         db.Tasks.Add(t);
+                        db.Projects.Find(SelectedProj.IdProject).Completed = null;
                         db.SaveChanges();
-
-                        //Refresh_db();
-
-                        //Refresh_tasks(db.Projects.Find(idProj()));
-
-                        //Tasks_listbox.SelectedItem = t;
                     }
-                }));
+                }, o => SelectedProj != null));
+            }
+        }
+
+        public RelayCommand EditTaskCommand
+        {
+            get
+            {
+                return editTaskCommand ?? (editTaskCommand = new RelayCommand((o) =>
+                {
+                    EditWindow w = new EditWindow(SelectedTask);
+                    Opacity = 0.5;
+                    w.ShowDialog();
+
+                    if (w.DialogResult.HasValue)
+                        Opacity = 1;
+
+                    if (w.DialogResult.Value)
+                    {
+                        Task edit = db.Tasks.Find(SelectedTask.IdTask);
+
+                        edit.Name = w.Name_textbox.Text.Trim();
+                        edit.Description = w.Description_textbox.Text.Trim();
+
+                        db.SaveChanges();
+                    }
+                }, o => SelectedTask != null));
+            }
+        }
+
+        public RelayCommand StartTaskCommand
+        {
+            get
+            {
+                return startTaskCommand ?? (startTaskCommand = new RelayCommand((o) =>
+                {
+
+                }, o => SelectedTask != null && SelectedTask.Completed == null));
+            }
+        }
+
+        public RelayCommand CompleteTaskCommand
+        {
+            get
+            {
+                return completeTaskCommand ?? (completeTaskCommand = new RelayCommand((o) =>
+                {
+                    Task task = db.Tasks.Find(SelectedTask.IdTask);
+                    task.Completed = DateTime.Now;
+
+                    bool compProj = true;
+
+                    foreach (Task t in db.Tasks.Where(t => t.IdProject == selectedProj.IdProject))
+                        if (t.Completed == null)
+                            compProj = false;
+
+                    if (compProj)
+                        db.Projects.Find(selectedProj.IdProject).Completed = DateTime.Now;
+
+                    db.SaveChanges();
+                }, o => SelectedTask != null && SelectedTask.Completed == null));
             }
         }
 

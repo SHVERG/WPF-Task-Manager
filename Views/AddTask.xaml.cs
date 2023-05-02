@@ -1,33 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WpfTaskManager
 {
-    /// <summary>
-    /// Логика взаимодействия для AddTask.xaml
-    /// </summary>
     public partial class AddTask : Window
     {
         AppContext db;
-        int id;
 
         public AddTask(int id)
         {
             InitializeComponent();
 
-            this.id = id;
             db = new AppContext();
 
             CalendarDateRange range = new CalendarDateRange();
@@ -40,13 +24,13 @@ namespace WpfTaskManager
 
         private void Close_button_Click(object sender, RoutedEventArgs e)
         {
-            //this.Owner.Opacity = 1;
+            this.Owner.Opacity = 1;
             Close();
         }
 
         private void AddTask_button_Click(object sender, RoutedEventArgs e)
         {
-            //this.Owner.Opacity = 1;
+            this.Owner.Opacity = 1;
             this.DialogResult = true;
         }
 

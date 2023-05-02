@@ -132,29 +132,6 @@ namespace WpfTaskManager
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        public string SDeadline
-        {
-            get
-            {
-                return deadline.ToString();
-            }
-        }
-
-        public string SCompleted
-        {
-            get
-            {
-                if (completed != null)
-                {
-                    return completed.ToString();
-                }
-                else
-                {
-                    return "Not Completed";
-                }
-            }
-        }
-
         public TimeSpan TSTimespent
         {
             get
