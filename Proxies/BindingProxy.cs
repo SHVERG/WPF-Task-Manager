@@ -9,14 +9,12 @@ namespace WpfTaskManager
 {
     public class BindingProxy : Freezable
     {
-        //#region Overrides of Freezable
-
+        #region Overrides of Freezable
         protected override Freezable CreateInstanceCore()
         {
             return new BindingProxy();
         }
-
-        //#endregion
+        #endregion
 
         public object Data
         {

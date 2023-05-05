@@ -105,7 +105,7 @@
       <DependentUpon>AddWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AppContext.cs" />
-    <Compile Include="ViewModels\AppVM.cs" />
+    <Compile Include="ViewModels\MainVM.cs" />
     <Compile Include="Views\EditWindow.xaml.cs">
       <DependentUpon>EditWindow.xaml</DependentUpon>
     </Compile>

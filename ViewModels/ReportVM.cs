@@ -211,7 +211,7 @@ namespace WpfTaskManager
                             str = "Name;Deadline;Timespent;Completed\n";
                             foreach (Report r in DGSource)
                             {
-                                str += $"{r.Name};{r.Deadline.ToString()};{r.Timespent};{r.Completed}\n";
+                                str += $"\"{r.Name}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.Completed}\"\n";
                             }
                         }
                         else
@@ -219,7 +219,7 @@ namespace WpfTaskManager
                             str = "Name;Project Name;Timespent;Completed\n";
                             foreach (Report r in DGSource)
                             {
-                                str += $"{r.Name};{r.ProjectName};{r.Deadline.ToString()};{r.Timespent};{r.Completed}\n";
+                                str += $"\"{r.Name}\";\"{r.ProjectName}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.Completed}\"\n";
                             }
                         }
                         

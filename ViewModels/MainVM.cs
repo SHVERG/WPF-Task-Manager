@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace WpfTaskManager
 {
-    public class AppVM : INotifyPropertyChanged
+    public class MainVM : INotifyPropertyChanged
     {
         AppContext db;
         RelayCommand refreshCommand;
@@ -29,7 +29,7 @@ namespace WpfTaskManager
         public ObservableCollection<Task> ProjTasks { get; set; }
 
         // Конструктор
-        public AppVM()
+        public MainVM()
         {
             db = new AppContext();
             Projects = new ObservableCollection<Project>(db.Projects);
