@@ -3,15 +3,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.Remoting.Proxies;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace WpfTaskManager
 {
-    public class AppViewModel : INotifyPropertyChanged
+    public class AppVM : INotifyPropertyChanged
     {
-        AppContext db = new AppContext();
+        AppContext db;
         RelayCommand refreshCommand;
         RelayCommand reportCommand;
 
@@ -28,16 +27,17 @@ namespace WpfTaskManager
         private Task selectedTask;
 
         public ObservableCollection<Project> Projects { get; set; }
-        public ObservableCollection<Task> Tasks { get; set; }
         public ObservableCollection<Task> ProjTasks { get; set; }
 
-        public AppViewModel()
+        // Конструктор
+        public AppVM()
         {
+            db = new AppContext();
             Projects = new ObservableCollection<Project>(db.Projects);
-            Tasks = new ObservableCollection<Task>(db.Tasks);
             ProjTasks = new ObservableCollection<Task>();
         }
 
+        //Свойства
         public double Opacity
         {
             get
@@ -61,16 +61,7 @@ namespace WpfTaskManager
             {
                 selectedProj = value;
 
-                if (selectedProj != null)
-                {
-                    foreach (Task t in db.Tasks)
-                    {
-                        if (t.IdProject == SelectedProj.IdProject && !ProjTasks.Contains(t))
-                            ProjTasks.Insert(0, t);
-                        else if (t.IdProject != SelectedProj.IdProject && ProjTasks.Contains(t))
-                            ProjTasks.Remove(t);
-                    }
-                }
+                RefreshTasks();
 
                 OnPropertyChanged();
             }
@@ -89,16 +80,56 @@ namespace WpfTaskManager
             }
         }
 
+        private void RefreshTasks()
+        {
+            if (selectedProj != null)
+            {
+                foreach (Task t in db.Tasks)
+                {
+                    if (t.IdProject == SelectedProj.IdProject && !ProjTasks.Contains(t))
+                        ProjTasks.Insert(0, t);
+                    else if (t.IdProject != SelectedProj.IdProject && ProjTasks.Contains(t))
+                        ProjTasks.Remove(t);
+                }
+            }
+        }
+
+        // Обновление данных приложения при внешнем обновлении БД
         public RelayCommand RefreshCommand 
         { 
             get {
                 return refreshCommand ?? (refreshCommand = new RelayCommand((o) =>
                 {
-                    ((DataGrid)o).Items.Refresh();
+                    db = new AppContext();
+
+                    int p_id = -1;
+                    int t_id = -1;
+
+                    if (SelectedProj != null)
+                    {
+                        p_id = SelectedProj.IdProject;
+                        
+                        if (SelectedTask != null)
+                        {
+                            t_id = SelectedTask.IdTask;
+                        }
+
+                        ProjTasks.Clear();
+                        ProjTasks.AddRange(db.Tasks.Where(t => t.IdProject == SelectedProj.IdProject));
+
+                        SelectedTask = ProjTasks.FirstOrDefault(t => t_id != -1 && t.IdTask == t_id);
+                    }
+                 
+                    Projects.Clear();
+                    Projects.AddRange(db.Projects);
+
+                    SelectedProj = Projects.FirstOrDefault(p => p_id != -1 && p.IdProject == p_id);
+
                 }));
             }
         }
 
+        // Создание отчетов
         public RelayCommand ReportCommand
         {
             get
@@ -110,7 +141,13 @@ namespace WpfTaskManager
                     {
                         bool.TryParse(param, out bool isProj);
 
-                        Report w = new Report(isProj);
+                        ReportVM vm = new ReportVM(isProj);
+
+                        var w = new ReportWindow()
+                        {
+                            DataContext = vm
+                        };
+
                         Opacity = 0.5;
                         w.ShowDialog();
 
@@ -121,13 +158,14 @@ namespace WpfTaskManager
             }
         }
 
+        // Добавление проекта
         public RelayCommand AddProjCommand
         {
             get
             {
                 return addProjCommand ?? (addProjCommand = new RelayCommand((o) =>
                 {
-                    AddProject w = new AddProject();
+                    Add w = new Add(null);
                     Opacity = 0.5;
                     w.ShowDialog();
 
@@ -145,8 +183,8 @@ namespace WpfTaskManager
 
                         if (w.Deadline_datepicker.SelectedDate == DateTime.Now.Date && time < DateTime.Now.TimeOfDay)
                         {
-                            MessageBox mb = new MessageBox();
-                            mb.Owner = w;
+                            MBWindow mb = new MBWindow();
+                            //mb.Owner = w;
                             mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
                             return;
                         }
@@ -157,18 +195,27 @@ namespace WpfTaskManager
 
                         db.Projects.Add(p);
                         db.SaveChanges();
+                        Projects.Add(p);
+                        SelectedProj = p;
                     }
                 }));
             }
         }
 
+        // Редактирование проекта
         public RelayCommand EditProjCommand
         {
             get
             {
                 return editProjCommand ?? (editProjCommand = new RelayCommand((o) =>
                 {
-                    EditWindow w = new EditWindow(SelectedProj);
+                    EditVM editVM = new EditVM(o);
+
+                    var w = new EditWindow()
+                    {
+                        DataContext = editVM
+                    };
+
                     Opacity = 0.5;
                     w.ShowDialog();
 
@@ -188,12 +235,13 @@ namespace WpfTaskManager
             }
         }
 
+        // Добавление задачи
         public RelayCommand AddTaskCommand { 
             get
             {
                 return addTaskCommand ?? (addTaskCommand = new RelayCommand((o) =>
                 {
-                    AddTask w = new AddTask(SelectedProj.IdProject);
+                    Add w = new Add(SelectedProj.IdProject);
                     Opacity = 0.5;
                     w.ShowDialog();
 
@@ -214,8 +262,8 @@ namespace WpfTaskManager
 
                         if (w.Deadline_datepicker.SelectedDate == DateTime.Now.Date && time < DateTime.Now.TimeOfDay)
                         {
-                            MessageBox mb = new MessageBox();
-                            mb.Owner = w;
+                            MBWindow mb = new MBWindow();
+                            //mb.Owner = w;
                             mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
                             return;
                         }
@@ -227,18 +275,27 @@ namespace WpfTaskManager
                         db.Tasks.Add(t);
                         db.Projects.Find(SelectedProj.IdProject).Completed = null;
                         db.SaveChanges();
+                        ProjTasks.Add(t);
+                        SelectedTask = t;
                     }
-                }, o => SelectedProj != null));
+                }, o => SelectedProj != null && SelectedProj.Deadline >= DateTime.Now));
             }
         }
 
+        // Редактирование задачи
         public RelayCommand EditTaskCommand
         {
             get
             {
                 return editTaskCommand ?? (editTaskCommand = new RelayCommand((o) =>
                 {
-                    EditWindow w = new EditWindow(SelectedTask);
+                    EditVM editVM = new EditVM(o);
+
+                    var w = new EditWindow()
+                    {
+                        DataContext = editVM
+                    };
+
                     Opacity = 0.5;
                     w.ShowDialog();
 
@@ -258,6 +315,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Запуск задачи
         public RelayCommand StartTaskCommand
         {
             get
@@ -269,6 +327,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Выполнение задачи
         public RelayCommand CompleteTaskCommand
         {
             get

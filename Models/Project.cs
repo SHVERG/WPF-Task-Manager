@@ -92,6 +92,7 @@ namespace WpfTaskManager
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        /*
         public string SDeadline
         {
             get
@@ -99,5 +100,6 @@ namespace WpfTaskManager
                 return deadline.ToString();
             }
         }
+        */
     }
 }

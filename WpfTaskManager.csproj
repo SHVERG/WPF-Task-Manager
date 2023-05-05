@@ -91,35 +91,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ViewModels\AddProjectVM.cs" />
-    <Compile Include="Views\AddProject.xaml.cs">
-      <DependentUpon>AddProject.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\AddTask.xaml.cs">
-      <DependentUpon>AddTask.xaml</DependentUpon>
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\CompletionConverter.cs" />
+    <Compile Include="Converters\DateTimeToStringConverter.cs" />
+    <Compile Include="Converters\IntToTimespanConverter.cs" />
+    <Compile Include="Converters\InvertBooleanConverter.cs" />
+    <Compile Include="Models\Report.cs" />
+    <Compile Include="Proxies\BindingProxy.cs" />
+    <Compile Include="ViewModels\AddVM.cs" />
+    <Compile Include="ViewModels\EditVM.cs" />
+    <Compile Include="ViewModels\ReportVM.cs" />
+    <Compile Include="Views\AddWindow.xaml.cs">
+      <DependentUpon>AddWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AppContext.cs" />
-    <Compile Include="ViewModels\AppViewModel.cs" />
+    <Compile Include="ViewModels\AppVM.cs" />
     <Compile Include="Views\EditWindow.xaml.cs">
       <DependentUpon>EditWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MessageBox.xaml.cs">
-      <DependentUpon>MessageBox.xaml</DependentUpon>
+    <Compile Include="Views\MBWindow.xaml.cs">
+      <DependentUpon>MBWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="Views\Report.xaml.cs">
-      <DependentUpon>Report.xaml</DependentUpon>
+    <Compile Include="Views\ReportWindow.xaml.cs">
+      <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\ReportProject.cs" />
-    <Compile Include="Models\ReportTask.cs" />
     <Compile Include="Models\Task.cs" />
-    <Page Include="Views\AddProject.xaml">
+    <Page Include="Views\AddWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddTask.xaml">
-      <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
     <Page Include="Views\EditWindow.xaml">
       <SubType>Designer</SubType>
@@ -137,11 +137,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\MessageBox.xaml">
+    <Page Include="Views\MBWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Report.xaml">
+    <Page Include="Views\ReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -178,8 +178,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\icon.ico" />
-    <Resource Include="images\icon.png" />
+    <Resource Include="Images\icon.ico" />
+    <Resource Include="Images\icon.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

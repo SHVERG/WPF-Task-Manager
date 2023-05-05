@@ -20,15 +20,17 @@ namespace WpfTaskManager
     /// </summary>
     public partial class EditWindow : Window
     {
+        /*
         Task t = null;
         Project p = null;
         bool isProject = false;
+        */
 
-        public EditWindow(Object obj)
+        public EditWindow()
         {
-
             InitializeComponent();
-            try
+
+            /*try
             {
                 t = (Task)obj;
             }
@@ -49,9 +51,10 @@ namespace WpfTaskManager
                 Name_textbox.Text = p.Name;
                 Description_textbox.Text = p.Description;
                 isProject = true;
-            }
+            }*/
         }
 
+        /*
         private void ChangeName(string s)
         {
             Name_label.Content = Name_label.Content.ToString().Insert(0, s);
@@ -87,5 +90,6 @@ namespace WpfTaskManager
         {
             Check();
         }
+        */
     }
 }

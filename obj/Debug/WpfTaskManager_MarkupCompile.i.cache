@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\App.xaml
-6315265311
+5475596165
 
-191234294936
+25-504970089
 261269995946
-Views\AddProject.xaml;Views\AddTask.xaml;Views\EditWindow.xaml;Views\MainWindow.xaml;Views\MessageBox.xaml;Views\Report.xaml;
+Views\AddWindow.xaml;Views\EditWindow.xaml;Views\MainWindow.xaml;Views\MBWindow.xaml;Views\ReportWindow.xaml;
 
 True
 

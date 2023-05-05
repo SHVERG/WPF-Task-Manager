@@ -20,9 +20,9 @@ namespace WpfTaskManager
     /// Логика взаимодействия для NewMB.xaml
     /// </summary>
 
-    public partial class MessageBox : Window
+    public partial class MBWindow : Window
     {
-        public MessageBox()
+        public MBWindow()
         {
             InitializeComponent();
         }

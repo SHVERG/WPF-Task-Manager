@@ -1,24 +1,17 @@
-﻿using MaterialDesignThemes.Wpf;
-using System;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace WpfTaskManager
 {
-    public class AddProjectVM : INotifyPropertyChanged
+    public class AddVM : INotifyPropertyChanged
     {
         private RelayCommand closeCommand;
         private RelayCommand addCommand;
         private string name = "";
         private string description = "";
         private DateTime? deadline = null;
-
-        public AddProjectVM()
-        {
-
-        }
 
         public string Name
         {
@@ -66,7 +59,6 @@ namespace WpfTaskManager
                 return closeCommand ?? (closeCommand = new RelayCommand((o) =>
                 {
                     Window w = o as Window;
-                    Window owner = w.Owner as Window;
                     w.Close();
                 }));
             }

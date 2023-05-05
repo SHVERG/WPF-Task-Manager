@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Animation;
 
 namespace WpfTaskManager
 {
@@ -132,6 +126,7 @@ namespace WpfTaskManager
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        /*
         public TimeSpan TSTimespent
         {
             get
@@ -139,5 +134,6 @@ namespace WpfTaskManager
                 return new TimeSpan(timespent*10000000);
             }
         }
+        */
     }
 }
