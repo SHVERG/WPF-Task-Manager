@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\
+C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\
 WpfTaskManager
 none
 false
 DEBUG;TRACE
-D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\App.xaml
+C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\App.xaml
 5475596165
 
-25-504970089
-261269995946
+251870917657
+2639175070
 Views\AddWindow.xaml;Views\EditWindow.xaml;Views\MainWindow.xaml;Views\MBWindow.xaml;Views\ReportWindow.xaml;
 
 True
