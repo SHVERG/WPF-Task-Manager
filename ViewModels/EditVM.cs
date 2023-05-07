@@ -70,11 +70,11 @@ namespace WpfTaskManager
                 if (p.Name == Name && p.Description == Description)
                     return false;
 
-                using (AppContext db = new AppContext())
+                using (AppContext db = AppContext.ReCreate())
                 {
                     foreach (Project pr in db.Projects)
                     {
-                        if (pr.Name == Name.Trim())
+                        if (pr.Name == Name.Trim() && pr.IdProject != p.IdProject)
                         {
                             return false;
                         }

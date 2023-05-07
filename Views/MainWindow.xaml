@@ -210,9 +210,13 @@
                                       SelectedItem="{Binding SelectedProj}"
                                       AutoGenerateColumns="False">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Project Name" Binding="{Binding Name}"/>
-                                    <DataGridTextColumn Header="Deadline" Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
-                                    <DataGridTextColumn Header="State" Binding="{Binding Completed, Converter={StaticResource Completion}}"/>
+                                    <DataGridTextColumn Header="Project Name" 
+                                                        Binding="{Binding Name}"
+                                                        Width="120"/>
+                                    <DataGridTextColumn Header="Deadline" 
+                                                        Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
+                                    <DataGridTextColumn Header="State"
+                                                        Binding="{Binding Completed, Converter={StaticResource Completion}}"/>
                                 </DataGrid.Columns>
                                 
                                 <DataGrid.ContextMenu>
@@ -314,7 +318,8 @@
 
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Task Name" 
-                                                        Binding="{Binding Name}"/>
+                                                        Binding="{Binding Name}"
+                                                        Width="100"/>
                                     <DataGridTextColumn Header="Deadline" 
                                                         Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
                                     <DataGridTextColumn Header="State" 

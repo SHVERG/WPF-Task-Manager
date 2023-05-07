@@ -87,7 +87,7 @@
                                                 Visibility="{Binding Data, Source={StaticResource VisProxy}, Converter={StaticResource BoolToHidden}}"
                                                 Binding="{Binding ProjectName}"/>
                             <DataGridTextColumn Header="Deadline"
-                                                Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy H:mm:ss}}"/>
+                                                Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
                             <DataGridTextColumn Header="Time spent" 
                                                 Binding="{Binding Timespent}"/>
                             <DataGridTextColumn Header="Completed"

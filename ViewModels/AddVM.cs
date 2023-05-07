@@ -66,7 +66,7 @@ namespace WpfTaskManager
 
         private bool isUnique()
         {
-            using (AppContext db = new AppContext())
+            using (AppContext db = AppContext.ReCreate())
             {
                 foreach (Project pr in db.Projects)
                 {

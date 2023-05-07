@@ -142,11 +142,11 @@ namespace WpfTaskManager
 
                     DGSource.Clear();
 
-                    using (AppContext db = new AppContext())
+                    using (AppContext db = AppContext.ReCreate())
                     {
                         if (isProj)
                         {
-                            foreach (Project p in db.Projects.Where(p => p.Deadline >= ((DateTime)StartDate) && p.Deadline <= ((DateTime)EndDate)))
+                            foreach (Project p in db.Projects.Where(p => ((p.Completed == null && ChoiceIndex == 2) || (p.Completed != null && ChoiceIndex == 1) || ChoiceIndex == 0) && p.Deadline >= ((DateTime)StartDate) && p.Deadline <= ((DateTime)EndDate)))
                             {
                                 TimeSpan ts = new TimeSpan();
 
@@ -170,7 +170,7 @@ namespace WpfTaskManager
                         }
                         else
                         {
-                            foreach (Task t in db.Tasks.Where(t => t.Deadline >= ((DateTime)StartDate) && t.Deadline <= ((DateTime)EndDate)))
+                            foreach (Task t in db.Tasks.Where(t => ((t.Completed == null && ChoiceIndex == 2) || (t.Completed != null && ChoiceIndex == 1) || ChoiceIndex == 0) && t.Deadline >= ((DateTime)StartDate) && t.Deadline <= ((DateTime)EndDate)))
                             {
 
                                 if (t.Completed != null)

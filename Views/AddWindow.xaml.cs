@@ -10,7 +10,7 @@ namespace WpfTaskManager
         {
             if (id.HasValue)
             {
-                using (AppContext db = new AppContext())
+                using (AppContext db = AppContext.ReCreate())
                 {
                     CalendarDateRange range = new CalendarDateRange();
                     range.Start = db.Projects.Find(id).Deadline.AddDays(1);

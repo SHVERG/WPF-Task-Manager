@@ -31,7 +31,7 @@ namespace WpfTaskManager
         // Конструктор
         public MainVM()
         {
-            db = new AppContext();
+            db = AppContext.Create();
             Projects = new ObservableCollection<Project>(db.Projects);
             ProjTasks = new ObservableCollection<Task>();
         }
@@ -99,7 +99,7 @@ namespace WpfTaskManager
             get {
                 return refreshCommand ?? (refreshCommand = new RelayCommand((o) =>
                 {
-                    db = new AppContext();
+                    db = AppContext.ReCreate();
 
                     int p_id = -1;
                     int t_id = -1;

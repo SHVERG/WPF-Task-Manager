@@ -39,7 +39,7 @@
                          FontWeight="SemiBold"
                          FontSize="12"
                          Margin="10, 0"
-                         Text="{Binding Name}"/>
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Label Content="DESCRIPTION" 
                        HorizontalAlignment="Center" 
@@ -56,7 +56,7 @@
                          AcceptsTab="True"
                          Margin="10, 0" 
                          Height="265"
-                         Text="{Binding Description}"/>
+                         Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <StackPanel Grid.Row="1" 
                             VerticalAlignment="Center" 
@@ -75,7 +75,8 @@
                             Content="EDIT" 
                             Margin="20, 0" 
                             Width="150" 
-                            Command="{Binding EditCommand}"/>
+                            Command="{Binding EditCommand}"
+                            CommandParameter="{Binding ElementName=editWindow}"/>
 
                 </StackPanel>
 
