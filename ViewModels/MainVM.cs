@@ -31,7 +31,7 @@ namespace WpfTaskManager
         // Конструктор
         public MainVM()
         {
-            db = AppContext.Create();
+            db = new AppContext();
             Projects = new ObservableCollection<Project>(db.Projects);
             ProjTasks = new ObservableCollection<Task>();
         }
@@ -99,7 +99,7 @@ namespace WpfTaskManager
             get {
                 return refreshCommand ?? (refreshCommand = new RelayCommand((o) =>
                 {
-                    db = AppContext.ReCreate();
+                    db = new AppContext();
 
                     int p_id = -1;
                     int t_id = -1;
@@ -164,7 +164,14 @@ namespace WpfTaskManager
             {
                 return addProjCommand ?? (addProjCommand = new RelayCommand((o) =>
                 {
-                    Add w = new Add(null);
+
+                    AddVM addVM = new AddVM(null);
+
+                    var w = new AddWindow()
+                    {
+                        DataContext = addVM
+                    };
+
                     Opacity = 0.5;
                     w.ShowDialog();
 
@@ -173,24 +180,16 @@ namespace WpfTaskManager
 
                     if (w.DialogResult.Value)
                     {
-                        TimeSpan time = new TimeSpan(23, 59, 59);
+                        ProjectCreator pc = new ProjectCreator();
+                        
+                        Project p = (Project)pc.Create(addVM);
 
-                        if (w.Deadline_timepicker.SelectedTime != null)
-                        {
-                            time = ((DateTime)w.Deadline_timepicker.SelectedTime).TimeOfDay;
-                        }
-
-                        if (w.Deadline_datepicker.SelectedDate == DateTime.Now.Date && time < DateTime.Now.TimeOfDay)
+                        if (p == null)
                         {
                             MBWindow mb = new MBWindow();
-                            //mb.Owner = w;
                             mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
                             return;
                         }
-
-                        DateTime date = ((DateTime)w.Deadline_datepicker.SelectedDate).Add(time);
-
-                        Project p = new Project(w.Name_textbox.Text.Trim(), w.Description_textbox.Text, date);
 
                         db.Projects.Add(p);
                         db.SaveChanges();
@@ -240,7 +239,13 @@ namespace WpfTaskManager
             {
                 return addTaskCommand ?? (addTaskCommand = new RelayCommand((o) =>
                 {
-                    Add w = new Add(SelectedProj.IdProject);
+                    AddVM addVM = new AddVM(SelectedProj.IdProject);
+
+                    var w = new AddWindow()
+                    {
+                        DataContext = addVM
+                    };
+
                     Opacity = 0.5;
                     w.ShowDialog();
 
@@ -249,27 +254,16 @@ namespace WpfTaskManager
 
                     if (w.DialogResult.Value)
                     {
-                        TimeSpan time = new TimeSpan(23, 59, 59);
+                        TaskCreator tc = new TaskCreator();
 
-                        if (w.Deadline_timepicker.SelectedTime != null)
-                        {
-                            time = ((DateTime)w.Deadline_timepicker.SelectedTime).TimeOfDay;
-                        }
+                        Task t = (Task)tc.Create(addVM);
 
-                        if (db.Projects.Find(SelectedProj.IdProject).Deadline.Date == w.Deadline_datepicker.SelectedDate && time > db.Projects.Find(SelectedProj.IdProject).Deadline.TimeOfDay)
-                            time = db.Projects.Find(SelectedProj.IdProject).Deadline.TimeOfDay;
-
-                        if (w.Deadline_datepicker.SelectedDate == DateTime.Now.Date && time < DateTime.Now.TimeOfDay)
+                        if (t == null)
                         {
                             MBWindow mb = new MBWindow();
-                            //mb.Owner = w;
                             mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
                             return;
                         }
-
-                        DateTime date = ((DateTime)w.Deadline_datepicker.SelectedDate).Add(time);
-
-                        Task t = new Task(SelectedProj.IdProject, w.Name_textbox.Text.Trim(), w.Description_textbox.Text, date);
 
                         db.Tasks.Add(t);
                         db.Projects.Find(SelectedProj.IdProject).Completed = null;

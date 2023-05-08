@@ -1,8 +1,9 @@
-﻿<Window x:Class="WpfTaskManager.Add"
+﻿<Window x:Class="WpfTaskManager.AddWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:WpfTaskManager"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
         mc:Ignorable="d"
@@ -71,14 +72,17 @@
                                 FontWeight="SemiBold"
                                 FontSize="12"
                                 FirstDayOfWeek="Monday"
-                                SelectedDate="{Binding Deadline}">
+                                SelectedDate="{Binding Deadline}"
+                                DisplayDateStart="{Binding StartDate}"
+                                DisplayDateEnd="{Binding EndDate}">
                     </DatePicker>
-
+                    
                     <materialDesign:TimePicker x:Name="Deadline_timepicker" 
-                                                Grid.Column="1"
-                                                FontWeight="SemiBold"
-                                                FontSize="12"
-                                                Is24Hours="True"/>
+                                               Grid.Column="1"
+                                               FontWeight="SemiBold"
+                                               FontSize="12"
+                                               Is24Hours="True"
+                                               SelectedTime="{Binding Time}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" 

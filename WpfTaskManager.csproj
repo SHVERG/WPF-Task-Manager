@@ -96,6 +96,10 @@
     <Compile Include="Converters\DateTimeToStringConverter.cs" />
     <Compile Include="Converters\IntToTimespanConverter.cs" />
     <Compile Include="Converters\InvertBooleanConverter.cs" />
+    <Compile Include="Factories\Creator.cs" />
+    <Compile Include="Factories\ProjectCreator.cs" />
+    <Compile Include="Factories\Prototype.cs" />
+    <Compile Include="Factories\TaskCreator.cs" />
     <Compile Include="Models\Report.cs" />
     <Compile Include="Proxies\BindingProxy.cs" />
     <Compile Include="ViewModels\AddVM.cs" />

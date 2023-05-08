@@ -142,7 +142,7 @@ namespace WpfTaskManager
 
                     DGSource.Clear();
 
-                    using (AppContext db = AppContext.ReCreate())
+                    using (AppContext db = new AppContext())
                     {
                         if (isProj)
                         {

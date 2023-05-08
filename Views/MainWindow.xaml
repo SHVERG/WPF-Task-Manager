@@ -90,20 +90,17 @@
                           VerticalAlignment="Top">
                 
                         <MenuItem Header="File" FontWeight="SemiBold">
-                    
-                            <MenuItem Header="Refresh"
-                                      Command="{Binding RefreshCommand}"
-                                      CommandParameter="{Binding ElementName=Projs_datagrid}"/>
-                            
                             <MenuItem Header="Add Project"
                                       Command="{Binding AddProjCommand}"/>
                             <MenuItem Header="Add Task"
                                       Command="{Binding AddTaskCommand}"/>
                             <Separator/>
-                            
+                            <MenuItem Header="Refresh"
+                                      Command="{Binding RefreshCommand}"
+                                      CommandParameter="{Binding ElementName=Projs_datagrid}"/>
+                            <Separator/>
                             <MenuItem Header="Exit"
                                       Click="Exit_menuitem_Click"/>
-                    
                         </MenuItem>
 
                         <MenuItem Header="Edit" FontWeight="SemiBold">

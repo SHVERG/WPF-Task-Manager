@@ -1,18 +1,16 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
 
 namespace WpfTaskManager
 {
-    public class Task : INotifyPropertyChanged
+    public class Task : Prototype
     {
         [Key] public int IdTask { get; set; }
         private int idProject;
-        private string name;
+        /*private string name;
         private string description;
         private DateTime deadline;
-        private DateTime? completed;
+        private DateTime? completed;*/
         private int timespent;
 
         public int IdProject 
@@ -29,7 +27,7 @@ namespace WpfTaskManager
                 }
             }
         }
-        
+        /*
         public string Name 
         {
             get
@@ -95,6 +93,7 @@ namespace WpfTaskManager
                 }
             }
         }
+        */
 
         public int Timespent 
         { 
@@ -122,18 +121,9 @@ namespace WpfTaskManager
             Deadline = deadline;
         }
 
+        /*
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-        /*
-        public TimeSpan TSTimespent
-        {
-            get
-            {
-                return new TimeSpan(timespent*10000000);
-            }
-        }
-        */
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));*/
     }
 }

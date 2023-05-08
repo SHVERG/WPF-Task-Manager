@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace WpfTaskManager
 {
@@ -9,9 +10,64 @@ namespace WpfTaskManager
     {
         private RelayCommand closeCommand;
         private RelayCommand addCommand;
+
+        //private DateTime 
+
+        public Project proj { get; private set; }
+        private DateTime startDate;
+        private DateTime endDate;
         private string name = "";
         private string description = "";
         private DateTime? deadline = null;
+        private DateTime? time = null;
+
+        public AddVM() 
+        {
+        }
+
+        public AddVM(int? id)
+        {
+            StartDate = DateTime.Now;
+            
+            if (id.HasValue)
+            {
+                using (AppContext db = new AppContext())
+                {
+                    proj = db.Projects.Find(id);
+                    EndDate = db.Projects.Find(id).Deadline;
+                }
+            }
+            else
+            {
+                EndDate = DateTime.MaxValue;
+            }
+        }
+
+        public DateTime StartDate
+        {
+            get
+            {
+                return startDate;
+            }
+            set
+            {
+                startDate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public DateTime EndDate
+        {
+            get
+            {
+                return endDate;
+            }
+            set
+            {
+                endDate = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string Name
         {
@@ -52,6 +108,19 @@ namespace WpfTaskManager
             }
         }
 
+        public DateTime? Time
+        {
+            get
+            {
+                return time;
+            }
+            set
+            {
+                time = value;
+                OnPropertyChanged();
+            }
+        }
+
         public RelayCommand CloseCommand
         {
             get
@@ -66,7 +135,7 @@ namespace WpfTaskManager
 
         private bool isUnique()
         {
-            using (AppContext db = AppContext.ReCreate())
+            using (AppContext db = new AppContext())
             {
                 foreach (Project pr in db.Projects)
                 {

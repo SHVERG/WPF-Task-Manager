@@ -1,16 +1,17 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace WpfTaskManager
 {
-    public class Project : Prototype
+    public abstract class Prototype : INotifyPropertyChanged
     {
-        [Key] public int IdProject { get; set; }
-        /*private string name;
+        private string name;
         private string description;
         private DateTime deadline;
         private DateTime? completed;
-        
+
         public string Name
         {
             get
@@ -76,20 +77,9 @@ namespace WpfTaskManager
                 }
             }
         }
-        */
 
-        public Project() { }
-        
-        public Project(string name, string description, DateTime deadline)
-        {
-            Name = name;
-            Description = description;
-            Deadline = deadline;
-        }
-
-        /*
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));*/
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

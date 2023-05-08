@@ -1,25 +1,12 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 
 namespace WpfTaskManager
 {
-    public partial class Add : Window
+    public partial class AddWindow : Window
     {
-        public Add(int? id)
+        public AddWindow()
         {
-            if (id.HasValue)
-            {
-                using (AppContext db = AppContext.ReCreate())
-                {
-                    CalendarDateRange range = new CalendarDateRange();
-                    range.Start = db.Projects.Find(id).Deadline.AddDays(1);
-                    range.End = DateTime.MaxValue;
-                }
-            }
-
             InitializeComponent();
-            Deadline_datepicker.BlackoutDates.AddDatesInPast();
         }
     }
 }
