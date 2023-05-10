@@ -7,10 +7,6 @@ namespace WpfTaskManager
     {
         [Key] public int IdTask { get; set; }
         private int idProject;
-        /*private string name;
-        private string description;
-        private DateTime deadline;
-        private DateTime? completed;*/
         private int timespent;
 
         public int IdProject 
@@ -27,73 +23,6 @@ namespace WpfTaskManager
                 }
             }
         }
-        /*
-        public string Name 
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                if (name != value)
-                {
-                    name = value; 
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string Description 
-        { 
-            get
-            {
-                return description;
-            }
-            set
-            {
-                if (description != value)
-                {
-                    description = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        [DataType(DataType.Date)]
-        public DateTime Deadline 
-        { 
-            get
-            {
-                return deadline;
-            }
-            set
-            {
-                if (deadline != value)
-                {
-                    deadline = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        [DataType(DataType.Date)]
-        public DateTime? Completed 
-        { 
-            get
-            {
-                return completed;
-            } 
-            set
-            {
-                if (completed != value)
-                {
-                    completed = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        */
 
         public int Timespent 
         { 
@@ -120,10 +49,5 @@ namespace WpfTaskManager
             Description = description;
             Deadline = deadline;
         }
-
-        /*
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));*/
     }
 }

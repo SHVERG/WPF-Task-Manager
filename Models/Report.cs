@@ -4,24 +4,10 @@ using System.Runtime.CompilerServices;
 
 namespace WpfTaskManager
 {
-    public class Report : INotifyPropertyChanged
+    public class Report : Prototype
     {
-        private string name, projectName, completed;
-        private DateTime deadline;
+        private string s_completed, projectName;
         private TimeSpan timespent;
-
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-                OnPropertyChanged();
-            }
-        }
 
         public string ProjectName
         {
@@ -36,28 +22,15 @@ namespace WpfTaskManager
             }
         }
 
-        public DateTime Deadline
+        public string S_Completed
         {
             get
             {
-                return deadline;
+                return s_completed;
             }
             set
             {
-                deadline = value; 
-                OnPropertyChanged();
-            }
-        }
-
-        public string Completed
-        {
-            get
-            {
-                return completed;
-            }
-            set
-            {
-                completed = value;
+                s_completed = value;
                 OnPropertyChanged();
             }
         }
@@ -75,18 +48,13 @@ namespace WpfTaskManager
             }
         }
 
-        public Report(string name, string projectName, DateTime deadline, string completed, TimeSpan timespent)
+        public Report(string name, string projectName, DateTime deadline, string s_completed, TimeSpan timespent)
         {
             Name = name;
             ProjectName = projectName;
             Deadline = deadline;
-            Completed = completed;
+            S_Completed = s_completed;
             Timespent = timespent;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
     }
 }

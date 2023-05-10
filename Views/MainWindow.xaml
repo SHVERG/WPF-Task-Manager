@@ -94,11 +94,25 @@
                                       Command="{Binding AddProjCommand}"/>
                             <MenuItem Header="Add Task"
                                       Command="{Binding AddTaskCommand}"/>
+                            
                             <Separator/>
+
+                            <MenuItem Header="Export">
+                                <MenuItem Header="Selected Project"
+                                          Command="{Binding ExportProjCommand}"/>
+                                <MenuItem Header="All Projects"
+                                          Command="{Binding ExportAllProjsCommand}"/>
+                            </MenuItem>
+                            <MenuItem Header="Import Projects"
+                                      Command="{Binding ImportProjCommand}"/>
+                            
+                            <Separator/>
+                            
                             <MenuItem Header="Refresh"
                                       Command="{Binding RefreshCommand}"
                                       CommandParameter="{Binding ElementName=Projs_datagrid}"/>
                             <Separator/>
+                            
                             <MenuItem Header="Exit"
                                       Click="Exit_menuitem_Click"/>
                         </MenuItem>
@@ -218,10 +232,17 @@
                                 
                                 <DataGrid.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem x:Name="EditProject_contextmenuitem"
-                                                  Header="Edit"
+                                        <MenuItem Header="Edit"
                                                   Command="{Binding EditProjCommand}"
                                                   CommandParameter="{Binding SelectedProj}"/>
+                                        
+                                        <Separator/>
+                                        
+                                        <MenuItem Header="Export"
+                                                  Command="{Binding ExportProjCommand}"/>
+                                        
+                                        <MenuItem Header="Import"
+                                                  Command="{Binding ImportProjCommand}"/>
                                     </ContextMenu>
                                 </DataGrid.ContextMenu>
                             </DataGrid>

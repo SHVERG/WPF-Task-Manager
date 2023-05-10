@@ -138,7 +138,7 @@ namespace WpfTaskManager
             {
                 return showCommand ?? (showCommand = new RelayCommand((o) =>
                 {
-                    string Completed;
+                    string S_Completed;
 
                     DGSource.Clear();
 
@@ -158,14 +158,14 @@ namespace WpfTaskManager
                                 if (p.Completed != null)
                                 {
                                     if (p.Completed <= p.Deadline)
-                                        Completed = "Completed in time";
+                                        S_Completed = "Completed in time";
                                     else
-                                        Completed = "Completed in bad time";
+                                        S_Completed = "Completed in bad time";
                                 }
                                 else
-                                    Completed = "Not completed";
+                                    S_Completed = "Not completed";
 
-                                DGSource.Add(new Report(p.Name, null, p.Deadline, Completed, ts));
+                                DGSource.Add(new Report(p.Name, null, p.Deadline, S_Completed, ts));
                             }
                         }
                         else
@@ -176,14 +176,14 @@ namespace WpfTaskManager
                                 if (t.Completed != null)
                                 {
                                     if (t.Completed <= t.Deadline)
-                                        Completed = "Completed in time";
+                                        S_Completed = "Completed in time";
                                     else
-                                        Completed = "Completed in bad time";
+                                        S_Completed = "Completed in bad time";
                                 }
                                 else
-                                    Completed = "Not completed";
+                                    S_Completed = "Not completed";
 
-                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, Completed, new TimeSpan(t.Timespent * 10000000)));
+                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, S_Completed, new TimeSpan(t.Timespent * 10000000)));
                             }
                         }
                     }
@@ -202,8 +202,6 @@ namespace WpfTaskManager
 
                     if (save.ShowDialog() == true)
                     {
-                        IDataObject objectSave = Clipboard.GetDataObject();
-
                         string str;
 
                         if (IsProj)

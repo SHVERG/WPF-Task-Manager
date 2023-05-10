@@ -91,7 +91,7 @@
                             <DataGridTextColumn Header="Time spent" 
                                                 Binding="{Binding Timespent}"/>
                             <DataGridTextColumn Header="Completed"
-                                                Binding="{Binding Completed}"/>
+                                                Binding="{Binding S_Completed}"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
