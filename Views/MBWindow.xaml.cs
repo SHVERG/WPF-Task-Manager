@@ -1,25 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
 
 namespace WpfTaskManager
 {
-    /// <summary>
-    /// Логика взаимодействия для NewMB.xaml
-    /// </summary>
-
     public partial class MBWindow : Window
     {
         public MBWindow()
@@ -69,15 +53,6 @@ namespace WpfTaskManager
             this.ShowDialog();
             return this.Result;
         }
-
-        /*public static MessageBoxResult Show(string caption, string message, MessageBoxButton buttons)
-        {
-            var dialog = new MessageBox() { Title = caption };
-            dialog.MessageContainer.Text = message;
-            dialog.AddButtons(buttons);
-            dialog.ShowDialog();
-            return dialog.Result;
-        }*/
     }
 
 }

@@ -88,10 +88,10 @@
                                                 Binding="{Binding ProjectName}"/>
                             <DataGridTextColumn Header="Deadline"
                                                 Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
-                            <DataGridTextColumn Header="Time spent" 
-                                                Binding="{Binding Timespent}"/>
                             <DataGridTextColumn Header="Completed"
                                                 Binding="{Binding S_Completed}"/>
+                            <DataGridTextColumn Header="Time spent" 
+                                                Binding="{Binding Timespent}"/>
                         </DataGrid.Columns>
                     </DataGrid>
 

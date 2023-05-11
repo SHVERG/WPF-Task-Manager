@@ -394,6 +394,9 @@ namespace WpfTaskManager
                     if (save.ShowDialog() == true)
                     {
                         proj.Save(save.FileName);
+
+                        MBWindow mb = new MBWindow();
+                        mb.Show("Export Successful!", $"Project \"{SelectedProj.Name}\" exported successfully.", MessageBoxButton.OK);
                     }
 
                 }, o => SelectedProj != null));
@@ -447,6 +450,9 @@ namespace WpfTaskManager
                     if (save.ShowDialog() == true)
                     {
                         projs.Save(save.FileName);
+
+                        MBWindow mb = new MBWindow();
+                        mb.Show("Export Successful!", "All Projects exported successfully.", MessageBoxButton.OK);
                     }
                 }, o => db.Projects.Count() > 0));
             }
@@ -464,16 +470,17 @@ namespace WpfTaskManager
 
                     if (open.ShowDialog() == true)
                     {
+                        string names = "";
                         var doc = XDocument.Load(open.FileName);
-
                         IEnumerable<XElement> elements = doc.Descendants("project");
 
                         foreach (XElement proj in elements)
                         {
                             string name = proj.Element("name").Value;
+
                             if (db.Projects.Any(p => p.Name == name))
                             {
-                                MessageBox.Show($"Project {proj.Element("name").Value} can't be added");
+                                names += $"\n\"{name}\"";
                                 continue;
                             }
 
@@ -489,8 +496,6 @@ namespace WpfTaskManager
 
                             db.Projects.Add(p_add);
                             db.SaveChanges();
-                            Projects.Add(p_add);
-                            SelectedProj = p_add;
 
                             foreach (XElement task in proj.Element("tasks").Elements())
                             {
@@ -498,7 +503,7 @@ namespace WpfTaskManager
 
                                 DateTime t_comp;
 
-                                t_add.IdProject = db.Projects.First(p => p.Name == p_add.Name).IdProject;
+                                t_add.IdProject = p_add.IdProject;
                                 t_add.Name = task.Element("name").Value;
                                 t_add.Description = task.Element("desc").Value;
                                 t_add.Deadline = DateTime.Parse(task.Element("deadline").Value);
@@ -508,9 +513,20 @@ namespace WpfTaskManager
 
                                 db.Tasks.Add(t_add);
                                 db.SaveChanges();
-                                ProjTasks.Add(t_add);
-                                SelectedTask = t_add;
                             }
+
+                            Projects.Add(p_add);
+                            SelectedProj = p_add;
+                        }
+
+                        MBWindow mb = new MBWindow();
+                        if (names.Length != 0)
+                        {
+                            mb.Show("Warning!", $"Can't import Projects:{names}", MessageBoxButton.OK);
+                        }
+                        else
+                        {
+                            mb.Show("Import Successful!", "All Projects imported successfully.", MessageBoxButton.OK);
                         }
                     }
                 }));

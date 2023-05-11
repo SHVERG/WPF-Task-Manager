@@ -1135,6 +1135,16 @@
             Get or sets the corner radius of the popup card.
             </summary>
         </member>
+        <member name="F:MaterialDesignThemes.Wpf.PopupBox.PopupElevationProperty">
+            <summary>
+            Gets or sets the elevation of the popup card.
+            </summary>
+        </member>
+        <member name="P:MaterialDesignThemes.Wpf.PopupBox.PopupElevation">
+            <summary>
+            Gets or sets the elevation of the popup card.
+            </summary>
+        </member>
         <member name="P:MaterialDesignThemes.Wpf.PopupBox.PopupPlacementMethod">
             <summary>
             Framework use. Provides the method used to position the popup.

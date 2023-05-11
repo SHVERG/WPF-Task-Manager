@@ -22,24 +22,13 @@
             </Grid.RowDefinitions>
 
             <Label Name="CaptionContainer" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource PrimaryHueMidBrush}" FontWeight="Bold" FontSize="16"/>
-            
-            <TextBlock Grid.Row="1" Name="MessageContainer" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="10" FontWeight="SemiBold" FontSize="14"/>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <TextBlock Name="MessageContainer" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="10" FontWeight="SemiBold" FontSize="14"/>
+            </ScrollViewer>
             
             <StackPanel Name="ButtonContainer" Grid.Row="2" Orientation="Horizontal"
-                        HorizontalAlignment="Center" Margin="10">
-                
-                <StackPanel.Resources>
-                    <!--#region 
-                    
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="MinHeight" Value="25"/>
-                        <Setter Property="MinWidth" Value="75"/>
-                        <Setter Property="Margin" Value="10,0,0,0"/>
-                    </Style>
-                    -->
-                </StackPanel.Resources>
-                
-            </StackPanel>
+                        HorizontalAlignment="Center" Margin="10"/>
             
         </Grid>
     </Border>
