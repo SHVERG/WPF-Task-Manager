@@ -29,7 +29,6 @@
             
             <StackPanel Name="ButtonContainer" Grid.Row="2" Orientation="Horizontal"
                         HorizontalAlignment="Center" Margin="10"/>
-            
         </Grid>
     </Border>
 </Window>

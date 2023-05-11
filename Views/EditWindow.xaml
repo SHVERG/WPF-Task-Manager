@@ -19,23 +19,18 @@
     <Window.DataContext>
         <local:EditVM/>
     </Window.DataContext>
-    
-    <Grid x:Name="Main_grid">
 
-        <Border x:Name="Edit_border" 
-                CornerRadius="5" 
+    <Grid>
+        <Border CornerRadius="5" 
                 Background="{StaticResource MaterialDesignBackground}">
-
             <StackPanel>
-                <Label x:Name="Name_label"
-                       Content="NAME" 
+                <Label Content="NAME" 
                        HorizontalAlignment="Center" 
                        Foreground="{StaticResource PrimaryHueMidBrush}" 
                        FontWeight="Bold"
                        FontSize="14"/>
 
-                <TextBox x:Name="Name_textbox" 
-                         Background="WhiteSmoke"
+                <TextBox Background="WhiteSmoke"
                          FontWeight="SemiBold"
                          FontSize="12"
                          Margin="10, 0"
@@ -47,8 +42,7 @@
                        FontWeight="Bold"
                        FontSize="14"/>
 
-                <TextBox x:Name="Description_textbox" 
-                         VerticalContentAlignment="Top" 
+                <TextBox VerticalContentAlignment="Top" 
                          Background="WhiteSmoke" 
                          FontWeight="SemiBold"
                          FontSize="12"
@@ -64,24 +58,19 @@
                             HorizontalAlignment="Center" 
                             Margin="14">
 
-                    <Button x:Name="Close_button" 
-                            Content="CLOSE" 
+                    <Button Content="CLOSE" 
                             Margin="20, 0" 
                             Width="150" 
                             Command="{Binding CloseCommand}"
                             CommandParameter="{Binding ElementName=editWindow}"/>
 
-                    <Button x:Name="Edit_button" 
-                            Content="EDIT" 
+                    <Button Content="EDIT" 
                             Margin="20, 0" 
                             Width="150" 
                             Command="{Binding EditCommand}"
                             CommandParameter="{Binding ElementName=editWindow}"/>
-
                 </StackPanel>
-
             </StackPanel>
         </Border>
-
     </Grid>
 </Window>

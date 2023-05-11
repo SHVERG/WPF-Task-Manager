@@ -29,15 +29,11 @@
         </ResourceDictionary>
     </Window.Resources>
 
-        <Grid x:Name="Main_grid">
-
-        <Border x:Name="AddProject_border" 
-                CornerRadius="5" 
+    <Grid>
+        <Border CornerRadius="5" 
                 Background="{StaticResource MaterialDesignBackground}">
-
             <StackPanel>
-                <Label x:Name="Title_label"
-                       Content="{Binding Title}" 
+                <Label Content="{Binding Title}" 
                        HorizontalAlignment="Center" 
                        Foreground="{StaticResource PrimaryHueMidBrush}" 
                        FontWeight="Bold"
@@ -45,14 +41,12 @@
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center">
-                    
                     <Label Content="{Binding ChoiceLabel}"
                            Foreground="{StaticResource PrimaryHueMidBrush}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
 
-                    <ComboBox x:Name="ChoiceBox" 
-                              SelectedIndex="{Binding ChoiceIndex}"
+                    <ComboBox SelectedIndex="{Binding ChoiceIndex}"
                               FontWeight="SemiBold"
                               FontSize="12">
                         
@@ -72,13 +66,11 @@
                            FontWeight="SemiBold"
                            FontSize="14"/>
                     <DatePicker x:Name="EndDate" SelectedDate="{Binding EndDate}"/>
-                    
                 </StackPanel>
 
                 <ScrollViewer Margin="10"
                               Height="463">
-                    <DataGrid x:Name="Report_datagrid"
-                              IsReadOnly="True"
+                    <DataGrid IsReadOnly="True"
                               AutoGenerateColumns="False"
                               ItemsSource="{Binding DGSource}">
                         <DataGrid.Columns>
@@ -94,7 +86,6 @@
                                                 Binding="{Binding Timespent}"/>
                         </DataGrid.Columns>
                     </DataGrid>
-
                 </ScrollViewer>
 
                 <StackPanel Grid.Row="1"
@@ -103,30 +94,23 @@
                             HorizontalAlignment="Center"
                             Margin="14">
 
-                    <Button x:Name="Close_button"
-                            Content="CLOSE"
+                    <Button Content="CLOSE"
                             Margin="20, 0"
                             Width="150"
                             Command="{Binding CloseCommand}"
                             CommandParameter="{Binding ElementName=reportWindow}"/>
 
-                    <Button x:Name="Show_button" 
-                            Content="SHOW" 
+                    <Button Content="SHOW" 
                             Margin="20, 0" 
                             Width="150"
                             Command="{Binding ShowCommand}"/>
 
-                    <Button x:Name="Save_button" 
-                            Content="SAVE AS..." 
+                    <Button Content="SAVE AS..." 
                             Margin="20, 0" 
                             Width="150" 
                             Command="{Binding SaveCommand}"/>
-
                 </StackPanel>
-
             </StackPanel>
-
         </Border>
-
     </Grid>
 </Window>

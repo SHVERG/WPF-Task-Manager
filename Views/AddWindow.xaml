@@ -21,11 +21,9 @@
     <Window.DataContext>
         <local:AddVM/>
     </Window.DataContext>
-    
-    <Grid x:Name="Main_grid">
 
-        <Border x:Name="Add_border" 
-                CornerRadius="5" 
+    <Grid>
+        <Border CornerRadius="5" 
                 Background="{StaticResource MaterialDesignBackground}">
 
             <StackPanel>
@@ -35,8 +33,7 @@
                        FontWeight="Bold"
                        FontSize="14"/>
 
-                <TextBox x:Name="Name_textbox" 
-                         Background="WhiteSmoke" 
+                <TextBox Background="WhiteSmoke" 
                          FontWeight="SemiBold"
                          FontSize="12"
                          Margin="10, 0"
@@ -51,34 +48,30 @@
                 <ScrollViewer Margin="10, 0"
                               Height="235">
 
-                    <TextBox x:Name="Description_textbox" 
-                             VerticalContentAlignment="Top" 
+                    <TextBox VerticalContentAlignment="Top" 
                              Background="WhiteSmoke" 
                              FontWeight="SemiBold"
                              FontSize="12"
                              AcceptsReturn="True"
                              Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
-
                 </ScrollViewer>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="3">
-                        
-                    <Label Content="DEADLINE" 
-                            Foreground="{StaticResource PrimaryHueMidBrush}" 
-                            FontWeight="Bold"
-                            FontSize="14"/>
 
-                    <DatePicker x:Name="Deadline_datepicker"  
-                                FontWeight="SemiBold"
+                    <Label Content="DEADLINE" 
+                           Foreground="{StaticResource PrimaryHueMidBrush}" 
+                           FontWeight="Bold"
+                           FontSize="14"/>
+
+                    <DatePicker FontWeight="SemiBold"
                                 FontSize="12"
                                 FirstDayOfWeek="Monday"
                                 SelectedDate="{Binding Deadline}"
                                 DisplayDateStart="{Binding StartDate}"
                                 DisplayDateEnd="{Binding EndDate}">
                     </DatePicker>
-                    
-                    <materialDesign:TimePicker x:Name="Deadline_timepicker" 
-                                               Grid.Column="1"
+
+                    <materialDesign:TimePicker Grid.Column="1"
                                                FontWeight="SemiBold"
                                                FontSize="12"
                                                Is24Hours="True"
@@ -91,25 +84,19 @@
                             HorizontalAlignment="Center" 
                             Margin="14">
 
-                    <Button x:Name="Close_button" 
-                            Content="CLOSE" 
+                    <Button Content="CLOSE" 
                             Margin="20, 0" 
                             Width="150"
                             Command="{Binding CloseCommand}"
                             CommandParameter="{Binding ElementName=addWindow}"/>
 
-                    <Button x:Name="Add_button" 
-                            Content="ADD" 
+                    <Button Content="ADD" 
                             Margin="20, 0" 
                             Width="150"
                             Command="{Binding AddCommand}"
                             CommandParameter="{Binding ElementName=addWindow}"/>
-
                 </StackPanel>
-
             </StackPanel>
-
         </Border>
-
     </Grid>
 </Window>

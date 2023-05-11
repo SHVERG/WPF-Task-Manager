@@ -233,8 +233,8 @@ namespace WpfTaskManager
                     {
                         Project edit = db.Projects.Find(selectedProj.IdProject);
 
-                        edit.Name = w.Name_textbox.Text.Trim();
-                        edit.Description = w.Description_textbox.Text.Trim();
+                        edit.Name = editVM.Name.Trim();
+                        edit.Description = editVM.Description.Trim();
 
                         db.SaveChanges();
                     }
@@ -308,8 +308,8 @@ namespace WpfTaskManager
                     {
                         Task edit = db.Tasks.Find(SelectedTask.IdTask);
 
-                        edit.Name = w.Name_textbox.Text.Trim();
-                        edit.Description = w.Description_textbox.Text.Trim();
+                        edit.Name = editVM.Name.Trim();
+                        edit.Description = editVM.Description.Trim();
 
                         db.SaveChanges();
                     }
