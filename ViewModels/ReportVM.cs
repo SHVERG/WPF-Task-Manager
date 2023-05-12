@@ -214,7 +214,7 @@ namespace WpfTaskManager
                         }
                         else
                         {
-                            str = "Name;Project Name;Timespent;Completed\n";
+                            str = "Name;Project Name;Deadline;Timespent;Completed\n";
                             foreach (Report r in DGSource)
                             {
                                 str += $"\"{r.Name}\";\"{r.ProjectName}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.S_Completed}\"\n";
