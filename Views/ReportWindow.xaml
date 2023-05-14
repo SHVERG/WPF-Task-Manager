@@ -13,8 +13,9 @@
         ResizeMode="NoResize"
         AllowsTransparency="True"
         Background="{x:Null}"
+        Icon="/Images/icon.ico"
         WindowStyle="None"
-        ShowInTaskbar="False">
+        ShowInTaskbar="True">
 
     <Window.DataContext>
         <local:ReportVM/>

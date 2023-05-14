@@ -94,10 +94,12 @@
                                   FontWeight="SemiBold">
                             
                             <MenuItem Header="Add Project"
-                                      Command="{Binding AddProjCommand}"/>
+                                      Command="{Binding AddProjCommand}"
+                                      CommandParameter="{Binding ElementName=mainWindow}"/>
 
                             <MenuItem Header="Add Task"
-                                      Command="{Binding AddTaskCommand}"/>
+                                      Command="{Binding AddTaskCommand}"
+                                      CommandParameter="{Binding ElementName=mainWindow}"/>
                             <Separator/>
 
                             <MenuItem Header="Export">
