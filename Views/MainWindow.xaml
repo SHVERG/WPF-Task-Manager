@@ -28,6 +28,7 @@
             <local:IntToTimespanConverter x:Key="IntToTimespan"/>
             <local:DateTimeToStringConverter x:Key="DatetimeToString"/>
             <local:CompletionConverter x:Key="Completion"/>
+            <local:BindingProxy x:Key="OwnerProxy" Data="{Binding ElementName=mainWindow}"/>
             <Style TargetType="{x:Type Button}" x:Key="WindowButtonStyle">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -69,16 +70,14 @@
         <local:MainVM/>
     </Window.DataContext>
 
-    <Grid x:Name="Main_grid" 
-          Background="{StaticResource MaterialDesignDarkBackground}">
+    <Grid Background="{StaticResource MaterialDesignDarkBackground}">
         
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         
-        <Border x:Name="TitleBar" 
-                Background="{StaticResource MaterialDesignBackground}" 
+        <Border Background="{StaticResource MaterialDesignBackground}" 
                 Margin="3, 3, 3, 0" 
                 CornerRadius="5"
                 MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
@@ -126,11 +125,11 @@
 
                             <MenuItem Header="Project"
                                       Command="{Binding EditProjCommand}"
-                                      CommandParameter="{Binding SelectedProj}"/>
+                                      CommandParameter="{Binding ElementName=mainWindow}"/>
 
                             <MenuItem Header="Task"
                                       Command="{Binding EditTaskCommand}"
-                                      CommandParameter="{Binding SelectedTask}"/>
+                                      CommandParameter="{Binding ElementName=mainWindow}"/>
                         </MenuItem>
 
                         <MenuItem Header="Report" 
@@ -233,7 +232,7 @@
                                     <ContextMenu>
                                         <MenuItem Header="Edit"
                                                   Command="{Binding EditProjCommand}"
-                                                  CommandParameter="{Binding SelectedProj}"/>
+                                                  CommandParameter="{Binding Data, Source={StaticResource OwnerProxy}}"/>
                                         <Separator/>
 
                                         <MenuItem Header="Export"
@@ -252,7 +251,8 @@
                         Content="ADD PROJECT" 
                         VerticalContentAlignment="Top" 
                         Margin="3"
-                        Command="{Binding AddProjCommand}"/>
+                        Command="{Binding AddProjCommand}"
+                        CommandParameter="{Binding ElementName=mainWindow}"/>
             </Grid>
 
             <!-- Сетка инфы о проекте и его задач -->
@@ -354,7 +354,7 @@
 
                                         <MenuItem Header="Edit"
                                                   Command="{Binding EditTaskCommand}"
-                                                  CommandParameter="{Binding SelectedTask}"/>
+                                                  CommandParameter="{Binding Data, Source={StaticResource OwnerProxy}}"/>
 
                                         <MenuItem Header="Complete"
                                                   Command="{Binding CompleteTaskCommand}"/>

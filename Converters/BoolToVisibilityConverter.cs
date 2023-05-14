@@ -14,7 +14,7 @@ namespace WpfTaskManager
         {
             // Set defaults
             this.TrueValue = Visibility.Visible;
-            this.FalseValue = Visibility.Collapsed;
+            this.FalseValue = Visibility.Hidden;
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

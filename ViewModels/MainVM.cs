@@ -5,9 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.Remoting.Proxies;
 using System.Windows;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace WpfTaskManager
@@ -182,6 +180,7 @@ namespace WpfTaskManager
                     };
 
                     Opacity = 0.5;
+                    w.Owner = (Window)o;
                     w.ShowDialog();
 
                     if (w.DialogResult.HasValue)
@@ -216,7 +215,7 @@ namespace WpfTaskManager
             {
                 return editProjCommand ?? (editProjCommand = new RelayCommand((o) =>
                 {
-                    EditVM editVM = new EditVM(o);
+                    EditVM editVM = new EditVM(SelectedProj);
 
                     var w = new EditWindow()
                     {
@@ -224,6 +223,7 @@ namespace WpfTaskManager
                     };
 
                     Opacity = 0.5;
+                    w.Owner = (Window)o;
                     w.ShowDialog();
 
                     if (w.DialogResult.HasValue)
@@ -256,6 +256,7 @@ namespace WpfTaskManager
                     };
 
                     Opacity = 0.5;
+                    w.Owner = (Window)o;
                     w.ShowDialog();
 
                     if (w.DialogResult.HasValue)
@@ -291,7 +292,7 @@ namespace WpfTaskManager
             {
                 return editTaskCommand ?? (editTaskCommand = new RelayCommand((o) =>
                 {
-                    EditVM editVM = new EditVM(o);
+                    EditVM editVM = new EditVM(SelectedTask);
 
                     var w = new EditWindow()
                     {
@@ -299,6 +300,7 @@ namespace WpfTaskManager
                     };
 
                     Opacity = 0.5;
+                    w.Owner = (Window)o;
                     w.ShowDialog();
 
                     if (w.DialogResult.HasValue)

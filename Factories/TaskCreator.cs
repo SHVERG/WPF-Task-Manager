@@ -1,6 +1,4 @@
-﻿using System.Windows;
-using System;
-using System.Windows.Input;
+﻿using System;
 
 namespace WpfTaskManager
 {

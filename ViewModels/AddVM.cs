@@ -7,11 +7,6 @@ namespace WpfTaskManager
 {
     public class AddVM : INotifyPropertyChanged
     {
-        private RelayCommand closeCommand;
-        private RelayCommand addCommand;
-
-        //private DateTime 
-
         public Project proj { get; private set; }
         private DateTime startDate;
         private DateTime endDate;
@@ -20,6 +15,10 @@ namespace WpfTaskManager
         private DateTime? deadline = null;
         private DateTime? time = null;
 
+        private RelayCommand closeCommand;
+        private RelayCommand addCommand;
+
+        // Конструкторы
         public AddVM() 
         {
         }
@@ -42,6 +41,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Свойства
         public DateTime StartDate
         {
             get
@@ -120,6 +120,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Команда закрытия
         public RelayCommand CloseCommand
         {
             get
@@ -132,6 +133,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Проверка на уникальность названия создаваемого проекта
         private bool isUnique()
         {
             if (proj != null) return true;
@@ -151,6 +153,7 @@ namespace WpfTaskManager
             return true;
         }
 
+        // Команда добавления проекта/задачи
         public RelayCommand AddCommand
         {
             get
@@ -162,7 +165,6 @@ namespace WpfTaskManager
                 }, o => Name != null && Deadline != null && Name.Trim().Length != 0 && Name.Trim().Length <= 30 && Description.Trim().Length <= 150 && isUnique()));
             }
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

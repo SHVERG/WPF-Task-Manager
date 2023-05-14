@@ -25,6 +25,7 @@ namespace WpfTaskManager
         private RelayCommand showCommand;
         private RelayCommand saveCommand;
 
+        // Конструкторы
         public ReportVM() 
         {
             DGSource = new ObservableCollection<Report>();
@@ -42,6 +43,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Свойства
         public bool IsProj
         {
             get
@@ -120,6 +122,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Команда закрытия окна
         public RelayCommand CloseCommand
         {
             get
@@ -132,6 +135,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Команда показа отчета
         public RelayCommand ShowCommand
         {
             get
@@ -191,6 +195,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Команда сохранения отчета
         public RelayCommand SaveCommand
         {
             get

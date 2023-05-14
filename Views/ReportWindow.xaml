@@ -25,7 +25,6 @@
             <local:InvertBooleanConverter x:Key="BoolConvert"/>
             <local:BoolToVisibilityConverter x:Key="BoolToHidden" TrueValue="Visible" FalseValue="Hidden"/>
             <local:BindingProxy x:Key="VisProxy" Data="{Binding Path=IsProj, Converter={StaticResource BoolConvert}}"/>
-            <local:BindingProxy x:Key="SourceProxy" Data="{Binding Path=DGSource}"/>
         </ResourceDictionary>
     </Window.Resources>
 

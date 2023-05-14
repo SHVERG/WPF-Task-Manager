@@ -15,6 +15,7 @@ namespace WpfTaskManager
         private RelayCommand closeCommand;
         private RelayCommand editCommand;
         
+        // Конструкторы
         public EditVM() 
         {
 
@@ -37,6 +38,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Свойства
         public string Name
         {
             get
@@ -63,6 +65,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Проверка на уникальность изменяемой задачи/проекта
         private bool isUnique()
         {
             if (isProject)
@@ -91,6 +94,7 @@ namespace WpfTaskManager
 
         }
 
+        // Команда закрытия
         public RelayCommand CloseCommand
         {
             get
@@ -103,6 +107,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Команда подтверждения изменения
         public RelayCommand EditCommand
         {
             get
