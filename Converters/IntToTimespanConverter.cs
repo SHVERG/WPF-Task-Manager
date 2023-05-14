@@ -9,13 +9,24 @@ namespace WpfTaskManager
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             int original = (int)value;
-            return new TimeSpan(original * 10000000);
+
+            int hrs = original / 3600;
+            int mins = (original - hrs * 3600) / 60;
+
+            return $"{hrs} hours {mins} minutes";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            TimeSpan original = (TimeSpan)value;
-            return (int)(original.Ticks / 10000000);
+            throw new NotImplementedException();
         }
+
+        /*
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+           TimeSpan original = (TimeSpan)value;
+           return (int)(original.Ticks / 10000000);
+        }
+        */
     }
 }

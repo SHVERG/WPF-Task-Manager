@@ -135,6 +135,15 @@ namespace WpfTaskManager
             }
         }
 
+        private TimeSpan SecondsToTimeSpan(int val)
+        {
+            int hrs = val / 3600;
+            int mins = (val - hrs * 3600) / 60;
+            int secs = (val - hrs * 3600 - mins * 60) / 60;
+
+            return new TimeSpan(hrs, mins, secs);
+        }
+
         // Команда показа отчета
         public RelayCommand ShowCommand
         {
@@ -156,7 +165,7 @@ namespace WpfTaskManager
 
                                 foreach (Task t in db.Tasks.Where(t => t.IdProject == p.IdProject))
                                 {
-                                    ts = ts.Add(new TimeSpan(t.Timespent * 10000000));
+                                    ts = ts.Add(SecondsToTimeSpan(t.Timespent));
                                 }
 
                                 if (p.Completed != null)
@@ -176,7 +185,6 @@ namespace WpfTaskManager
                         {
                             foreach (Task t in db.Tasks.Where(t => ((t.Completed == null && ChoiceIndex == 2) || (t.Completed != null && ChoiceIndex == 1) || ChoiceIndex == 0) && t.Deadline >= ((DateTime)StartDate) && t.Deadline <= ((DateTime)EndDate)))
                             {
-
                                 if (t.Completed != null)
                                 {
                                     if (t.Completed <= t.Deadline)
@@ -187,7 +195,7 @@ namespace WpfTaskManager
                                 else
                                     S_Completed = "Not completed";
 
-                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, S_Completed, new TimeSpan(t.Timespent * 10000000)));
+                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, S_Completed, SecondsToTimeSpan(t.Timespent)));
                             }
                         }
                     }
