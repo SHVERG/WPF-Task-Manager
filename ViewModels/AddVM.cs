@@ -153,6 +153,12 @@ namespace WpfTaskManager
             return true;
         }
 
+        // Условие запуска команды добавления проекта/задачи
+        private bool AddCanExecute()
+        {
+            return Name != null && Deadline != null && Name.Trim().Length != 0 && Name.Trim().Length <= 30 && Description.Trim().Length <= 150 && isUnique();
+        }
+
         // Команда добавления проекта/задачи
         public RelayCommand AddCommand
         {
@@ -162,7 +168,7 @@ namespace WpfTaskManager
                 {
                     Window w = o as Window;
                     w.DialogResult = true;
-                }, o => Name != null && Deadline != null && Name.Trim().Length != 0 && Name.Trim().Length <= 30 && Description.Trim().Length <= 150 && isUnique()));
+                }, o => AddCanExecute()));
             }
         }
 

@@ -135,6 +135,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Преобразование секунд в TimeSpan
         private TimeSpan SecondsToTimeSpan(int val)
         {
             int hrs = val / 3600;
@@ -144,6 +145,59 @@ namespace WpfTaskManager
             return new TimeSpan(hrs, mins, secs);
         }
 
+        // Показ отчета
+        public void ShowExecute()
+        {
+            string S_Completed;
+
+            DGSource.Clear();
+
+            using (AppContext db = new AppContext())
+            {
+                if (IsProj)
+                {
+                    foreach (Project p in db.Projects.Where(p => ((p.Completed == null && ChoiceIndex == 2) || (p.Completed != null && ChoiceIndex == 1) || ChoiceIndex == 0) && p.Deadline >= ((DateTime)StartDate) && p.Deadline <= ((DateTime)EndDate)))
+                    {
+                        TimeSpan ts = new TimeSpan();
+
+                        foreach (Task t in db.Tasks.Where(t => t.IdProject == p.IdProject))
+                        {
+                            ts = ts.Add(SecondsToTimeSpan(t.Timespent));
+                        }
+
+                        if (p.Completed != null)
+                        {
+                            if (p.Completed <= p.Deadline)
+                                S_Completed = "Completed in time";
+                            else
+                                S_Completed = "Completed in bad time";
+                        }
+                        else
+                            S_Completed = "Not completed";
+
+                        DGSource.Add(new Report(p.Name, null, p.Deadline, S_Completed, ts));
+                    }
+                }
+                else
+                {
+                    foreach (Task t in db.Tasks.Where(t => ((t.Completed == null && ChoiceIndex == 2) || (t.Completed != null && ChoiceIndex == 1) || ChoiceIndex == 0) && t.Deadline >= ((DateTime)StartDate) && t.Deadline <= ((DateTime)EndDate)))
+                    {
+                        if (t.Completed != null)
+                        {
+                            if (t.Completed <= t.Deadline)
+                                S_Completed = "Completed in time";
+                            else
+                                S_Completed = "Completed in bad time";
+                        }
+                        else
+                            S_Completed = "Not completed";
+
+                        DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, S_Completed, SecondsToTimeSpan(t.Timespent)));
+                    }
+                }
+            }
+        }
+
         // Команда показа отчета
         public RelayCommand ShowCommand
         {
@@ -151,55 +205,42 @@ namespace WpfTaskManager
             {
                 return showCommand ?? (showCommand = new RelayCommand((o) =>
                 {
-                    string S_Completed;
-
-                    DGSource.Clear();
-
-                    using (AppContext db = new AppContext())
-                    {
-                        if (isProj)
-                        {
-                            foreach (Project p in db.Projects.Where(p => ((p.Completed == null && ChoiceIndex == 2) || (p.Completed != null && ChoiceIndex == 1) || ChoiceIndex == 0) && p.Deadline >= ((DateTime)StartDate) && p.Deadline <= ((DateTime)EndDate)))
-                            {
-                                TimeSpan ts = new TimeSpan();
-
-                                foreach (Task t in db.Tasks.Where(t => t.IdProject == p.IdProject))
-                                {
-                                    ts = ts.Add(SecondsToTimeSpan(t.Timespent));
-                                }
-
-                                if (p.Completed != null)
-                                {
-                                    if (p.Completed <= p.Deadline)
-                                        S_Completed = "Completed in time";
-                                    else
-                                        S_Completed = "Completed in bad time";
-                                }
-                                else
-                                    S_Completed = "Not completed";
-
-                                DGSource.Add(new Report(p.Name, null, p.Deadline, S_Completed, ts));
-                            }
-                        }
-                        else
-                        {
-                            foreach (Task t in db.Tasks.Where(t => ((t.Completed == null && ChoiceIndex == 2) || (t.Completed != null && ChoiceIndex == 1) || ChoiceIndex == 0) && t.Deadline >= ((DateTime)StartDate) && t.Deadline <= ((DateTime)EndDate)))
-                            {
-                                if (t.Completed != null)
-                                {
-                                    if (t.Completed <= t.Deadline)
-                                        S_Completed = "Completed in time";
-                                    else
-                                        S_Completed = "Completed in bad time";
-                                }
-                                else
-                                    S_Completed = "Not completed";
-
-                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, S_Completed, SecondsToTimeSpan(t.Timespent)));
-                            }
-                        }
-                    }
+                    ShowExecute();
                 }, o => StartDate != null && EndDate != null));
+            }
+        }
+
+        // Сохранение отчета
+        private void SaveExecute()
+        {
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "CSV file|*.csv";
+
+            if (save.ShowDialog() == true)
+            {
+                string str;
+
+                if (IsProj)
+                {
+                    str = "Name;Deadline;Timespent;Completed\n";
+                    foreach (Report r in DGSource)
+                    {
+                        str += $"\"{r.Name}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.S_Completed}\"\n";
+                    }
+                }
+                else
+                {
+                    str = "Name;Project Name;Deadline;Timespent;Completed\n";
+                    foreach (Report r in DGSource)
+                    {
+                        str += $"\"{r.Name}\";\"{r.ProjectName}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.S_Completed}\"\n";
+                    }
+                }
+
+                File.WriteAllText(save.FileName, str, Encoding.UTF8);
+
+                MBWindow mb = new MBWindow();
+                mb.Show("Saving successful!", "All records saved successfully.", MessageBoxButton.OK);
             }
         }
 
@@ -210,35 +251,7 @@ namespace WpfTaskManager
             {
                 return saveCommand ?? (saveCommand = new RelayCommand((o) =>
                 {
-                    SaveFileDialog save = new SaveFileDialog();
-                    save.Filter = "CSV file|*.csv";
-
-                    if (save.ShowDialog() == true)
-                    {
-                        string str;
-
-                        if (IsProj)
-                        {
-                            str = "Name;Deadline;Timespent;Completed\n";
-                            foreach (Report r in DGSource)
-                            {
-                                str += $"\"{r.Name}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.S_Completed}\"\n";
-                            }
-                        }
-                        else
-                        {
-                            str = "Name;Project Name;Deadline;Timespent;Completed\n";
-                            foreach (Report r in DGSource)
-                            {
-                                str += $"\"{r.Name}\";\"{r.ProjectName}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.S_Completed}\"\n";
-                            }
-                        }
-                        
-                        File.WriteAllText(save.FileName, str, Encoding.UTF8);
-
-                        MBWindow mb = new MBWindow();
-                        mb.Show("Saving successful!", "All records saved successfully.", MessageBoxButton.OK);
-                    }
+                    SaveExecute();
                 }, o => DGSource.Count > 0));
             }
         }

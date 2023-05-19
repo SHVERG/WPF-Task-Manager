@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
 using System.Xml.Linq;
 
@@ -100,226 +101,269 @@ namespace WpfTaskManager
             }
         }
 
-        // Обновление данных приложения при внешнем обновлении БД
+        // Обновление контекста БД приложения
+        private void RefreshExecute()
+        {
+            db = new AppContext();
+
+            int p_id = -1;
+            int t_id = -1;
+
+            if (SelectedProj != null)
+            {
+                p_id = SelectedProj.IdProject;
+
+                if (SelectedTask != null)
+                {
+                    t_id = SelectedTask.IdTask;
+                }
+
+                ProjTasks.Clear();
+                ProjTasks.AddRange(db.Tasks.Where(t => t.IdProject == SelectedProj.IdProject));
+
+                SelectedTask = ProjTasks.FirstOrDefault(t => t_id != -1 && t.IdTask == t_id);
+            }
+
+            Projects.Clear();
+            Projects.AddRange(db.Projects);
+
+            SelectedProj = Projects.FirstOrDefault(p => p_id != -1 && p.IdProject == p_id);
+        }
+
+        // Команда обновления контекста БД приложения
         public RelayCommand RefreshCommand 
         { 
             get {
                 return refreshCommand ?? (refreshCommand = new RelayCommand((o) =>
                 {
-                    db = new AppContext();
-
-                    int p_id = -1;
-                    int t_id = -1;
-
-                    if (SelectedProj != null)
-                    {
-                        p_id = SelectedProj.IdProject;
-                        
-                        if (SelectedTask != null)
-                        {
-                            t_id = SelectedTask.IdTask;
-                        }
-
-                        ProjTasks.Clear();
-                        ProjTasks.AddRange(db.Tasks.Where(t => t.IdProject == SelectedProj.IdProject));
-
-                        SelectedTask = ProjTasks.FirstOrDefault(t => t_id != -1 && t.IdTask == t_id);
-                    }
-                 
-                    Projects.Clear();
-                    Projects.AddRange(db.Projects);
-
-                    SelectedProj = Projects.FirstOrDefault(p => p_id != -1 && p.IdProject == p_id);
-
+                    RefreshExecute();
                 }));
             }
         }
 
         // Создание отчетов
+        private void ReportExecute(object o)
+        {
+            string param = o as string;
+            if (param != null)
+            {
+                bool.TryParse(param, out bool isProj);
+
+                ReportVM vm = new ReportVM(isProj);
+
+                var w = new ReportWindow()
+                {
+                    DataContext = vm
+                };
+
+                Opacity = 0.5;
+                w.ShowDialog();
+
+                if (w.DialogResult.HasValue)
+                    Opacity = 1;
+            }
+        }
+
+        // Команда создания отчетов
         public RelayCommand ReportCommand
         {
             get
             {
                 return reportCommand ?? (reportCommand = new RelayCommand((o) =>
                 {
-                    string param = o as string;
-                    if (param != null)
-                    {
-                        bool.TryParse(param, out bool isProj);
-
-                        ReportVM vm = new ReportVM(isProj);
-
-                        var w = new ReportWindow()
-                        {
-                            DataContext = vm
-                        };
-
-                        Opacity = 0.5;
-                        w.ShowDialog();
-
-                        if (w.DialogResult.HasValue) 
-                            Opacity = 1;
-                    }
+                    ReportExecute(o);
                 }));
             }
         }
 
+        public void AddProj(AddVM addVM)
+        {
+            ProjectCreator pc = new ProjectCreator();
+
+            Project p = (Project)pc.Create(addVM);
+
+            if (p == null)
+            {
+                MBWindow mb = new MBWindow();
+                mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
+                return;
+            }
+
+            db.Projects.Add(p);
+            db.SaveChanges();
+            Projects.Add(p);
+            SelectedProj = p;
+        }
+
         // Добавление проекта
+        private void AddProjExecute(object o)
+        {
+            AddVM addVM = new AddVM(null);
+
+            var w = new AddWindow()
+            {
+                DataContext = addVM
+            };
+
+            Opacity = 0.5;
+            w.Owner = (Window)o;
+            w.ShowDialog();
+
+            if (w.DialogResult.HasValue)
+                Opacity = 1;
+
+            if (w.DialogResult.Value)
+            {
+                AddProj(addVM);
+            }
+        }
+
+        // Команда добавления проекта
         public RelayCommand AddProjCommand
         {
             get
             {
                 return addProjCommand ?? (addProjCommand = new RelayCommand((o) =>
                 {
-
-                    AddVM addVM = new AddVM(null);
-
-                    var w = new AddWindow()
-                    {
-                        DataContext = addVM
-                    };
-
-                    Opacity = 0.5;
-                    w.Owner = (Window)o;
-                    w.ShowDialog();
-
-                    if (w.DialogResult.HasValue)
-                        Opacity = 1;
-
-                    if (w.DialogResult.Value)
-                    {
-                        ProjectCreator pc = new ProjectCreator();
-                        
-                        Project p = (Project)pc.Create(addVM);
-
-                        if (p == null)
-                        {
-                            MBWindow mb = new MBWindow();
-                            mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
-                            return;
-                        }
-
-                        db.Projects.Add(p);
-                        db.SaveChanges();
-                        Projects.Add(p);
-                        SelectedProj = p;
-                    }
+                    AddProjExecute(o);
                 }));
             }
         }
 
         // Редактирование проекта
+        private void EditProjExecute(object o)
+        {
+            EditVM editVM = new EditVM(SelectedProj);
+
+            var w = new EditWindow()
+            {
+                DataContext = editVM
+            };
+
+            Opacity = 0.5;
+            w.Owner = (Window)o;
+            w.ShowDialog();
+
+            if (w.DialogResult.HasValue)
+                Opacity = 1;
+
+            if (w.DialogResult.Value)
+            {
+                Project edit = db.Projects.Find(selectedProj.IdProject);
+
+                edit.Name = editVM.Name.Trim();
+                edit.Description = editVM.Description.Trim();
+
+                db.SaveChanges();
+            }
+        }
+
+        // Команда редактирования проекта
         public RelayCommand EditProjCommand
         {
             get
             {
                 return editProjCommand ?? (editProjCommand = new RelayCommand((o) =>
                 {
-                    EditVM editVM = new EditVM(SelectedProj);
-
-                    var w = new EditWindow()
-                    {
-                        DataContext = editVM
-                    };
-
-                    Opacity = 0.5;
-                    w.Owner = (Window)o;
-                    w.ShowDialog();
-
-                    if (w.DialogResult.HasValue)
-                        Opacity = 1;
-
-                    if (w.DialogResult.Value)
-                    {
-                        Project edit = db.Projects.Find(selectedProj.IdProject);
-
-                        edit.Name = editVM.Name.Trim();
-                        edit.Description = editVM.Description.Trim();
-
-                        db.SaveChanges();
-                    }
+                    EditProjExecute(o);
                 }, o => SelectedProj != null));
             }
         }
 
+        public void AddTask(AddVM addVM)
+        {
+            TaskCreator tc = new TaskCreator();
+
+            Task t = (Task)tc.Create(addVM);
+
+            if (t == null)
+            {
+                MBWindow mb = new MBWindow();
+                mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
+                return;
+            }
+
+            db.Tasks.Add(t);
+            db.Projects.Find(SelectedProj.IdProject).Completed = null;
+            db.SaveChanges();
+            ProjTasks.Add(t);
+            SelectedTask = t;
+        }
+
         // Добавление задачи
+        private void AddTaskExecute(object o)
+        {
+            AddVM addVM = new AddVM(SelectedProj.IdProject);
+
+            var w = new AddWindow()
+            {
+                DataContext = addVM
+            };
+
+            Opacity = 0.5;
+            w.Owner = (Window)o;
+            w.ShowDialog();
+
+            if (w.DialogResult.HasValue)
+                Opacity = 1;
+
+            if (w.DialogResult.Value)
+            {
+                AddTask(addVM);
+            }
+        }
+
+        // Команда добавления задачи
         public RelayCommand AddTaskCommand { 
             get
             {
                 return addTaskCommand ?? (addTaskCommand = new RelayCommand((o) =>
                 {
-                    AddVM addVM = new AddVM(SelectedProj.IdProject);
-
-                    var w = new AddWindow()
-                    {
-                        DataContext = addVM
-                    };
-
-                    Opacity = 0.5;
-                    w.Owner = (Window)o;
-                    w.ShowDialog();
-
-                    if (w.DialogResult.HasValue)
-                        Opacity = 1;
-
-                    if (w.DialogResult.Value)
-                    {
-                        TaskCreator tc = new TaskCreator();
-
-                        Task t = (Task)tc.Create(addVM);
-
-                        if (t == null)
-                        {
-                            MBWindow mb = new MBWindow();
-                            mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
-                            return;
-                        }
-
-                        db.Tasks.Add(t);
-                        db.Projects.Find(SelectedProj.IdProject).Completed = null;
-                        db.SaveChanges();
-                        ProjTasks.Add(t);
-                        SelectedTask = t;
-                    }
+                    AddTaskExecute(o);
                 }, o => SelectedProj != null && SelectedProj.Deadline >= DateTime.Now));
             }
         }
 
-        // Редактирование задачи
+        private void EditTaskExecute(object o)
+        {
+            EditVM editVM = new EditVM(SelectedTask);
+
+            var w = new EditWindow()
+            {
+                DataContext = editVM
+            };
+
+            Opacity = 0.5;
+            w.Owner = (Window)o;
+            w.ShowDialog();
+
+            if (w.DialogResult.HasValue)
+                Opacity = 1;
+
+            if (w.DialogResult.Value)
+            {
+                Task edit = db.Tasks.Find(SelectedTask.IdTask);
+
+                edit.Name = editVM.Name.Trim();
+                edit.Description = editVM.Description.Trim();
+
+                db.SaveChanges();
+            }
+        }
+
+        // Команда редактирования задачи
         public RelayCommand EditTaskCommand
         {
             get
             {
                 return editTaskCommand ?? (editTaskCommand = new RelayCommand((o) =>
                 {
-                    EditVM editVM = new EditVM(SelectedTask);
-
-                    var w = new EditWindow()
-                    {
-                        DataContext = editVM
-                    };
-
-                    Opacity = 0.5;
-                    w.Owner = (Window)o;
-                    w.ShowDialog();
-
-                    if (w.DialogResult.HasValue)
-                        Opacity = 1;
-
-                    if (w.DialogResult.Value)
-                    {
-                        Task edit = db.Tasks.Find(SelectedTask.IdTask);
-
-                        edit.Name = editVM.Name.Trim();
-                        edit.Description = editVM.Description.Trim();
-
-                        db.SaveChanges();
-                    }
+                    EditTaskExecute(o);
                 }, o => SelectedTask != null));
             }
         }
 
-        // Запуск задачи
+        // Команда запуска задачи
         public RelayCommand StartTaskCommand
         {
             get
@@ -332,205 +376,229 @@ namespace WpfTaskManager
         }
 
         // Выполнение задачи
+        private void CompleteTaskExecute()
+        {
+            Task task = db.Tasks.Find(SelectedTask.IdTask);
+            task.Completed = DateTime.Now;
+
+            bool compProj = true;
+
+            foreach (Task t in db.Tasks.Where(t => t.IdProject == selectedProj.IdProject))
+                if (t.Completed == null)
+                    compProj = false;
+
+            if (compProj)
+                db.Projects.Find(selectedProj.IdProject).Completed = DateTime.Now;
+
+            db.SaveChanges();
+        }
+
+        // Команда выполнения задачи
         public RelayCommand CompleteTaskCommand
         {
             get
             {
                 return completeTaskCommand ?? (completeTaskCommand = new RelayCommand((o) =>
                 {
-                    Task task = db.Tasks.Find(SelectedTask.IdTask);
-                    task.Completed = DateTime.Now;
-
-                    bool compProj = true;
-
-                    foreach (Task t in db.Tasks.Where(t => t.IdProject == selectedProj.IdProject))
-                        if (t.Completed == null)
-                            compProj = false;
-
-                    if (compProj)
-                        db.Projects.Find(selectedProj.IdProject).Completed = DateTime.Now;
-
-                    db.SaveChanges();
+                    CompleteTaskExecute();
                 }, o => SelectedTask != null && SelectedTask.Completed == null));
             }
         }
 
         // Экспорт проекта
+        private void ExportProjExecute()
+        {
+            XElement proj = new XElement("project");
+            XAttribute p_id = new XAttribute("id", SelectedProj.IdProject);
+            XElement p_name = new XElement("name", SelectedProj.Name);
+            XElement p_desc = new XElement("desc", SelectedProj.Description);
+            XElement p_dead = new XElement("deadline", SelectedProj.Deadline);
+            XElement p_comp = new XElement("completed", selectedProj.Completed);
+            XElement p_tasks = new XElement("tasks");
+
+            foreach (Task t in db.Tasks)
+            {
+                if (t.IdProject == SelectedProj.IdProject)
+                {
+                    XElement task = new XElement("task");
+                    XAttribute t_id = new XAttribute("id", t.IdTask);
+                    XAttribute t_pid = new XAttribute("p_id", t.IdProject);
+                    XElement t_name = new XElement("name", t.Name);
+                    XElement t_desc = new XElement("desc", t.Description);
+                    XElement t_dead = new XElement("deadline", t.Deadline);
+                    XElement t_comp = new XElement("completed", t.Completed);
+                    XElement t_time = new XElement("timespent", t.Timespent);
+
+                    task.Add(t_id, t_pid, t_name, t_desc, t_dead, t_comp, t_time);
+                    p_tasks.Add(task);
+                }
+            }
+
+            proj.Add(p_id, p_name, p_desc, p_dead, p_comp, p_tasks);
+
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "XML file|*.xml";
+
+            if (save.ShowDialog() == true)
+            {
+                proj.Save(save.FileName);
+
+                MBWindow mb = new MBWindow();
+                mb.Show("Export Successful!", $"Project \"{SelectedProj.Name}\" exported successfully.", MessageBoxButton.OK);
+            }
+        }
+
+        // Команда экспорта проекта
         public RelayCommand ExportProjCommand
         {
             get
             {
                 return exportProjCommand ?? (exportProjCommand = new RelayCommand((o) =>
                 {
-                    XElement proj = new XElement("project");
-                    XAttribute p_id = new XAttribute("id", SelectedProj.IdProject);
-                    XElement p_name = new XElement("name", SelectedProj.Name);
-                    XElement p_desc = new XElement("desc", SelectedProj.Description);
-                    XElement p_dead = new XElement("deadline", SelectedProj.Deadline);
-                    XElement p_comp = new XElement("completed", selectedProj.Completed);
-                    XElement p_tasks = new XElement("tasks");
-
-                    foreach (Task t in db.Tasks)
-                    {
-                        if (t.IdProject == SelectedProj.IdProject)
-                        {
-                            XElement task = new XElement("task");
-                            XAttribute t_id = new XAttribute ("id", t.IdTask);
-                            XAttribute t_pid = new XAttribute("p_id", t.IdProject);
-                            XElement t_name = new XElement("name", t.Name);
-                            XElement t_desc = new XElement("desc", t.Description);
-                            XElement t_dead = new XElement("deadline", t.Deadline);
-                            XElement t_comp = new XElement("completed", t.Completed);
-                            XElement t_time = new XElement ("timespent", t.Timespent);
-
-                            task.Add(t_id, t_pid, t_name, t_desc, t_dead, t_comp, t_time);
-                            p_tasks.Add(task);
-                        }
-                    }
-
-                    proj.Add(p_id, p_name, p_desc, p_dead, p_comp, p_tasks);
-
-                    SaveFileDialog save = new SaveFileDialog();
-                    save.Filter = "XML file|*.xml";
-
-                    if (save.ShowDialog() == true)
-                    {
-                        proj.Save(save.FileName);
-
-                        MBWindow mb = new MBWindow();
-                        mb.Show("Export Successful!", $"Project \"{SelectedProj.Name}\" exported successfully.", MessageBoxButton.OK);
-                    }
-
+                    ExportProjExecute();
                 }, o => SelectedProj != null));
             }
         }
 
         // Экспорт всех проектов
+        private void ExportAllProjsExecute()
+        {
+            XElement projs = new XElement("projects");
+
+            foreach (Project p in db.Projects)
+            {
+                XElement proj = new XElement("project");
+                XAttribute p_id = new XAttribute("id", p.IdProject);
+                XElement p_name = new XElement("name", p.Name);
+                XElement p_desc = new XElement("desc", p.Description);
+                XElement p_dead = new XElement("deadline", p.Deadline);
+                XElement p_comp = new XElement("completed", p.Completed);
+                XElement p_tasks = new XElement("tasks");
+
+                foreach (Task t in db.Tasks)
+                {
+                    if (t.IdProject == p.IdProject)
+                    {
+                        XElement task = new XElement("task");
+                        XAttribute t_id = new XAttribute("id", t.IdTask);
+                        XAttribute t_pid = new XAttribute("p_id", t.IdProject);
+                        XElement t_name = new XElement("name", t.Name);
+                        XElement t_desc = new XElement("desc", t.Description);
+                        XElement t_dead = new XElement("deadline", t.Deadline);
+                        XElement t_comp = new XElement("completed", t.Completed);
+                        XElement t_time = new XElement("timespent", t.Timespent);
+
+                        task.Add(t_id, t_pid, t_name, t_desc, t_dead, t_comp, t_time);
+                        p_tasks.Add(task);
+                    }
+                }
+
+                proj.Add(p_id, p_name, p_desc, p_dead, p_comp, p_tasks);
+                projs.Add(proj);
+            }
+
+            SaveFileDialog save = new SaveFileDialog();
+            save.Filter = "XML file|*.xml";
+
+            if (save.ShowDialog() == true)
+            {
+                projs.Save(save.FileName);
+
+                MBWindow mb = new MBWindow();
+                mb.Show("Export Successful!", "All Projects exported successfully.", MessageBoxButton.OK);
+            }
+        }
+
+        // Команда экспорта всех проектов
         public RelayCommand ExportAllProjsCommand
         {
             get
             {
                 return exportAllProjsCommand ?? (exportAllProjsCommand = new RelayCommand((o) =>
                 {
-                    XElement projs = new XElement("projects");
-
-                    foreach (Project p in db.Projects)
-                    {
-                        XElement proj = new XElement("project");
-                        XAttribute p_id = new XAttribute("id", p.IdProject);
-                        XElement p_name = new XElement("name", p.Name);
-                        XElement p_desc = new XElement("desc", p.Description);
-                        XElement p_dead = new XElement("deadline", p.Deadline);
-                        XElement p_comp = new XElement("completed", p.Completed);
-                        XElement p_tasks = new XElement("tasks");
-
-                        foreach (Task t in db.Tasks)
-                        {
-                            if (t.IdProject == p.IdProject)
-                            {
-                                XElement task = new XElement("task");
-                                XAttribute t_id = new XAttribute("id", t.IdTask);
-                                XAttribute t_pid = new XAttribute("p_id", t.IdProject);
-                                XElement t_name = new XElement("name", t.Name);
-                                XElement t_desc = new XElement("desc", t.Description);
-                                XElement t_dead = new XElement("deadline", t.Deadline);
-                                XElement t_comp = new XElement("completed", t.Completed);
-                                XElement t_time = new XElement("timespent", t.Timespent);
-
-                                task.Add(t_id, t_pid, t_name, t_desc, t_dead, t_comp, t_time);
-                                p_tasks.Add(task);
-                            }
-                        }
-
-                        proj.Add(p_id, p_name, p_desc, p_dead, p_comp, p_tasks);
-                        projs.Add(proj);
-                    }
-
-                    SaveFileDialog save = new SaveFileDialog();
-                    save.Filter = "XML file|*.xml";
-
-                    if (save.ShowDialog() == true)
-                    {
-                        projs.Save(save.FileName);
-
-                        MBWindow mb = new MBWindow();
-                        mb.Show("Export Successful!", "All Projects exported successfully.", MessageBoxButton.OK);
-                    }
+                    ExportAllProjsExecute();
                 }, o => db.Projects.Count() > 0));
             }
         }
 
         // Импорт проектов
+        private void ImportProjExecute()
+        {
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "XML file|*.xml";
+
+            if (open.ShowDialog() == true)
+            {
+                string names = "";
+                var doc = XDocument.Load(open.FileName);
+                IEnumerable<XElement> elements = doc.Descendants("project");
+
+                foreach (XElement proj in elements)
+                {
+                    string name = proj.Element("name").Value;
+
+                    if (db.Projects.Any(p => p.Name == name))
+                    {
+                        names += $"\n\"{name}\"";
+                        continue;
+                    }
+
+                    Project p_add = new Project();
+                    DateTime p_comp;
+
+                    p_add.Name = proj.Element("name").Value;
+                    p_add.Description = proj.Element("desc").Value;
+                    p_add.Deadline = DateTime.Parse(proj.Element("deadline").Value);
+
+                    if (DateTime.TryParse(proj.Element("completed").Value, out p_comp))
+                        p_add.Completed = p_comp;
+
+                    db.Projects.Add(p_add);
+                    db.SaveChanges();
+
+                    foreach (XElement task in proj.Element("tasks").Elements())
+                    {
+                        Task t_add = new Task();
+
+                        DateTime t_comp;
+
+                        t_add.IdProject = p_add.IdProject;
+                        t_add.Name = task.Element("name").Value;
+                        t_add.Description = task.Element("desc").Value;
+                        t_add.Deadline = DateTime.Parse(task.Element("deadline").Value);
+                        t_add.Timespent = int.Parse(task.Element("timespent").Value);
+
+                        if (DateTime.TryParse(task.Element("completed").Value, out t_comp))
+                            t_add.Completed = t_comp;
+
+                        db.Tasks.Add(t_add);
+                        db.SaveChanges();
+                    }
+
+                    Projects.Add(p_add);
+                    SelectedProj = p_add;
+                }
+
+                MBWindow mb = new MBWindow();
+                if (names.Length != 0)
+                {
+                    mb.Show("Warning!", $"Can't import Projects:{names}", MessageBoxButton.OK);
+                }
+                else
+                {
+                    mb.Show("Import Successful!", "All Projects imported successfully.", MessageBoxButton.OK);
+                }
+            }
+        }
+
+        // Команда импорта проектов
         public RelayCommand ImportProjCommand
         {
             get
             {
                 return importProjCommand ?? (importProjCommand = new RelayCommand((o) =>
                 {
-                    OpenFileDialog open = new OpenFileDialog();
-                    open.Filter = "XML file|*.xml";
-
-                    if (open.ShowDialog() == true)
-                    {
-                        string names = "";
-                        var doc = XDocument.Load(open.FileName);
-                        IEnumerable<XElement> elements = doc.Descendants("project");
-
-                        foreach (XElement proj in elements)
-                        {
-                            string name = proj.Element("name").Value;
-
-                            if (db.Projects.Any(p => p.Name == name))
-                            {
-                                names += $"\n\"{name}\"";
-                                continue;
-                            }
-
-                            Project p_add = new Project();
-                            DateTime p_comp;
-
-                            p_add.Name = proj.Element("name").Value;
-                            p_add.Description = proj.Element("desc").Value;
-                            p_add.Deadline = DateTime.Parse(proj.Element("deadline").Value);
-
-                            if (DateTime.TryParse(proj.Element("completed").Value, out p_comp))
-                                p_add.Completed = p_comp;
-
-                            db.Projects.Add(p_add);
-                            db.SaveChanges();
-
-                            foreach (XElement task in proj.Element("tasks").Elements())
-                            {
-                                Task t_add = new Task();
-
-                                DateTime t_comp;
-
-                                t_add.IdProject = p_add.IdProject;
-                                t_add.Name = task.Element("name").Value;
-                                t_add.Description = task.Element("desc").Value;
-                                t_add.Deadline = DateTime.Parse(task.Element("deadline").Value);
-
-                                if (DateTime.TryParse(task.Element("completed").Value, out t_comp))
-                                    t_add.Completed = t_comp;
-
-                                db.Tasks.Add(t_add);
-                                db.SaveChanges();
-                            }
-
-                            Projects.Add(p_add);
-                            SelectedProj = p_add;
-                        }
-
-                        MBWindow mb = new MBWindow();
-                        if (names.Length != 0)
-                        {
-                            mb.Show("Warning!", $"Can't import Projects:{names}", MessageBoxButton.OK);
-                        }
-                        else
-                        {
-                            mb.Show("Import Successful!", "All Projects imported successfully.", MessageBoxButton.OK);
-                        }
-                    }
+                    ImportProjExecute();
                 }));
             }
         }

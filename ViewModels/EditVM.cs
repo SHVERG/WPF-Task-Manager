@@ -107,6 +107,13 @@ namespace WpfTaskManager
             }
         }
 
+        // Условие запуска команды подтверждения изменения
+        private bool EditCanExecute()
+        {
+            return Name != null && Name.Trim().Length != 0 && Name.Trim().Length <= 30 && Description.Trim().Length <= 150 && isUnique();
+        }
+
+
         // Команда подтверждения изменения
         public RelayCommand EditCommand
         {
@@ -116,7 +123,7 @@ namespace WpfTaskManager
                 {
                     Window w = o as Window;
                     w.DialogResult = true;
-                }, o => Name != null && Name.Trim().Length != 0 && Name.Trim().Length <= 30 && Description.Trim().Length <= 150 && isUnique()));
+                }, o => EditCanExecute()));
             }
         }
 

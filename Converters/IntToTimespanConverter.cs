@@ -20,13 +20,5 @@ namespace WpfTaskManager
         {
             throw new NotImplementedException();
         }
-
-        /*
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-           TimeSpan original = (TimeSpan)value;
-           return (int)(original.Ticks / 10000000);
-        }
-        */
     }
 }
