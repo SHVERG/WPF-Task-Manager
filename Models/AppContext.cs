@@ -6,6 +6,8 @@ namespace WpfTaskManager
     {
         public DbSet<Project> Projects { get; set; }
         public DbSet<Task> Tasks { get; set; }
+        public DbSet<ProjectsActivityLogs> ProjectsLogs { get; set; }
+        public DbSet<TasksActivityLogs> TasksLogs { get; set; }
 
         public AppContext() : base("DefaultConnection") { }
     }

@@ -98,6 +98,9 @@
     <Compile Include="Converters\InvertBooleanConverter.cs" />
     <Compile Include="Factories\Creator.cs" />
     <Compile Include="Factories\ProjectCreator.cs" />
+    <Compile Include="Models\LogBase.cs" />
+    <Compile Include="Models\TasksActivityLogs.cs" />
+    <Compile Include="Models\ProjectsActivityLogs.cs" />
     <Compile Include="Models\Prototype.cs" />
     <Compile Include="Factories\TaskCreator.cs" />
     <Compile Include="Models\Report.cs" />

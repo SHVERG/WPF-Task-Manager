@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
 using System.Xml.Linq;
 
@@ -87,6 +86,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Обновление списка отображаемых задач
         private void RefreshTasks()
         {
             if (selectedProj != null)
@@ -176,6 +176,18 @@ namespace WpfTaskManager
             }
         }
 
+        // Добавление записи в журнал
+        private void AddLog(bool isProject, int id, int action, string message)
+        {
+            if (isProject)
+                db.ProjectsLogs.Add(new ProjectsActivityLogs(id, action, message));
+            else
+                db.TasksLogs.Add(new TasksActivityLogs(id, action, message));
+
+            db.SaveChanges();
+        }
+
+        // Добавление проекта
         public void AddProj(AddVM addVM)
         {
             ProjectCreator pc = new ProjectCreator();
@@ -191,11 +203,14 @@ namespace WpfTaskManager
 
             db.Projects.Add(p);
             db.SaveChanges();
+
+            AddLog(true, p.IdProject, 0, $"Project \"{p.Name}\" added.");
+
             Projects.Add(p);
             SelectedProj = p;
         }
 
-        // Добавление проекта
+        // Добавление проекта из VM
         private void AddProjExecute(object o)
         {
             AddVM addVM = new AddVM(null);
@@ -251,8 +266,17 @@ namespace WpfTaskManager
             {
                 Project edit = db.Projects.Find(selectedProj.IdProject);
 
-                edit.Name = editVM.Name.Trim();
-                edit.Description = editVM.Description.Trim();
+                if (edit.Name != editVM.Name.Trim())
+                {
+                    AddLog(true, edit.IdProject, 1, $"Project name changed (\"{edit.Name}\" => \"{editVM.Name.Trim()}\").");
+                    edit.Name = editVM.Name.Trim();
+                }
+
+                if (edit.Description != editVM.Description.Trim())
+                {
+                    AddLog(true, edit.IdProject, 1, $"Project \"{edit.Name}\" description changed.");
+                    edit.Description = editVM.Description.Trim();
+                }
 
                 db.SaveChanges();
             }
@@ -270,10 +294,11 @@ namespace WpfTaskManager
             }
         }
 
+        // Добавление задачи
         public void AddTask(AddVM addVM)
         {
+            Project p = db.Projects.Find(SelectedProj.IdProject);
             TaskCreator tc = new TaskCreator();
-
             Task t = (Task)tc.Create(addVM);
 
             if (t == null)
@@ -284,13 +309,20 @@ namespace WpfTaskManager
             }
 
             db.Tasks.Add(t);
-            db.Projects.Find(SelectedProj.IdProject).Completed = null;
+            
+            if (p.Completed != null)
+            {
+                p.Completed = null;
+                AddLog(true, p.IdProject, 2, $"Project \"{p.Name}\" turned to incompleted.");
+            }
+
             db.SaveChanges();
+            AddLog(false, t.IdTask, 0, $"Task \"{t.Name}\" added.");
             ProjTasks.Add(t);
             SelectedTask = t;
         }
 
-        // Добавление задачи
+        // Добавление задачи из VM
         private void AddTaskExecute(object o)
         {
             AddVM addVM = new AddVM(SelectedProj.IdProject);
@@ -324,6 +356,7 @@ namespace WpfTaskManager
             }
         }
 
+        // Редактирование задачи
         private void EditTaskExecute(object o)
         {
             EditVM editVM = new EditVM(SelectedTask);
@@ -344,8 +377,17 @@ namespace WpfTaskManager
             {
                 Task edit = db.Tasks.Find(SelectedTask.IdTask);
 
-                edit.Name = editVM.Name.Trim();
-                edit.Description = editVM.Description.Trim();
+                if (edit.Name != editVM.Name.Trim())
+                {
+                    AddLog(false, edit.IdTask, 1, $"Task name changed (\"{edit.Name}\" => \"{editVM.Name.Trim()}\").");
+                    edit.Name = editVM.Name.Trim();
+                }
+
+                if (edit.Description != editVM.Description.Trim())
+                {
+                    AddLog(false, edit.IdTask, 1, $"Task \"{edit.Name}\" description changed.");
+                    edit.Description = editVM.Description.Trim();
+                }
 
                 db.SaveChanges();
             }
@@ -378,17 +420,22 @@ namespace WpfTaskManager
         // Выполнение задачи
         private void CompleteTaskExecute()
         {
-            Task task = db.Tasks.Find(SelectedTask.IdTask);
-            task.Completed = DateTime.Now;
+            Task t = db.Tasks.Find(SelectedTask.IdTask);
+            t.Completed = DateTime.Now;
+            AddLog(false, t.IdTask, 2, $"Task \"{t.Name}\" completed.");
 
             bool compProj = true;
 
-            foreach (Task t in db.Tasks.Where(t => t.IdProject == selectedProj.IdProject))
-                if (t.Completed == null)
+            foreach (Task task in db.Tasks.Where(task => task.IdProject == selectedProj.IdProject))
+                if (task.Completed == null)
                     compProj = false;
 
             if (compProj)
-                db.Projects.Find(selectedProj.IdProject).Completed = DateTime.Now;
+            {
+                Project p = db.Projects.Find(selectedProj.IdProject);
+                p.Completed = DateTime.Now;
+                AddLog(true, p.IdProject, 2, $"Project \"{p.Name}\" completed.");
+            }
 
             db.SaveChanges();
         }
