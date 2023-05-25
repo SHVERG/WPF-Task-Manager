@@ -107,6 +107,7 @@
     <Compile Include="Proxies\BindingProxy.cs" />
     <Compile Include="ViewModels\AddVM.cs" />
     <Compile Include="ViewModels\EditVM.cs" />
+    <Compile Include="ViewModels\LogVM.cs" />
     <Compile Include="ViewModels\ReportVM.cs" />
     <Compile Include="Views\AddWindow.xaml.cs">
       <DependentUpon>AddWindow.xaml</DependentUpon>
@@ -115,6 +116,9 @@
     <Compile Include="ViewModels\MainVM.cs" />
     <Compile Include="Views\EditWindow.xaml.cs">
       <DependentUpon>EditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LogWindow.xaml.cs">
+      <DependentUpon>LogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MBWindow.xaml.cs">
       <DependentUpon>MBWindow.xaml</DependentUpon>
@@ -129,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\EditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

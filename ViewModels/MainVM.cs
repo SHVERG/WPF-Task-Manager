@@ -14,15 +14,20 @@ namespace WpfTaskManager
     {
         AppContext db;
         RelayCommand refreshCommand;
-        RelayCommand reportCommand;
 
         RelayCommand addProjCommand;
         RelayCommand editProjCommand;
+        RelayCommand deleteProjCommand;
         
         RelayCommand addTaskCommand;
         RelayCommand editTaskCommand;
         RelayCommand startTaskCommand;
         RelayCommand completeTaskCommand;
+        RelayCommand deleteTaskCommand;
+
+        RelayCommand reportCommand;
+        RelayCommand showLogCommand;
+        RelayCommand clearLogCommand;
 
         RelayCommand exportProjCommand;
         RelayCommand exportAllProjsCommand;
@@ -294,6 +299,31 @@ namespace WpfTaskManager
             }
         }
 
+        // Удаление проекта
+        public void DeleteProjExecute()
+        {
+            MBWindow conf = new MBWindow();
+            if (conf.Show("Delete Confirmation", $"Do you really want to delete Project \"{SelectedProj.Name}\"?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                db.Projects.Remove(SelectedProj);
+                db.SaveChanges();
+                AddLog(true, SelectedProj.IdProject, 3, $"Project \"{SelectedProj.Name}\" deleted.");
+                Projects.Remove(SelectedProj);
+            }
+        }
+
+        // Команда удаления проекта
+        public RelayCommand DeleteProjCommand
+        {
+            get
+            {
+                return deleteProjCommand ?? (deleteProjCommand = new RelayCommand((o) =>
+                {
+                    DeleteProjExecute();
+                }, o => SelectedProj != null));
+            }
+        }
+
         // Добавление задачи
         public void AddTask(AddVM addVM)
         {
@@ -449,6 +479,83 @@ namespace WpfTaskManager
                 {
                     CompleteTaskExecute();
                 }, o => SelectedTask != null && SelectedTask.Completed == null));
+            }
+        }
+
+        // Удаление задачи
+        public void DeleteTaskExecute()
+        {
+            MBWindow conf = new MBWindow();
+            if (conf.Show("Delete Confirmation", $"Do you really want to delete Task \"{SelectedTask.Name}\"?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                db.Tasks.Remove(SelectedTask);
+                db.SaveChanges();
+                AddLog(false, SelectedTask.IdTask, 3, $"Task \"{SelectedTask.Name}\" deleted.");
+                ProjTasks.Remove(SelectedTask);
+            }
+        }
+
+        // Команда удаления задачи
+        public RelayCommand DeleteTaskCommand
+        {
+            get
+            {
+                return deleteTaskCommand ?? (deleteTaskCommand = new RelayCommand((o) =>
+                {
+                    DeleteTaskExecute();
+                }, o => SelectedTask != null));
+            }
+        }
+
+
+        // Создание журнала
+        private void LogExecute(object o)
+        {
+            var w = new LogWindow();
+            
+            Opacity = 0.5;
+            w.ShowDialog();
+
+            if (w.DialogResult.HasValue)
+                Opacity = 1;
+        }
+
+        // Команда создания журнала
+        public RelayCommand ShowLogCommand
+        {
+            get
+            {
+                return showLogCommand ?? (showLogCommand = new RelayCommand((o) =>
+                {
+                    LogExecute(o);
+                }));
+            }
+        }
+
+        // Очистка журнала
+        public void ClearLogExecute()
+        {
+            MBWindow conf = new MBWindow();
+            if (conf.Show("Clear Confirmation", "Do you really want to clear Actions Log?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                db.ProjectsLogs.RemoveRange(db.ProjectsLogs.ToList());
+                db.TasksLogs.RemoveRange(db.TasksLogs.ToList());
+                db.SaveChanges();
+
+                MBWindow mb = new MBWindow();
+                mb.Show("Clear Successful!", $"Actions Log cleared successfully.", MessageBoxButton.OK);
+            }
+        }
+
+        // Команда очистки журнала
+        public RelayCommand ClearLogCommand
+        {
+            get
+            {
+                return clearLogCommand ?? (clearLogCommand = new RelayCommand((o) =>
+                {
+                    ClearLogExecute();
+                }));
             }
         }
 

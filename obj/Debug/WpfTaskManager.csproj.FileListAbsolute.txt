@@ -98,3 +98,5 @@ C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskMa
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\Views\AddWindow.baml
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\Views\MBWindow.baml
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\Views\ReportWindow.baml
+C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\Views\LogWindow.g.cs
+C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\Views\LogWindow.baml

@@ -7,6 +7,8 @@ namespace WpfTaskManager
         [Key] public int IdLog { get; set; }
         public int IdProject { get; set; }
 
+        public ProjectsActivityLogs() { }
+
         public ProjectsActivityLogs(int idProject, int action, string message) : base(action, message)
         {
             IdProject = idProject;

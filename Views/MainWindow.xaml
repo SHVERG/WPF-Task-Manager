@@ -123,14 +123,23 @@
 
                         <MenuItem Header="Edit" 
                                   FontWeight="SemiBold">
+                            <MenuItem Header="Edit">
+                                <MenuItem Header="Project"
+                                          Command="{Binding EditProjCommand}"
+                                          CommandParameter="{Binding ElementName=mainWindow}"/>
 
-                            <MenuItem Header="Project"
-                                      Command="{Binding EditProjCommand}"
-                                      CommandParameter="{Binding ElementName=mainWindow}"/>
+                                <MenuItem Header="Task"
+                                          Command="{Binding EditTaskCommand}"
+                                          CommandParameter="{Binding ElementName=mainWindow}"/>
+                            </MenuItem>
 
-                            <MenuItem Header="Task"
-                                      Command="{Binding EditTaskCommand}"
-                                      CommandParameter="{Binding ElementName=mainWindow}"/>
+                            <MenuItem Header="Delete">
+                                <MenuItem Header="Project"
+                                          Command="{Binding DeleteProjCommand}"/>
+
+                                <MenuItem Header="Task"
+                                          Command="{Binding DeleteTaskCommand}"/>
+                            </MenuItem>
                         </MenuItem>
 
                         <MenuItem Header="Report" 
@@ -143,6 +152,13 @@
                             <MenuItem Header="Tasks"
                                       Command="{Binding ReportCommand}"
                                       CommandParameter="False"/>
+                            <MenuItem Header="Log">
+                                <MenuItem Header="Show"
+                                          Command="{Binding ShowLogCommand}"/>
+
+                                <MenuItem Header="Clear"
+                                          Command="{Binding ClearLogCommand}"/>
+                            </MenuItem>
                         </MenuItem>
 
                         <MenuItem Header="About"
@@ -241,6 +257,10 @@
 
                                         <MenuItem Header="Import"
                                                   Command="{Binding ImportProjCommand}"/>
+                                        <Separator/>
+
+                                        <MenuItem Header="Delete"
+                                                  Command="{Binding DeleteProjCommand}"/>
                                     </ContextMenu>
                                 </DataGrid.ContextMenu>
                             </DataGrid>
@@ -359,6 +379,10 @@
 
                                         <MenuItem Header="Complete"
                                                   Command="{Binding CompleteTaskCommand}"/>
+                                        <Separator/>
+
+                                        <MenuItem Header="Delete"
+                                                  Command="{Binding DeleteTaskCommand}"/>
                                     </ContextMenu>
                                 </DataGrid.ContextMenu>
                             </DataGrid>
