@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:WpfTaskManager"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
         mc:Ignorable="d"
@@ -21,6 +20,12 @@
     <Window.DataContext>
         <local:AddVM/>
     </Window.DataContext>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <local:BoolToVisibilityConverter x:Key="BoolToVis" TrueValue="Visible" FalseValue="Hidden"/>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Grid>
         <Border CornerRadius="5" 

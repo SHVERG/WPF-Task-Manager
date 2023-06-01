@@ -44,11 +44,11 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="MaterialDesignColors, Version=2.1.3.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
-      <HintPath>packages\MaterialDesignColors.2.1.3\lib\net462\MaterialDesignColors.dll</HintPath>
+    <Reference Include="MaterialDesignColors, Version=2.1.4.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
+      <HintPath>packages\MaterialDesignColors.2.1.4\lib\net462\MaterialDesignColors.dll</HintPath>
     </Reference>
-    <Reference Include="MaterialDesignThemes.Wpf, Version=4.8.1.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
-      <HintPath>packages\MaterialDesignThemes.4.8.1\lib\net462\MaterialDesignThemes.Wpf.dll</HintPath>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=4.9.0.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
+      <HintPath>packages\MaterialDesignThemes.4.9.0\lib\net462\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
@@ -98,6 +98,7 @@
     <Compile Include="Converters\InvertBooleanConverter.cs" />
     <Compile Include="Factories\Creator.cs" />
     <Compile Include="Factories\ProjectCreator.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\LogBase.cs" />
     <Compile Include="Models\TasksActivityLogs.cs" />
     <Compile Include="Models\ProjectsActivityLogs.cs" />
@@ -105,10 +106,14 @@
     <Compile Include="Factories\TaskCreator.cs" />
     <Compile Include="Models\Report.cs" />
     <Compile Include="Proxies\BindingProxy.cs" />
+    <Compile Include="ViewModels\AddCatVM.cs" />
     <Compile Include="ViewModels\AddVM.cs" />
     <Compile Include="ViewModels\EditVM.cs" />
     <Compile Include="ViewModels\LogVM.cs" />
     <Compile Include="ViewModels\ReportVM.cs" />
+    <Compile Include="Views\AddCatWindow.xaml.cs">
+      <DependentUpon>AddCatWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AddWindow.xaml.cs">
       <DependentUpon>AddWindow.xaml</DependentUpon>
     </Compile>
@@ -128,6 +133,10 @@
       <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Task.cs" />
+    <Page Include="Views\AddCatWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -205,9 +214,9 @@
     <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
     <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
     <Error Condition="!Exists('packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
-    <Error Condition="!Exists('packages\MaterialDesignThemes.4.8.1\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\MaterialDesignThemes.4.8.1\build\MaterialDesignThemes.targets'))" />
+    <Error Condition="!Exists('packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets'))" />
   </Target>
   <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <Import Project="packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
-  <Import Project="packages\MaterialDesignThemes.4.8.1\build\MaterialDesignThemes.targets" Condition="Exists('packages\MaterialDesignThemes.4.8.1\build\MaterialDesignThemes.targets')" />
+  <Import Project="packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets" Condition="Exists('packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets')" />
 </Project>

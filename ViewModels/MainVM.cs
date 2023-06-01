@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
 using System.Xml.Linq;
 
@@ -17,6 +18,7 @@ namespace WpfTaskManager
 
         RelayCommand addProjCommand;
         RelayCommand editProjCommand;
+        RelayCommand addProjCatCommand;
         RelayCommand deleteProjCommand;
         
         RelayCommand addTaskCommand;
@@ -250,6 +252,45 @@ namespace WpfTaskManager
             }
         }
 
+        // Добавление категории проекта
+        public void AddProjCat(AddCatVM vm)
+        {
+            db.Categories.Add(new Category(vm.Name, vm.Color.R, vm.Color.G, vm.Color.B));
+            db.SaveChanges();
+        }
+
+        private void AddProjCatExecute(object o)
+        {
+            AddCatVM vm = new AddCatVM();
+            var w = new AddCatWindow()
+            {
+                DataContext = vm
+            };
+
+            Opacity = 0.5;
+            w.Owner = (Window)o;
+            w.ShowDialog();
+
+            if (w.DialogResult.HasValue)
+                Opacity = 1;
+
+            if (w.DialogResult.Value)
+            {
+                AddProjCat(vm);
+            }
+        }
+
+        public RelayCommand AddProjCatCommand
+        {
+            get
+            {
+                return addProjCatCommand ?? (addProjCatCommand = new RelayCommand((o) =>
+                {
+                    AddProjCatExecute(o);
+                }));
+            }
+        }
+
         // Редактирование проекта
         private void EditProjExecute(object o)
         {
@@ -305,6 +346,11 @@ namespace WpfTaskManager
             MBWindow conf = new MBWindow();
             if (conf.Show("Delete Confirmation", $"Do you really want to delete Project \"{SelectedProj.Name}\"?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
+                foreach (Task t in db.Tasks)
+                    if (t.IdProject == selectedProj.IdProject)
+                        db.Tasks.Remove(t);
+
+                ProjTasks.Clear();
                 db.Projects.Remove(SelectedProj);
                 db.SaveChanges();
                 AddLog(true, SelectedProj.IdProject, 3, $"Project \"{SelectedProj.Name}\" deleted.");

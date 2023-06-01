@@ -19,7 +19,7 @@ namespace WpfTaskManager
             }
 
             DateTime date = ((DateTime)vm.Deadline).Add(time);
-            return new Project(vm.Name.Trim(), vm.Description, date);
+            return new Project(vm.Name.Trim(), vm.Description, vm.IdCat, date);
         }
     }
 }

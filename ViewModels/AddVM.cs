@@ -14,6 +14,7 @@ namespace WpfTaskManager
         private string description = "";
         private DateTime? deadline = null;
         private DateTime? time = null;
+        private int? idCat = null;
 
         private RelayCommand closeCommand;
         private RelayCommand addCommand;
@@ -116,6 +117,19 @@ namespace WpfTaskManager
             set
             {
                 time = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int? IdCat
+        {
+            get
+            {
+                return idCat;
+            }
+            set
+            {
+                idCat = value;
                 OnPropertyChanged();
             }
         }

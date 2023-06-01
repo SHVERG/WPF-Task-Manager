@@ -100,3 +100,9 @@ C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskMa
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\Views\ReportWindow.baml
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\Views\LogWindow.g.cs
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\Views\LogWindow.baml
+D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\Views\LogWindow.g.cs
+D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\Views\LogWindow.baml
+C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\Views\AddCatWindow.g.cs
+C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\Views\AddCatWindow.baml
+D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\Views\AddCatWindow.g.cs
+D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\Views\AddCatWindow.baml

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WpfTaskManager
 {
     public class Task : Prototype
     {
         [Key] public int IdTask { get; set; }
-        private int idProject;
+        [ForeignKey("Projects")] private int idProject;
         private int timespent;
 
         public int IdProject 
