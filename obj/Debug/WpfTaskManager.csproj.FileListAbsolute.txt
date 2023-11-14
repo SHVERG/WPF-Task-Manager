@@ -52,7 +52,6 @@ D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\bin\Deb
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\bin\Debug\Microsoft.Xaml.Behaviors.xml
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\bin\Debug\System.Data.SQLite.xml
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\WpfTaskManager.csproj.AssemblyReference.cache
-D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\WpfTaskManager.csproj.SuggestedBindingRedirects.cache
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\App.g.cs
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\WpfTaskManager_MarkupCompile.cache
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\WpfTaskManager_MarkupCompile.lref
