@@ -2,7 +2,6 @@ C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskMa
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\bin\Debug\WpfTaskManager.exe
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\bin\Debug\WpfTaskManager.pdb
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\WpfTaskManager.csproj.AssemblyReference.cache
-C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\WpfTaskManager.csproj.SuggestedBindingRedirects.cache
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\App.g.cs
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\WpfTaskManager_MarkupCompile.cache
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\WpfTaskManager_MarkupCompile.lref
@@ -30,7 +29,6 @@ C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskMa
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\bin\Debug\Microsoft.Xaml.Behaviors.xml
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\bin\Debug\System.Data.SQLite.xml
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\App.baml
-C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\WpfTaskManager.csproj.CopyComplete
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\bin\Debug\taskmanager.db
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\bin\Debug\WpfTaskManager.exe.config
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\bin\Debug\WpfTaskManager.exe
@@ -105,3 +103,4 @@ C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskMa
 C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\Views\AddCatWindow.baml
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\Views\AddCatWindow.g.cs
 D:\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WpfTaskManager\obj\Debug\Views\AddCatWindow.baml
+C:\Users\SHVERG\YandexDisk\Учеба\2 Курс\Сем 4\ПО\Project\WPFTaskManager\obj\Debug\WpfTaskM.64D7D341.Up2Date

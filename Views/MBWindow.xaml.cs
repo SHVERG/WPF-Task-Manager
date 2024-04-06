@@ -38,7 +38,7 @@ namespace WpfTaskManager
 
         void AddButton(string text, MessageBoxResult result, bool isCancel = false)
         {
-            var button = new Button() { Content = text, IsCancel = isCancel };
+            var button = new Button() { Content = text, IsCancel = isCancel, Margin = new Thickness(5, 0, 5, 0) };
             button.Click += (o, args) => { Result = result; DialogResult = true; };
             ButtonContainer.Children.Add(button);
         }
@@ -47,11 +47,11 @@ namespace WpfTaskManager
 
         public MessageBoxResult Show(string caption, string message, MessageBoxButton buttons)
         {
-            this.CaptionContainer.Content = caption;
-            this.MessageContainer.Text = message;
-            this.AddButtons(buttons);
-            this.ShowDialog();
-            return this.Result;
+            CaptionContainer.Content = caption;
+            MessageContainer.Text = message;
+            AddButtons(buttons);
+            ShowDialog();
+            return Result;
         }
     }
 

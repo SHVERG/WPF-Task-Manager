@@ -170,7 +170,7 @@ namespace WpfTaskManager
         // Условие запуска команды добавления проекта/задачи
         private bool AddCanExecute()
         {
-            return Name != null && Deadline != null && Name.Trim().Length != 0 && Name.Trim().Length <= 30 && Description.Trim().Length <= 150 && isUnique();
+            return Name != null && Deadline != null && Name.Trim().Length != 0 && Name.Trim().Length <= 30 && Description.Trim().Length <= 500 && isUnique();
         }
 
         // Команда добавления проекта/задачи
