@@ -13,8 +13,8 @@ namespace WpfTaskManager
         public BoolToVisibilityConverter()
         {
             // Set defaults
-            this.TrueValue = Visibility.Visible;
-            this.FalseValue = Visibility.Hidden;
+            TrueValue = Visibility.Visible;
+            FalseValue = Visibility.Hidden;
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -29,14 +29,14 @@ namespace WpfTaskManager
                 bool? nullable = (bool?)value;
                 flag = nullable.HasValue ? nullable.Value : false;
             }
-            return flag ? this.TrueValue : this.FalseValue;
+            return flag ? TrueValue : FalseValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (object.Equals(value, this.TrueValue))
+            if (Equals(value, TrueValue))
                 return true;
-            if (object.Equals(value, this.FalseValue))
+            if (Equals(value, FalseValue))
                 return false;
             return null;
         }
