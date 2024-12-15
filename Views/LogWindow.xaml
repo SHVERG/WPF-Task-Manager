@@ -25,7 +25,7 @@
         <Border CornerRadius="5" 
                 Background="{StaticResource MaterialDesignBackground}">
             <StackPanel>
-                <Label Content="LOGS" 
+                <Label Content="{DynamicResource log_logs_caps}" 
                        HorizontalAlignment="Center" 
                        Foreground="{StaticResource PrimaryHueMidBrush}" 
                        FontWeight="Bold"
@@ -33,7 +33,7 @@
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center">
-                    <Label Content="Logs"
+                    <Label Content="{DynamicResource log_logs}"
                            Foreground="{StaticResource PrimaryHueMidBrush}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
@@ -42,18 +42,18 @@
                               FontWeight="SemiBold"
                               FontSize="12">
 
-                        <ComboBoxItem Content="All"/>
-                        <ComboBoxItem Content="Projects"/>
-                        <ComboBoxItem Content="Tasks"/>
+                        <ComboBoxItem Content="{DynamicResource all}"/>
+                        <ComboBoxItem Content="{DynamicResource projects}"/>
+                        <ComboBoxItem Content="{DynamicResource tasks}"/>
                     </ComboBox>
 
-                    <Label Content="Start Date"
+                    <Label Content="{DynamicResource log_start_date}"
                            Foreground="{StaticResource PrimaryHueMidBrush}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
                     <DatePicker x:Name="StartDate" SelectedDate="{Binding StartDate}"/>
 
-                    <Label Content="End Date"
+                    <Label Content="{DynamicResource log_end_date}"
                            Foreground="{StaticResource PrimaryHueMidBrush}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
@@ -66,8 +66,8 @@
                               AutoGenerateColumns="False"
                               ItemsSource="{Binding DGSource}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Message" Binding="{Binding Message}"/>
-                            <DataGridTextColumn Header="Date" 
+                            <DataGridTextColumn Header="{DynamicResource log_message}" Binding="{Binding Message}"/>
+                            <DataGridTextColumn Header="{DynamicResource log_date}" 
                                                 Binding="{Binding Date}"/>
                         </DataGrid.Columns>
                     </DataGrid>
@@ -79,18 +79,18 @@
                             HorizontalAlignment="Center"
                             Margin="14">
 
-                    <Button Content="CLOSE"
+                    <Button Content="{DynamicResource close}"
                             Margin="20, 0"
                             Width="150"
                             Command="{Binding CloseCommand}"
                             CommandParameter="{Binding ElementName=logWindow}"/>
 
-                    <Button Content="SHOW" 
+                    <Button Content="{DynamicResource show}" 
                             Margin="20, 0" 
                             Width="150"
                             Command="{Binding ShowCommand}"/>
 
-                    <Button Content="SAVE AS..." 
+                    <Button Content="{DynamicResource save_as}" 
                             Margin="20, 0" 
                             Width="150" 
                             Command="{Binding SaveCommand}"/>

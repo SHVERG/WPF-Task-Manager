@@ -24,7 +24,7 @@
         <Border CornerRadius="5" 
                 Background="{StaticResource MaterialDesignBackground}">
             <StackPanel>
-                <Label Content="NAME" 
+                <Label Content="{DynamicResource name_caps}" 
                        HorizontalAlignment="Center" 
                        Foreground="{StaticResource PrimaryHueMidBrush}" 
                        FontWeight="Bold"
@@ -36,7 +36,7 @@
                          Margin="10, 0"
                          Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <Label Content="DESCRIPTION" 
+                <Label Content="{DynamicResource desc_caps}" 
                        HorizontalAlignment="Center" 
                        Foreground="{StaticResource PrimaryHueMidBrush}" 
                        FontWeight="Bold"
@@ -58,13 +58,13 @@
                             HorizontalAlignment="Center" 
                             Margin="14">
 
-                    <Button Content="CLOSE" 
+                    <Button Content="{DynamicResource close}" 
                             Margin="20, 0" 
                             Width="150" 
                             Command="{Binding CloseCommand}"
                             CommandParameter="{Binding ElementName=editWindow}"/>
 
-                    <Button Content="EDIT" 
+                    <Button Content="{DynamicResource edit}" 
                             Margin="20, 0" 
                             Width="150" 
                             Command="{Binding EditCommand}"

@@ -22,15 +22,6 @@ namespace WpfTaskManager
         }
 
         public Project() { }
-        
-        /*
-        public Project(string name, string description, DateTime deadline)
-        {
-            Name = name;
-            Description = description;
-            Deadline = deadline;
-        }
-        */
 
         public Project(string name, string description, int? idCat, DateTime deadline)
         {

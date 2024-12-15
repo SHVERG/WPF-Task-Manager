@@ -10,7 +10,15 @@ namespace WpfTaskManager
         {
             DateTime? original = (DateTime?)value;
             if (!original.HasValue)
-                return null;
+            {
+                switch (App.Language.Name)
+                {
+                    case "ru-RU":
+                        return "Не выполнен(а)";
+                    default:
+                        return "Not completed";
+                }
+            }
             return original.ToString();
         }
 

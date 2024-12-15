@@ -11,9 +11,22 @@ namespace WpfTaskManager
             DateTime? original = value as DateTime?;
 
             if (!original.HasValue)
-                return "Not Completed";
+                switch (App.Language.Name)
+                {
+                    case "ru-RU":
+                        return "Не завершено";
+                    default:
+                        return "Not Completed";
+
+                }
             else
-                return "Completed";
+                switch (App.Language.Name)
+                {
+                    case "ru-RU":
+                        return "Завершено";
+                    default:
+                        return "Completed";
+                }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

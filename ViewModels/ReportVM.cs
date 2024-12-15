@@ -13,8 +13,8 @@ namespace WpfTaskManager
     public class ReportVM : INotifyPropertyChanged
     {
         private bool isProj;
-        private string title = "TASKS REPORT";
-        private string choice_label = "Tasks";
+        private string title;
+        private string choice_label;
 
         private int choice_index = 0;
         private DateTime? startDate;
@@ -38,8 +38,39 @@ namespace WpfTaskManager
 
             if (isProj)
             {
-                Title = "PROJECTS REPORT";
-                ChoiceLabel = "Projects";
+                switch (App.Language.Name)
+                {
+                    case "ru-RU":
+                    {
+                        Title = "ОТЧЕТ ПО ПРОЕКТАМ";
+                        ChoiceLabel = "Проекты";
+                        break;
+                    }
+                    default:
+                    {
+                        Title = "PROJECTS REPORT";
+                        ChoiceLabel = "Projects";
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                switch (App.Language.Name)
+                {
+                    case "ru-RU":
+                        {
+                            title = "ОТЧЕТ ПО ЗАДАЧАМ";
+                            choice_label = "Задачи";
+                            break;
+                        }
+                    default:
+                        {
+                            title = "TASKS REPORT";
+                            choice_label = "Tasks";
+                            break;
+                        }
+                }
             }
         }
 
@@ -149,6 +180,7 @@ namespace WpfTaskManager
         public void ShowExecute()
         {
             string S_Completed;
+            string S_Completed_ru;
 
             DGSource.Clear();
 
@@ -168,14 +200,31 @@ namespace WpfTaskManager
                         if (p.Completed != null)
                         {
                             if (p.Completed <= p.Deadline)
+                            {
                                 S_Completed = "Completed in time";
+                                S_Completed_ru = "Выполнен вовремя";
+                            }    
                             else
+                            {
                                 S_Completed = "Completed in bad time";
+                                S_Completed_ru = "Выполнен невовремя";
+                            }
                         }
                         else
+                        {
                             S_Completed = "Not completed";
+                            S_Completed_ru = "Не выполнен";
+                        }
 
-                        DGSource.Add(new Report(p.Name, null, p.Deadline, S_Completed, ts));
+                        switch (App.Language.Name)
+                        {
+                            case "ru-RU":
+                                DGSource.Add(new Report(p.Name, null, p.Deadline, S_Completed_ru, ts));
+                                break;
+                            default:
+                                DGSource.Add(new Report(p.Name, null, p.Deadline, S_Completed, ts));
+                                break;
+                        }
                     }
                 }
                 else
@@ -185,14 +234,31 @@ namespace WpfTaskManager
                         if (t.Completed != null)
                         {
                             if (t.Completed <= t.Deadline)
+                            {
                                 S_Completed = "Completed in time";
+                                S_Completed_ru = "Выполнена вовремя";
+                            }
                             else
+                            {
                                 S_Completed = "Completed in bad time";
+                                S_Completed_ru = "Выполнена невовремя";
+                            }
                         }
                         else
+                        {
                             S_Completed = "Not completed";
+                            S_Completed_ru = "Не выполнена";
+                        }
 
-                        DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, S_Completed, SecondsToTimeSpan(t.Timespent)));
+                        switch (App.Language.Name)
+                        {
+                            case "ru-RU":
+                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, S_Completed_ru, SecondsToTimeSpan(t.Timespent)));
+                                break;
+                            default:
+                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, S_Completed, SecondsToTimeSpan(t.Timespent)));
+                                break;
+                        }
                     }
                 }
             }
@@ -218,11 +284,13 @@ namespace WpfTaskManager
 
             if (save.ShowDialog() == true)
             {
-                string str;
+                string str, str_ru;
 
                 if (IsProj)
                 {
                     str = "Name;Deadline;Timespent;Completed\n";
+                    str_ru = "Название;Крайний срок;Затрачено времени;Готовность\n";
+
                     foreach (Report r in DGSource)
                     {
                         str += $"\"{r.Name}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.S_Completed}\"\n";
@@ -231,6 +299,8 @@ namespace WpfTaskManager
                 else
                 {
                     str = "Name;Project Name;Deadline;Timespent;Completed\n";
+                    str_ru = "Название;Название проекта;Крайний срок;Затрачено времени;Готовность\n";
+
                     foreach (Report r in DGSource)
                     {
                         str += $"\"{r.Name}\";\"{r.ProjectName}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.S_Completed}\"\n";
@@ -240,7 +310,15 @@ namespace WpfTaskManager
                 File.WriteAllText(save.FileName, str, Encoding.UTF8);
 
                 MBWindow mb = new MBWindow();
-                mb.Show("Saving successful!", "All records saved successfully.", MessageBoxButton.OK);
+                switch (App.Language.Name)
+                {
+                    case "ru-RU":
+                        mb.Show("Файл сохранен успешно!", "Все записи сохранены.", MessageBoxButton.OK);
+                        break;
+                    default:
+                        mb.Show("Saving successful!", "All records saved successfully.", MessageBoxButton.OK);
+                        break;
+                }
             }
         }
 

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Report"
         Height="600"
-        Width="600"
+        Width="800"
         x:Name="reportWindow"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
@@ -50,18 +50,18 @@
                               FontWeight="SemiBold"
                               FontSize="12">
                         
-                        <ComboBoxItem Content="All"/>
-                        <ComboBoxItem Content="Completed"/>
-                        <ComboBoxItem Content="Uncompleted"/>
+                        <ComboBoxItem Content="{DynamicResource all}"/>
+                        <ComboBoxItem Content="{DynamicResource report_comp}"/>
+                        <ComboBoxItem Content="{DynamicResource report_uncomp}"/>
                     </ComboBox>
 
-                    <Label Content="Deadline Start Date"
+                    <Label Content="{DynamicResource report_deadline_start}"
                            Foreground="{StaticResource PrimaryHueMidBrush}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
                     <DatePicker x:Name="StartDate" SelectedDate="{Binding StartDate}"/>
 
-                    <Label Content="Deadline End Date"
+                    <Label Content="{DynamicResource report_deadline_end}"
                            Foreground="{StaticResource PrimaryHueMidBrush}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
@@ -74,15 +74,15 @@
                               AutoGenerateColumns="False"
                               ItemsSource="{Binding DGSource}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                            <DataGridTextColumn Header="Project Name" 
+                            <DataGridTextColumn Header="{DynamicResource name}" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="{DynamicResource report_proj_name}" 
                                                 Visibility="{Binding Data, Source={StaticResource VisProxy}, Converter={StaticResource BoolToVis}}"
                                                 Binding="{Binding ProjectName}"/>
-                            <DataGridTextColumn Header="Deadline"
+                            <DataGridTextColumn Header="{DynamicResource deadline}"
                                                 Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
-                            <DataGridTextColumn Header="Completed"
+                            <DataGridTextColumn Header="{DynamicResource comp}"
                                                 Binding="{Binding S_Completed}"/>
-                            <DataGridTextColumn Header="Time spent" 
+                            <DataGridTextColumn Header="{DynamicResource time_spent}" 
                                                 Binding="{Binding Timespent}"/>
                         </DataGrid.Columns>
                     </DataGrid>
@@ -94,18 +94,18 @@
                             HorizontalAlignment="Center"
                             Margin="14">
 
-                    <Button Content="CLOSE"
+                    <Button Content="{DynamicResource close}"
                             Margin="20, 0"
                             Width="150"
                             Command="{Binding CloseCommand}"
                             CommandParameter="{Binding ElementName=reportWindow}"/>
 
-                    <Button Content="SHOW" 
+                    <Button Content="{DynamicResource show}" 
                             Margin="20, 0" 
                             Width="150"
                             Command="{Binding ShowCommand}"/>
 
-                    <Button Content="SAVE AS..." 
+                    <Button Content="{DynamicResource save_as}" 
                             Margin="20, 0" 
                             Width="150" 
                             Command="{Binding SaveCommand}"/>
