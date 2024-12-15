@@ -284,12 +284,21 @@ namespace WpfTaskManager
 
             if (save.ShowDialog() == true)
             {
-                string str, str_ru;
+                string str;
 
                 if (IsProj)
                 {
-                    str = "Name;Deadline;Timespent;Completed\n";
-                    str_ru = "Название;Крайний срок;Затрачено времени;Готовность\n";
+
+                    switch (App.Language.Name)
+                    {
+                        case "ru-RU":
+                            str = "Название;Крайний срок;Затрачено времени;Готовность\n";
+                            break;
+                        default:
+
+                            str = "Name;Deadline;Timespent;Completed\n";
+                            break;
+                    }
 
                     foreach (Report r in DGSource)
                     {
@@ -298,8 +307,16 @@ namespace WpfTaskManager
                 }
                 else
                 {
-                    str = "Name;Project Name;Deadline;Timespent;Completed\n";
-                    str_ru = "Название;Название проекта;Крайний срок;Затрачено времени;Готовность\n";
+                    switch (App.Language.Name)
+                    {
+                        case "ru-RU":
+                            str = "Название;Название проекта;Крайний срок;Затрачено времени;Готовность\n";
+                            break;
+                        default:
+
+                            str = "Name;Project Name;Deadline;Timespent;Completed\n";
+                            break;
+                    }
 
                     foreach (Report r in DGSource)
                     {
