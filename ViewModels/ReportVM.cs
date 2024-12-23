@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Linq;
-using Microsoft.Win32;
-using System.Text;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Windows;
 
 namespace WpfTaskManager
 {
@@ -26,13 +26,13 @@ namespace WpfTaskManager
         private RelayCommand saveCommand;
 
         // Конструкторы
-        public ReportVM() 
+        public ReportVM()
         {
             DGSource = new ObservableCollection<Report>();
         }
 
-        public ReportVM(bool isProj) 
-        { 
+        public ReportVM(bool isProj)
+        {
             this.isProj = isProj;
             DGSource = new ObservableCollection<Report>();
 
@@ -41,17 +41,17 @@ namespace WpfTaskManager
                 switch (App.Language.Name)
                 {
                     case "ru-RU":
-                    {
-                        Title = "ОТЧЕТ ПО ПРОЕКТАМ";
-                        ChoiceLabel = "Проекты";
-                        break;
-                    }
+                        {
+                            Title = "ОТЧЕТ ПО ПРОЕКТАМ";
+                            ChoiceLabel = "Проекты";
+                            break;
+                        }
                     default:
-                    {
-                        Title = "PROJECTS REPORT";
-                        ChoiceLabel = "Projects";
-                        break;
-                    }
+                        {
+                            Title = "PROJECTS REPORT";
+                            ChoiceLabel = "Projects";
+                            break;
+                        }
                 }
             }
             else
@@ -109,7 +109,7 @@ namespace WpfTaskManager
             }
             set
             {
-                choice_label = value; 
+                choice_label = value;
                 OnPropertyChanged();
             }
         }
@@ -203,7 +203,7 @@ namespace WpfTaskManager
                             {
                                 S_Completed = "Completed in time";
                                 S_Completed_ru = "Выполнен вовремя";
-                            }    
+                            }
                             else
                             {
                                 S_Completed = "Completed in bad time";

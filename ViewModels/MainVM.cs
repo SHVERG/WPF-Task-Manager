@@ -6,7 +6,9 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security;
 using System.Windows;
+using System.Windows.Controls;
 using System.Xml.Linq;
 
 namespace WpfTaskManager
@@ -20,7 +22,7 @@ namespace WpfTaskManager
         RelayCommand editProjCommand;
         RelayCommand addProjCatCommand;
         RelayCommand deleteProjCommand;
-        
+
         RelayCommand addTaskCommand;
         RelayCommand editTaskCommand;
         RelayCommand startTaskCommand;
@@ -37,10 +39,23 @@ namespace WpfTaskManager
 
         RelayCommand changeLanguageCommand;
 
+        private RelayCommand loginNavCommand;
+        private RelayCommand loginCommand;
+        private RelayCommand logoutCommand;
+        private RelayCommand signupNavCommand;
+        private RelayCommand signupCommand;
+
         private bool isLangRussian;
         private double opacity = 1;
+        private UserControl selectedViewModel;
         private Project selectedProj;
         private Task selectedTask;
+        private string username;
+        private string name;
+        private string email;
+        private bool incorrectPassword;
+        private User user;
+        private bool isLogged;
 
         public ObservableCollection<Project> Projects { get; set; }
         public ObservableCollection<Task> ProjTasks { get; set; }
@@ -52,9 +67,114 @@ namespace WpfTaskManager
             Projects = new ObservableCollection<Project>(db.Projects);
             ProjTasks = new ObservableCollection<Task>();
             isLangRussian = App.Language.Equals(new CultureInfo("ru-RU"));
+
+            SelectedViewModel = new LoginUC()
+            {
+                DataContext = this
+            };
+
+            IncorrectPassword = false;
         }
 
         //Свойства
+
+        public bool IsLogged
+        {
+            get
+            {
+                return isLogged;
+            }
+            set
+            {
+                isLogged = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Username
+        {
+            get
+            {
+                return username;
+            }
+            set
+            {
+                username = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Email
+        {
+            get
+            {
+                return email;
+            }
+            set
+            {
+                email = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public User User
+        {
+            get
+            {
+                return user;
+            }
+            set
+            {
+                user = value;
+
+                if (user != null)
+                    IsLogged = true;
+                else
+                    IsLogged = false;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IncorrectPassword
+        {
+            get
+            {
+                return incorrectPassword;
+            }
+            set
+            {
+                incorrectPassword = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public UserControl SelectedViewModel
+        {
+            get
+            {
+                return selectedViewModel;
+            }
+            set
+            {
+                selectedViewModel = value;
+                OnPropertyChanged();
+            }
+        }
+
         public double Opacity
         {
             get
@@ -70,9 +190,9 @@ namespace WpfTaskManager
 
         public Project SelectedProj
         {
-            get 
-            { 
-                return selectedProj; 
+            get
+            {
+                return selectedProj;
             }
             set
             {
@@ -92,7 +212,7 @@ namespace WpfTaskManager
             }
             set
             {
-                selectedTask = value; 
+                selectedTask = value;
                 OnPropertyChanged();
             }
         }
@@ -163,9 +283,10 @@ namespace WpfTaskManager
         }
 
         // Команда обновления контекста БД приложения
-        public RelayCommand RefreshCommand 
-        { 
-            get {
+        public RelayCommand RefreshCommand
+        {
+            get
+            {
                 return refreshCommand ?? (refreshCommand = new RelayCommand((o) =>
                 {
                     RefreshExecute();
@@ -447,7 +568,7 @@ namespace WpfTaskManager
             }
 
             db.Tasks.Add(t);
-            
+
             if (p.Completed != null)
             {
                 p.Completed = null;
@@ -484,7 +605,8 @@ namespace WpfTaskManager
         }
 
         // Команда добавления задачи
-        public RelayCommand AddTaskCommand { 
+        public RelayCommand AddTaskCommand
+        {
             get
             {
                 return addTaskCommand ?? (addTaskCommand = new RelayCommand((o) =>
@@ -639,7 +761,7 @@ namespace WpfTaskManager
         private void LogExecute(object o)
         {
             var w = new LogWindow();
-            
+
             Opacity = 0.5;
             w.ShowDialog();
 
@@ -689,7 +811,7 @@ namespace WpfTaskManager
                 db.SaveChanges();
 
                 MBWindow mb = new MBWindow();
-                
+
                 switch (App.Language.Name)
                 {
                     case "ru-RU":
@@ -781,7 +903,7 @@ namespace WpfTaskManager
         // Смена языка
 
         public RelayCommand ChangeLanguageCommand
-        { 
+        {
             get
             {
                 return changeLanguageCommand ?? (changeLanguageCommand = new RelayCommand((o) =>
@@ -957,6 +1079,107 @@ namespace WpfTaskManager
                 {
                     ImportProjExecute();
                 }));
+            }
+        }
+
+        // Команда открытия окна авторизации
+        public RelayCommand LogInNavCommand
+        {
+            get
+            {
+                return loginNavCommand ?? (loginNavCommand = new RelayCommand((o) =>
+                {
+                    SelectedViewModel = new LoginUC()
+                    {
+                        DataContext = this
+                    };
+                }));
+            }
+        }
+
+        // Команда авторизации
+        public RelayCommand LogInCommand
+        {
+            get
+            {
+                return loginCommand ?? (loginCommand = new RelayCommand((o) =>
+                {
+                    User user = db.Users.FirstOrDefault(u => u.Username == Username);
+                    if (user.Password == Encode(((PasswordBox)o).SecurePassword))
+                    {
+                        IncorrectPassword = false;
+                        User = user;
+                        SelectedViewModel = null;
+                        Username = null;
+                    }
+                    else
+                    {
+                        IncorrectPassword = true;
+                    }
+                }, o => db.Users.Any(u => u.Username == Username)));
+            }
+        }
+
+        // Команда выхода из аккаунта
+        public RelayCommand LogOutCommand
+        {
+            get
+            {
+                return logoutCommand ?? (logoutCommand = new RelayCommand((o) =>
+                {
+                    User = null;
+
+                    SelectedViewModel = new LoginUC()
+                    {
+                        DataContext = this
+                    };
+                }, o => User != null));
+            }
+        }
+
+        // Команда открытия окна регистрации
+        public RelayCommand SignUpNavCommand
+        {
+            get
+            {
+                return signupNavCommand ?? (signupNavCommand = new RelayCommand((o) =>
+                {
+                    SelectedViewModel = new SignupUC()
+                    {
+                        DataContext = this
+                    };
+                }));
+            }
+        }
+
+        // Хэширование пароля
+        public static string Encode(SecureString value)
+        {
+            var hash = System.Security.Cryptography.SHA1.Create();
+            var encoder = new System.Text.ASCIIEncoding();
+            var combined = encoder.GetBytes(value.ToString() ?? "");
+            return BitConverter.ToString(hash.ComputeHash(combined)).ToLower().Replace("-", "");
+
+        }
+
+        // Команда регистрации
+        public RelayCommand SignUpCommand
+        {
+            get
+            {
+                return signupCommand ?? (signupCommand = new RelayCommand((o) =>
+                {
+                    User user = new User(Username, Name, Email, Encode(((PasswordBox)o).SecurePassword));
+
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                    User = user;
+
+                    SelectedViewModel = null;
+                    Username = null;
+                    Name = null;
+                    Email = null;
+                }, o => Username != null && !db.Users.Any(u => u.Username == Username) && Username.Length > 5 && ((PasswordBox)o).SecurePassword != null && ((PasswordBox)o).SecurePassword.Length > 5));
             }
         }
 

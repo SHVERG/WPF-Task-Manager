@@ -14,9 +14,9 @@ namespace WpfTaskManager
 
         private RelayCommand closeCommand;
         private RelayCommand editCommand;
-        
+
         // Конструкторы
-        public EditVM() 
+        public EditVM()
         {
 
         }

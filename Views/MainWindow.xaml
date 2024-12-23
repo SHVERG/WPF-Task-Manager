@@ -69,138 +69,142 @@
         <local:MainVM/>
     </Window.DataContext>
 
-    <Grid Background="{StaticResource MaterialDesignDarkBackground}">
-        
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        
-        <Border Background="{StaticResource MaterialDesignBackground}" 
+    <Grid>
+        <Grid Background="{StaticResource MaterialDesignDarkBackground}">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border Background="{StaticResource MaterialDesignBackground}" 
                 Margin="3, 3, 3, 0" 
                 CornerRadius="5"
                 MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
-            <Grid>
-                <StackPanel Orientation="Horizontal">
-                    
-                    <Image Source="/Images/icon.png" 
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+
+                        <Image Source="/Images/icon.png" 
                            Margin="5, 5, -5, 5"/>
-                    
-                    <Menu Height="40" 
-                          VerticalAlignment="Top">
-                        
-                        <MenuItem Header="{DynamicResource main_menu_file}" 
+
+                        <Menu Height="40" 
+                              VerticalAlignment="Top"
+                              IsEnabled="{Binding IsLogged}">
+
+                            <MenuItem Header="{DynamicResource main_menu_file}" 
                                   FontWeight="SemiBold">
-                            
-                            <MenuItem Header="{DynamicResource main_menu_add_project}"
+
+                                <MenuItem Header="{DynamicResource main_menu_add_project}"
                                       Command="{Binding AddProjCommand}"
                                       CommandParameter="{Binding ElementName=mainWindow}"/>
 
-                            <MenuItem Header="{DynamicResource main_menu_add_task}"
+                                <MenuItem Header="{DynamicResource main_menu_add_task}"
                                       Command="{Binding AddTaskCommand}"
                                       CommandParameter="{Binding ElementName=mainWindow}"/>
-                            <Separator/>
+                                <Separator/>
 
-                            <MenuItem Header="{DynamicResource main_menu_export}">
-                                <MenuItem Header="{DynamicResource main_menu_export_sel_proj}"
+                                <MenuItem Header="{DynamicResource main_menu_export}">
+                                    <MenuItem Header="{DynamicResource main_menu_export_sel_proj}"
                                           Command="{Binding ExportProjCommand}"/>
-                                <MenuItem Header="{DynamicResource main_menu_export_all_proj}"
+                                    <MenuItem Header="{DynamicResource main_menu_export_all_proj}"
                                           Command="{Binding ExportAllProjsCommand}"/>
-                            </MenuItem>
+                                </MenuItem>
 
-                            <MenuItem Header="{DynamicResource main_menu_import}"
+                                <MenuItem Header="{DynamicResource main_menu_import}"
                                       Command="{Binding ImportProjCommand}"/>
-                            <Separator/>
+                                <Separator/>
 
-                            <MenuItem Header="{DynamicResource main_menu_refresh}"
+                                <MenuItem Header="{DynamicResource main_menu_refresh}"
                                       Command="{Binding RefreshCommand}"
                                       CommandParameter="{Binding ElementName=Projs_datagrid}"/>
-                            <Separator/>
+                                <Separator/>
 
-                            <MenuItem Header="{DynamicResource main_menu_exit}"
+                                <MenuItem Header="{DynamicResource main_menu_exit}"
                                       Click="Exit_menuitem_Click"/>
-                        </MenuItem>
+                            </MenuItem>
 
-                        <MenuItem Header="{DynamicResource main_menu_edit}" 
+                            <MenuItem Header="{DynamicResource main_menu_edit}" 
                                   FontWeight="SemiBold">
-                            <MenuItem Header="{DynamicResource main_menu_edit_sub}">
-                                <MenuItem Header="{DynamicResource project}"
+                                <MenuItem Header="{DynamicResource main_menu_edit_sub}">
+                                    <MenuItem Header="{DynamicResource project}"
                                           Command="{Binding EditProjCommand}"
                                           CommandParameter="{Binding ElementName=mainWindow}"/>
 
-                                <MenuItem Header="{DynamicResource task}"
+                                    <MenuItem Header="{DynamicResource task}"
                                           Command="{Binding EditTaskCommand}"
                                           CommandParameter="{Binding ElementName=mainWindow}"/>
-                            </MenuItem>
+                                </MenuItem>
 
-                            <MenuItem Header="{DynamicResource main_menu_delete}">
-                                <MenuItem Header="{DynamicResource project}"
+                                <MenuItem Header="{DynamicResource main_menu_delete}">
+                                    <MenuItem Header="{DynamicResource project}"
                                           Command="{Binding DeleteProjCommand}"/>
 
-                                <MenuItem Header="{DynamicResource task}"
+                                    <MenuItem Header="{DynamicResource task}"
                                           Command="{Binding DeleteTaskCommand}"/>
+                                </MenuItem>
                             </MenuItem>
-                        </MenuItem>
 
-                        <MenuItem Header="{DynamicResource main_menu_report}" 
+                            <MenuItem Header="{DynamicResource main_menu_report}" 
                                   FontWeight="SemiBold">
-                            
-                            <MenuItem Header="{DynamicResource projects}"
+
+                                <MenuItem Header="{DynamicResource projects}"
                                       Command="{Binding ReportCommand}"
                                       CommandParameter="True"/>
 
-                            <MenuItem Header="{DynamicResource tasks}"
+                                <MenuItem Header="{DynamicResource tasks}"
                                       Command="{Binding ReportCommand}"
                                       CommandParameter="False"/>
-                            <MenuItem Header="{DynamicResource main_menu_log}">
-                                <MenuItem Header="{DynamicResource main_menu_log_show}"
+                                <MenuItem Header="{DynamicResource main_menu_log}">
+                                    <MenuItem Header="{DynamicResource main_menu_log_show}"
                                           Command="{Binding ShowLogCommand}"/>
 
-                                <MenuItem Header="{DynamicResource main_menu_log_clear}"
+                                    <MenuItem Header="{DynamicResource main_menu_log_clear}"
                                           Command="{Binding ClearLogCommand}"/>
+                                </MenuItem>
                             </MenuItem>
-                        </MenuItem>
 
-                        <MenuItem Header="{DynamicResource main_menu_settings}"
+                            <MenuItem Header="{DynamicResource main_menu_settings}"
                                   FontWeight="SemiBold">
 
-                            <MenuItem Header="{DynamicResource main_menu_lang}">
-                                <MenuItem Header="{DynamicResource main_menu_lang_ru}"
+                                <MenuItem Header="{DynamicResource main_menu_lang}">
+                                    <MenuItem Header="{DynamicResource main_menu_lang_ru}"
                                           IsCheckable="True"
                                           IsChecked="{Binding IsLangRussian}"
                                           Command="{Binding ChangeLanguageCommand}"
                                           CommandParameter="{Binding Languages[1]}"/>
-                                
-                                <MenuItem Header="{DynamicResource main_menu_lang_en}"
+
+                                    <MenuItem Header="{DynamicResource main_menu_lang_en}"
                                           IsCheckable="True"
                                           IsChecked="{Binding IsLangRussian, Converter={StaticResource InvertBooleanConverter}}"
                                           Command="{Binding ChangeLanguageCommand}"
                                           CommandParameter="{Binding Languages[0]}"/>
+                                </MenuItem>
+
+                                <MenuItem Header="{DynamicResource main_menu_logout}" Command="{Binding LogOutCommand}"/>
                             </MenuItem>
-                        </MenuItem>
 
-                        <MenuItem Header="{DynamicResource main_menu_about}"
+                            <MenuItem Header="{DynamicResource main_menu_about}"
                                   FontWeight="SemiBold"/>
-                    </Menu>
-                </StackPanel>
+                        </Menu>
+                    </StackPanel>
 
-                <Label Content="Project Manager" 
+                    <Label Content="Project Manager" 
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center" 
                        FontSize="16" 
                        Foreground="DarkGray"/>
 
-                <StackPanel HorizontalAlignment="Right" 
+                    <StackPanel HorizontalAlignment="Right" 
                             Orientation="Horizontal">
-                    
-                    <Button Content="0"
+
+                        <Button Content="0"
                             Style="{StaticResource WindowButtonStyle}"
                             FontSize="16"
                             Width="50"
                             Margin="3"
                             Click="Hide_button_Click"/>
 
-                    <Button x:Name="Restore_button"
+                        <Button x:Name="Restore_button"
                             Content="1"
                             Style="{StaticResource WindowButtonStyle}"
                             FontSize="16"
@@ -208,339 +212,343 @@
                             Margin="3"
                             Click="Restore_button_Click"/>
 
-                    <Button Content="r"
+                        <Button Content="r"
                             Style="{StaticResource WindowButtonStyle}"
                             FontSize="16"
                             Width="50"
                             Margin="3"
                             Click="Exit_menuitem_Click"/>
-                </StackPanel>
-            </Grid>
-        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="1" IsEnabled="{Binding IsLogged}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
 
-            <!-- Сетка проектов -->
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="40"/>
-                </Grid.RowDefinitions>
+                <!-- Сетка проектов -->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" 
+                    <Border Grid.Row="0" 
                         CornerRadius="5" 
                         Background="{StaticResource MaterialDesignBackground}" 
                         Margin="3">
 
-                    <Grid>
-                        <Label Content="{DynamicResource projects_caps}" 
+                        <Grid>
+                            <Label Content="{DynamicResource projects_caps}" 
                                HorizontalAlignment="Center" 
                                Foreground="{StaticResource PrimaryHueMidBrush}" 
                                FontWeight="Bold"
                                FontSize="14"/>
 
-                        <ScrollViewer Margin="5 25 5 5"
+                            <ScrollViewer Margin="5 25 5 5"
                                       Background="WhiteSmoke">
-                            
-                            <DataGrid IsReadOnly="True" 
+
+                                <DataGrid IsReadOnly="True" 
                                       SelectionMode="Single" 
                                       SelectionUnit="FullRow"
                                       ItemsSource="{Binding Projects}"
                                       SelectedItem="{Binding SelectedProj}"
                                       AutoGenerateColumns="False">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="{DynamicResource name}" 
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="{DynamicResource name}" 
                                                         Binding="{Binding Name}"
                                                         Width="120"/>
-                                    <DataGridTextColumn Header="{DynamicResource deadline}" 
+                                        <DataGridTextColumn Header="{DynamicResource deadline}" 
                                                         Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
-                                    <DataGridTextColumn Header="{DynamicResource state}"
+                                        <DataGridTextColumn Header="{DynamicResource state}"
                                                         Binding="{Binding Completed, Converter={StaticResource Completion}}"/>
-                                </DataGrid.Columns>
+                                    </DataGrid.Columns>
 
-                                <DataGrid.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="{DynamicResource main_menu_edit_sub}"
+                                    <DataGrid.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="{DynamicResource main_menu_edit_sub}"
                                                   Command="{Binding EditProjCommand}"
                                                   CommandParameter="{Binding Data, Source={StaticResource OwnerProxy}}"/>
-                                        <Separator/>
+                                            <Separator/>
 
-                                        <MenuItem Header="{DynamicResource main_menu_export}"
+                                            <MenuItem Header="{DynamicResource main_menu_export}"
                                                   Command="{Binding ExportProjCommand}"/>
 
-                                        <MenuItem Header="{DynamicResource main_menu_import}"
+                                            <MenuItem Header="{DynamicResource main_menu_import}"
                                                   Command="{Binding ImportProjCommand}"/>
-                                        <Separator/>
+                                            <Separator/>
 
-                                        <MenuItem Header="{DynamicResource main_menu_delete}"
+                                            <MenuItem Header="{DynamicResource main_menu_delete}"
                                                   Command="{Binding DeleteProjCommand}"/>
-                                    </ContextMenu>
-                                </DataGrid.ContextMenu>
-                            </DataGrid>
-                        </ScrollViewer>
-                    </Grid>
-                </Border>
+                                        </ContextMenu>
+                                    </DataGrid.ContextMenu>
+                                </DataGrid>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
 
-                <Button Grid.Row="1" 
+                    <Button Grid.Row="1" 
                         Content="{DynamicResource main_add_proj}" 
                         VerticalContentAlignment="Top" 
                         Margin="3"
                         Command="{Binding AddProjCommand}"
                         CommandParameter="{Binding ElementName=mainWindow}"/>
-            </Grid>
+                </Grid>
 
-            <!-- Сетка инфы о проекте и его задач -->
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="40"/>
-                </Grid.RowDefinitions>
+                <!-- Сетка инфы о проекте и его задач -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" 
+                    <Border Grid.Row="0" 
                         CornerRadius="5" 
                         Background="{StaticResource MaterialDesignBackground}" 
                         Margin="3"
                         IsEnabled="{Binding SelectedProj, TargetNullValue=False}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="3*"/>
-                            <RowDefinition Height="4*"/>
-                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="4*"/>
+                            </Grid.RowDefinitions>
 
-                        <Label Content="{DynamicResource project_info}" 
+                            <Label Content="{DynamicResource project_info}" 
                                HorizontalAlignment="Center"  
                                Foreground="{StaticResource PrimaryHueMidBrush}" 
                                FontWeight="Bold"
                                FontSize="14"/>
-                        
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" 
                                       Margin="3, 25, 3, 3">
-                            
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
+
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <Label FontWeight="Bold">
+                                            <TextBlock>
+                                            <Run Text="{DynamicResource name}"/>
+                                            <Run Text=":"/>
+                                            </TextBlock>
+                                        </Label>
+
+                                        <TextBlock Text="{Binding SelectedProj.Name}"
+                                               VerticalAlignment="Center"/>
+                                    </StackPanel>
 
                                     <Label FontWeight="Bold">
                                         <TextBlock>
-                                            <Run Text="{DynamicResource name}"/>
-                                            <Run Text=":"/>
+                                        <Run Text="{DynamicResource desc}"/>
+                                        <Run Text=":"/>
                                         </TextBlock>
                                     </Label>
 
-                                    <TextBlock Text="{Binding SelectedProj.Name}"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-
-                                <Label FontWeight="Bold">
-                                    <TextBlock>
-                                        <Run Text="{DynamicResource desc}"/>
-                                        <Run Text=":"/>
-                                    </TextBlock>
-                                </Label>
-
-                                <TextBox Text="{Binding SelectedProj.Description}"
+                                    <TextBox Text="{Binding SelectedProj.Description}"
                                          HorizontalAlignment="Left"
                                          VerticalAlignment="Top"
                                          IsReadOnly="True"/>
 
-                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal">
 
-                                    <Label FontWeight="Bold">
-                                        <TextBlock>
+                                        <Label FontWeight="Bold">
+                                            <TextBlock>
                                             <Run Text="{DynamicResource deadline}"/>
                                             <Run Text=":"/>
-                                        </TextBlock>
-                                    </Label>
+                                            </TextBlock>
+                                        </Label>
 
-                                    <TextBlock Text="{Binding SelectedProj.Deadline, Converter={StaticResource DatetimeToString}}"
+                                        <TextBlock Text="{Binding SelectedProj.Deadline, Converter={StaticResource DatetimeToString}}"
                                                VerticalAlignment="Center"/>
-                                </StackPanel>
+                                    </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal">
 
-                                    <Label FontWeight="Bold">
-                                        <TextBlock>
+                                        <Label FontWeight="Bold">
+                                            <TextBlock>
                                             <Run Text="{DynamicResource comp}"/>
                                             <Run Text=":"/>
-                                        </TextBlock>
-                                    </Label>
+                                            </TextBlock>
+                                        </Label>
 
-                                    <TextBlock Text="{Binding SelectedProj.Completed, Converter={StaticResource DatetimeToString}}"
+                                        <TextBlock Text="{Binding SelectedProj.Completed, Converter={StaticResource DatetimeToString}}"
                                                VerticalAlignment="Center"/>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                        </ScrollViewer>
+                            </ScrollViewer>
 
-                        <Label Content="{DynamicResource tasks_caps}" 
+                            <Label Content="{DynamicResource tasks_caps}" 
                                Grid.Row="1" 
                                HorizontalAlignment="Center"  
                                Foreground="{StaticResource PrimaryHueMidBrush}" 
                                FontWeight="Bold"
                                FontSize="14"/>
-                        
-                        <ScrollViewer Grid.Row="1" 
+
+                            <ScrollViewer Grid.Row="1" 
                                       Margin="5,25,5,5" 
                                       Background="WhiteSmoke">
-                            
-                            <DataGrid IsReadOnly="True" 
+
+                                <DataGrid IsReadOnly="True" 
                                       SelectionMode="Single" 
                                       SelectionUnit="FullRow"
                                       ItemsSource="{Binding ProjTasks}"
                                       AutoGenerateColumns="False"
                                       SelectedItem="{Binding SelectedTask}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="{DynamicResource name}" 
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="{DynamicResource name}" 
                                                         Binding="{Binding Name}"
                                                         Width="100"/>
-                                    <DataGridTextColumn Header="{DynamicResource deadline}" 
+                                        <DataGridTextColumn Header="{DynamicResource deadline}" 
                                                         Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
-                                    <DataGridTextColumn Header="{DynamicResource state}" 
+                                        <DataGridTextColumn Header="{DynamicResource state}" 
                                                         Binding="{Binding Completed, Converter={StaticResource Completion}}"/>
-                                </DataGrid.Columns>
+                                    </DataGrid.Columns>
 
-                                <DataGrid.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="{DynamicResource main_menu_start}"
+                                    <DataGrid.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="{DynamicResource main_menu_start}"
                                                   Command="{Binding StartTaskCommand}"/>
 
-                                        <MenuItem Header="{DynamicResource main_menu_edit_sub}"
+                                            <MenuItem Header="{DynamicResource main_menu_edit_sub}"
                                                   Command="{Binding EditTaskCommand}"
                                                   CommandParameter="{Binding Data, Source={StaticResource OwnerProxy}}"/>
 
-                                        <MenuItem Header="{DynamicResource main_menu_complete}"
+                                            <MenuItem Header="{DynamicResource main_menu_complete}"
                                                   Command="{Binding CompleteTaskCommand}"/>
-                                        <Separator/>
+                                            <Separator/>
 
-                                        <MenuItem Header="{DynamicResource main_menu_delete}"
+                                            <MenuItem Header="{DynamicResource main_menu_delete}"
                                                   Command="{Binding DeleteTaskCommand}"/>
-                                    </ContextMenu>
-                                </DataGrid.ContextMenu>
-                            </DataGrid>
-                        </ScrollViewer>
-                    </Grid>
-                </Border>
+                                        </ContextMenu>
+                                    </DataGrid.ContextMenu>
+                                </DataGrid>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
 
-                <Button Grid.Row="1" 
+                    <Button Grid.Row="1" 
                         Content="{DynamicResource main_add_task}"
                         VerticalContentAlignment="Top" 
                         Margin="3"
                         Command="{Binding AddTaskCommand}"
                         CommandParameter="{Binding ElementName=mainWindow}"/>
-            </Grid>
+                </Grid>
 
-            <!-- Сетка задачи -->
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="40"/>
-                </Grid.RowDefinitions>
+                <!-- Сетка задачи -->
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" CornerRadius="5" 
+                    <Border Grid.Row="0" CornerRadius="5" 
                         Background="{StaticResource MaterialDesignBackground}" 
                         Margin="3"
                         IsEnabled="{Binding SelectedTask, TargetNullValue=False}">
-                    <Grid>
-                        <Label Content="{DynamicResource task_info}" 
+                        <Grid>
+                            <Label Content="{DynamicResource task_info}" 
                                HorizontalAlignment="Center"  
                                Foreground="{StaticResource PrimaryHueMidBrush}" 
                                FontWeight="Bold"
                                FontSize="14"/>
-                        
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" 
                                       Margin="3, 25, 3, 3">
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <Label FontWeight="Bold">
+                                            <TextBlock>
+                                            <Run Text="{DynamicResource name}"/>
+                                            <Run Text=":"/>
+                                            </TextBlock>
+                                        </Label>
+
+                                        <TextBlock Text="{Binding SelectedTask.Name}"
+                                               VerticalAlignment="Center"/>
+                                    </StackPanel>
 
                                     <Label FontWeight="Bold">
                                         <TextBlock>
-                                            <Run Text="{DynamicResource name}"/>
-                                            <Run Text=":"/>
+                                        <Run Text="{DynamicResource desc}"/>
+                                        <Run Text=":"/>
                                         </TextBlock>
                                     </Label>
 
-                                    <TextBlock Text="{Binding SelectedTask.Name}"
-                                               VerticalAlignment="Center"/>
-                                </StackPanel>
-
-                                <Label FontWeight="Bold">
-                                    <TextBlock>
-                                        <Run Text="{DynamicResource desc}"/>
-                                        <Run Text=":"/>
-                                    </TextBlock>
-                                </Label>
-
-                                <TextBox Text="{Binding SelectedTask.Description}"
+                                    <TextBox Text="{Binding SelectedTask.Description}"
                                              HorizontalAlignment="Left"
                                              VerticalAlignment="Top"
                                              IsReadOnly="True"/>
 
-                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal">
 
-                                    <Label FontWeight="Bold">
-                                        <TextBlock>
+                                        <Label FontWeight="Bold">
+                                            <TextBlock>
                                             <Run Text="{DynamicResource deadline}"/>
                                             <Run Text=":"/>
-                                        </TextBlock>
-                                    </Label>
+                                            </TextBlock>
+                                        </Label>
 
-                                    <TextBlock Text="{Binding SelectedTask.Deadline, Converter={StaticResource DatetimeToString}}"
+                                        <TextBlock Text="{Binding SelectedTask.Deadline, Converter={StaticResource DatetimeToString}}"
                                                VerticalAlignment="Center"/>
-                                </StackPanel>
+                                    </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal">
 
-                                    <Label FontWeight="Bold">
-                                        <TextBlock>
+                                        <Label FontWeight="Bold">
+                                            <TextBlock>
                                             <Run Text="{DynamicResource comp}"/>
                                             <Run Text=":"/>
-                                        </TextBlock>
-                                    </Label>
+                                            </TextBlock>
+                                        </Label>
 
-                                    <TextBlock Text="{Binding SelectedTask.Completed, Converter={StaticResource DatetimeToString}}"
+                                        <TextBlock Text="{Binding SelectedTask.Completed, Converter={StaticResource DatetimeToString}}"
                                                VerticalAlignment="Center"/>
-                                </StackPanel>
+                                    </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal">
 
-                                    <Label FontWeight="Bold">
-                                        <TextBlock>
+                                        <Label FontWeight="Bold">
+                                            <TextBlock>
                                             <Run Text="{DynamicResource time_spent}"/>
                                             <Run Text=":"/>
-                                        </TextBlock>
-                                    </Label>
+                                            </TextBlock>
+                                        </Label>
 
-                                    <TextBlock Text="{Binding SelectedTask.Timespent, Converter={StaticResource IntToTimespan}}"
+                                        <TextBlock Text="{Binding SelectedTask.Timespent, Converter={StaticResource IntToTimespan}}"
                                                VerticalAlignment="Center"/>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                        </ScrollViewer>
-                    </Grid>
-                </Border>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
 
-                <!-- Сетка кнопок -->
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5*"/>
-                        <ColumnDefinition Width="4*"/>
-                    </Grid.ColumnDefinitions>
+                    <!-- Сетка кнопок -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <Button Content="{DynamicResource main_comp_task}"
+                        <Button Content="{DynamicResource main_comp_task}"
                             VerticalContentAlignment="Top" 
                             Grid.Column="0" 
                             Margin="3"
                             Command="{Binding CompleteTaskCommand}"/>
 
-                    <Button Content="{DynamicResource main_start_task}"
+                        <Button Content="{DynamicResource main_start_task}"
                             VerticalContentAlignment="Top" 
                             Grid.Column="1"
                             Margin="3"
                             Command="{Binding StartTaskCommand}"/>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>
+
+        <ContentControl Margin="30, 30, 200, 30"
+                        Content="{Binding SelectedViewModel}"/>
     </Grid>
 </Window>

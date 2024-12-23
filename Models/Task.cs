@@ -10,11 +10,12 @@ namespace WpfTaskManager
         [ForeignKey("Projects")] private int idProject;
         private int timespent;
 
-        public int IdProject 
+        public int IdProject
         {
-            get { 
-                return idProject; 
-            } 
+            get
+            {
+                return idProject;
+            }
             set
             {
                 if (idProject != value)
@@ -25,8 +26,8 @@ namespace WpfTaskManager
             }
         }
 
-        public int Timespent 
-        { 
+        public int Timespent
+        {
             get
             {
                 return timespent;

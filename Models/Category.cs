@@ -32,7 +32,7 @@ namespace WpfTaskManager
             }
             set
             {
-                color_r = value; 
+                color_r = value;
                 OnPropertyChanged();
             }
         }

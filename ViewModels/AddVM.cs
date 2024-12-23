@@ -20,14 +20,14 @@ namespace WpfTaskManager
         private RelayCommand addCommand;
 
         // Конструкторы
-        public AddVM() 
+        public AddVM()
         {
         }
 
         public AddVM(int? id)
         {
             StartDate = DateTime.Now;
-            
+
             if (id.HasValue)
             {
                 using (AppContext db = new AppContext())

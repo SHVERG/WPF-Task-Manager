@@ -21,6 +21,7 @@
     <v:String x:Key="main_menu_lang">Language</v:String>
     <v:String x:Key="main_menu_lang_ru">Русский</v:String>
     <v:String x:Key="main_menu_lang_en">English</v:String>
+    <v:String x:Key="main_menu_logout">Log out</v:String>
     <v:String x:Key="main_menu_about">About</v:String>
     <v:String x:Key="main_menu_complete">Complete</v:String>
     <v:String x:Key="main_menu_start">Start</v:String>
@@ -70,4 +71,19 @@
     <v:String x:Key="log_logs_caps">LOG</v:String>
     <v:String x:Key="log_message">Message</v:String>
     <v:String x:Key="log_date">Date</v:String>
+
+    <v:String x:Key="login_title">Logging In</v:String>
+    <v:String x:Key="login_username">Username</v:String>
+    <v:String x:Key="login_password">Password</v:String>
+    <v:String x:Key="login_inc_password">Incorrect password</v:String>
+    <v:String x:Key="login_login_btn">Log In</v:String>
+    <v:String x:Key="login_register_btn">Register</v:String>
+    <v:String x:Key="login_not_reg">Not registered?</v:String>
+
+    <v:String x:Key="register_title">Registration</v:String>
+    <v:String x:Key="register_name">Name</v:String>
+    <v:String x:Key="register_name_hint">Your name</v:String>
+    <v:String x:Key="register_username_password_hint">Min. length: 6</v:String>
+    <v:String x:Key="register_email_hint">Enter your email</v:String>
+    <v:String x:Key="register_alr_reg">I already have account</v:String>
 </ResourceDictionary>

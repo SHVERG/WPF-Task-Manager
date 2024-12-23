@@ -12,7 +12,7 @@ namespace WpfTaskManager
         private RelayCommand closeCommand;
         public RelayCommand addCommand;
 
-        public AddCatVM() 
+        public AddCatVM()
         {
             color = new Color();
             color.A = 255;

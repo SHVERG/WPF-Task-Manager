@@ -21,6 +21,7 @@
     <v:String x:Key="main_menu_lang">Язык</v:String>
     <v:String x:Key="main_menu_lang_ru">Русский</v:String>
     <v:String x:Key="main_menu_lang_en">English</v:String>
+    <v:String x:Key="main_menu_logout">Выйти из аккаунта</v:String>
     <v:String x:Key="main_menu_about">О программе</v:String>
     <v:String x:Key="main_menu_complete">Завершить</v:String>
     <v:String x:Key="main_menu_start">Начать</v:String>
@@ -70,4 +71,19 @@
     <v:String x:Key="log_logs_caps">ЖУРНАЛ</v:String>
     <v:String x:Key="log_message">Сообщение</v:String>
     <v:String x:Key="log_date">Дата</v:String>
+
+    <v:String x:Key="login_title">Вход</v:String>
+    <v:String x:Key="login_username">Имя пользователя</v:String>
+    <v:String x:Key="login_password">Пароль</v:String>
+    <v:String x:Key="login_inc_password">Неверный пароль</v:String>
+    <v:String x:Key="login_login_btn">Войти</v:String>
+    <v:String x:Key="login_register_btn">Зарегистрироваться</v:String>
+    <v:String x:Key="login_not_reg">Не зарегистрированы?</v:String>
+
+    <v:String x:Key="register_title">Регистрация</v:String>
+    <v:String x:Key="register_name">Имя</v:String>
+    <v:String x:Key="register_name_hint">Ваше имя</v:String>
+    <v:String x:Key="register_username_password_hint">Мин. длина: 6</v:String>
+    <v:String x:Key="register_email_hint">Введите свою электронную почту</v:String>
+    <v:String x:Key="register_alr_reg">У меня уже есть аккаунт</v:String>
 </ResourceDictionary>

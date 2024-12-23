@@ -15,7 +15,7 @@ namespace WpfTaskManager
             }
             set
             {
-                projectName = value; 
+                projectName = value;
                 OnPropertyChanged();
             }
         }

@@ -10,9 +10,9 @@ namespace WpfTaskManager
 
         public int? IdCat
         {
-            get 
-            { 
-                return idCat; 
+            get
+            {
+                return idCat;
             }
             set
             {

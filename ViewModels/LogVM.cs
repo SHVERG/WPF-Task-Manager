@@ -20,7 +20,7 @@ namespace WpfTaskManager
         private RelayCommand saveCommand;
 
         // Конструктор
-        public LogVM() 
+        public LogVM()
         {
             DGSource = new ObservableCollection<LogBase>();
         }

@@ -17,7 +17,7 @@ namespace WpfTaskManager
             if (e.ClickCount == 2)
                 Restore_button_Click(null, null);
             else
-                this.DragMove();
+                DragMove();
         }
 
         // Выход из приложения
@@ -29,22 +29,22 @@ namespace WpfTaskManager
         // Сворачивание окна
         private void Hide_button_Click(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized;
+            WindowState = WindowState.Minimized;
         }
 
         // Разворачивание на весь экран
         private void Restore_button_Click(object sender, RoutedEventArgs e)
         {
-            if (this.WindowState == WindowState.Normal)
-                this.WindowState = WindowState.Maximized;
+            if (WindowState == WindowState.Normal)
+                WindowState = WindowState.Maximized;
             else
-                this.WindowState = WindowState.Normal;
+                WindowState = WindowState.Normal;
         }
 
         // Событие при изменении статуса окна
         private void Window_StateChanged(object sender, EventArgs e)
         {
-            if (this.WindowState == WindowState.Normal)
+            if (WindowState == WindowState.Normal)
                 Restore_button.Content = "1";
             else
                 Restore_button.Content = "2";
