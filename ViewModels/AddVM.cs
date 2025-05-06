@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -13,6 +15,7 @@ namespace WpfTaskManager
         private string name = "";
         private string description = "";
         private DateTime? deadline = null;
+        private User selected_user = null;
         private DateTime? time = null;
         private int? idCat = null;
 
@@ -24,6 +27,8 @@ namespace WpfTaskManager
         {
         }
 
+        public ObservableCollection<User> Users { get; set; }
+
         public AddVM(int? id)
         {
             StartDate = DateTime.Now;
@@ -34,6 +39,7 @@ namespace WpfTaskManager
                 {
                     proj = db.Projects.Find(id);
                     EndDate = db.Projects.Find(id).Deadline;
+                    Users = new ObservableCollection<User>(db.Users.Where(p => p.IdRole==3));
                 }
             }
             else
@@ -134,6 +140,19 @@ namespace WpfTaskManager
             }
         }
 
+        public User SelectedUser
+        {
+            get
+            {
+                return selected_user;
+            }
+            set
+            {
+                selected_user = value;
+                OnPropertyChanged();
+            }
+        }
+
         // Команда закрытия
         public RelayCommand CloseCommand
         {
@@ -170,7 +189,7 @@ namespace WpfTaskManager
         // Условие запуска команды добавления проекта/задачи
         private bool AddCanExecute()
         {
-            return Name != null && Deadline != null && Name.Trim().Length != 0 && Name.Trim().Length <= 30 && Description.Trim().Length <= 500 && isUnique();
+            return Name != null && Deadline != null && (SelectedUser != null || proj == null) && Name.Trim().Length != 0 && Name.Trim().Length <= 30 && Description.Trim().Length <= 500 && isUnique();
         }
 
         // Команда добавления проекта/задачи

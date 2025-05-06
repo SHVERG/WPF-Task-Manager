@@ -22,7 +22,7 @@ namespace WpfTaskManager
         public App()
         {
             InitializeComponent();
-            App.LanguageChanged += App_LanguageChanged;
+            LanguageChanged += App_LanguageChanged;
 
             m_Languages.Clear();
             m_Languages.Add(new CultureInfo("en-US")); //Нейтральная культура для этого проекта
@@ -61,22 +61,22 @@ namespace WpfTaskManager
                 }
 
                 //3. Находим старую ResourceDictionary и удаляем его и добавляем новую ResourceDictionary
-                ResourceDictionary oldDict = (from d in Application.Current.Resources.MergedDictionaries
+                ResourceDictionary oldDict = (from d in Current.Resources.MergedDictionaries
                                               where d.Source != null && d.Source.OriginalString.StartsWith("Resources/lang.")
                                               select d).First();
                 if (oldDict != null)
                 {
-                    int ind = Application.Current.Resources.MergedDictionaries.IndexOf(oldDict);
-                    Application.Current.Resources.MergedDictionaries.Remove(oldDict);
-                    Application.Current.Resources.MergedDictionaries.Insert(ind, dict);
+                    int ind = Current.Resources.MergedDictionaries.IndexOf(oldDict);
+                    Current.Resources.MergedDictionaries.Remove(oldDict);
+                    Current.Resources.MergedDictionaries.Insert(ind, dict);
                 }
                 else
                 {
-                    Application.Current.Resources.MergedDictionaries.Add(dict);
+                    Current.Resources.MergedDictionaries.Add(dict);
                 }
 
                 //4. Вызываем евент для оповещения всех окон.
-                LanguageChanged(Application.Current, new EventArgs());
+                LanguageChanged(Current, new EventArgs());
             }
         }
 
@@ -84,6 +84,30 @@ namespace WpfTaskManager
         {
             WpfTaskManager.Properties.Settings.Default.DefaultLanguage = Language;
             WpfTaskManager.Properties.Settings.Default.Save();
+        }
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            
+            if (WpfTaskManager.Properties.Settings.Default.AutoLogin && !string.IsNullOrWhiteSpace(WpfTaskManager.Properties.Settings.Default.SavedUsername))
+            {
+                using (AppContext db = new AppContext()) { 
+                    var main = new MainWindow()
+                    {
+                        DataContext = new MainVM()
+                        {
+                            User = db.Users.FirstOrDefault(u => u.Username == WpfTaskManager.Properties.Settings.Default.SavedUsername)
+                        }
+                    };
+                    main.Show();
+                    Current.MainWindow = main;
+                }
+            }
+            else
+            {
+                var loginWindow = new LoginWindow();
+                loginWindow.Show();
+            }
         }
     }
 }

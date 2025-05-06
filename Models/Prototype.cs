@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Runtime.CompilerServices;
 
 namespace WpfTaskManager
@@ -9,6 +10,7 @@ namespace WpfTaskManager
     {
         private string name;
         private string description;
+        private DateTime? start_date;
         private DateTime deadline;
         private DateTime? completed;
 
@@ -41,6 +43,21 @@ namespace WpfTaskManager
                     description = value;
                     OnPropertyChanged();
                 }
+            }
+        }
+
+        [DataType(DataType.Date)]
+        public DateTime? StartDate
+        {
+            get
+            {
+                return start_date;
+            }
+            set
+            {
+                if (start_date != value)
+                    start_date = value;
+                OnPropertyChanged();
             }
         }
 

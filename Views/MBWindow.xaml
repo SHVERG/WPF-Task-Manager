@@ -12,7 +12,10 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="{x:Null}">
-    <Border Background="{StaticResource MaterialDesignBackground}" CornerRadius="10" BorderThickness="1" BorderBrush="Black">
+    <Border Background="{StaticResource MaterialDesignBackground}" 
+            CornerRadius="10" 
+            BorderThickness="1" 
+            BorderBrush="Black">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -20,14 +23,30 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Name="CaptionContainer" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource PrimaryHueMidBrush}" FontWeight="Bold" FontSize="16"/>
+            <Label Name="CaptionContainer" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" 
+                   Foreground="{StaticResource PrimaryHueMidBrush}" 
+                   FontWeight="Bold" 
+                   FontSize="16"/>
 
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <TextBlock Name="MessageContainer" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="10" FontWeight="SemiBold" FontSize="14"/>
+            <ScrollViewer Grid.Row="1" 
+                          VerticalScrollBarVisibility="Auto" 
+                          HorizontalScrollBarVisibility="Disabled">
+                <TextBlock Name="MessageContainer" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Center" 
+                           TextWrapping="WrapWithOverflow" 
+                           Margin="10" 
+                           FontWeight="SemiBold" 
+                           FontSize="14"/>
             </ScrollViewer>
             
-            <StackPanel Name="ButtonContainer" Grid.Row="2" Orientation="Horizontal"
-                        HorizontalAlignment="Center" Margin="10"/>
+            <StackPanel Name="ButtonContainer" 
+                        Grid.Row="2" 
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center" 
+                        Margin="10"/>
         </Grid>
     </Border>
 </Window>

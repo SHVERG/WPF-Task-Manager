@@ -25,7 +25,7 @@ namespace WpfTaskManager
             }
 
             DateTime date = ((DateTime)vm.Deadline).Add(time);
-            return new Task(vm.proj.IdProject, vm.Name.Trim(), vm.Description, date);
+            return new Task(vm.proj.IdProject, vm.Name.Trim(), vm.Description, date, vm.SelectedUser.IdUser);
         }
     }
 }

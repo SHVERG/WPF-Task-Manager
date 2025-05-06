@@ -1,0 +1,80 @@
+﻿<Window x:Class="WpfTaskManager.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfTaskManager"
+        mc:Ignorable="d"
+        Title="LoginWindow" 
+        Width="1000"
+        Height="680"
+        x:Name="loginWindow"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="{x:Null}"
+        WindowStyle="None">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type Button}" x:Key="WindowButtonStyle">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ButtonBase}">
+                            <Border x:Name="Chrome"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    Margin="0"
+                                    Background="{TemplateBinding Background}"
+                                    SnapsToDevicePixels="True">
+                                <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  Content="{TemplateBinding Content}"
+                                                  ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  RecognizesAccessKey="True"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="FontFamily" Value="Webdings"/>
+                <Setter Property="FontSize" Value="13.333" />
+                <Setter Property="Foreground" Value="LightGray" />
+                <Setter Property="Margin" Value="0,2,3,0"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="White" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <ContentControl Content="{Binding SelectedViewModel}"/>
+        <Border Height="60"
+                Background="#00FFFFFF"
+                VerticalAlignment="Top"
+                MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <StackPanel HorizontalAlignment="Right" 
+                    Orientation="Horizontal">
+
+                <Button Content="0"
+                        Style="{StaticResource WindowButtonStyle}"
+                        FontSize="16"
+                        Width="50"
+                        Margin="3"
+                        Click="Hide_button_Click"/>
+
+                <Button Content="r"
+                        Style="{StaticResource WindowButtonStyle}"
+                        FontSize="16"
+                        Width="50"
+                        Margin="3"
+                        Click="Exit_menuitem_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

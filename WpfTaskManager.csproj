@@ -115,6 +115,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CompletionConverter.cs" />
     <Compile Include="Converters\DateTimeToStringConverter.cs" />
+    <Compile Include="Converters\IdUserToNameConverter.cs" />
     <Compile Include="Converters\IntToTimespanConverter.cs" />
     <Compile Include="Converters\InvertBooleanConverter.cs" />
     <Compile Include="Factories\Creator.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="ViewModels\AddCatVM.cs" />
     <Compile Include="ViewModels\AddVM.cs" />
     <Compile Include="ViewModels\EditVM.cs" />
+    <Compile Include="ViewModels\LoginVM.cs" />
     <Compile Include="ViewModels\LogVM.cs" />
     <Compile Include="ViewModels\ReportVM.cs" />
     <Compile Include="Views\AddCatWindow.xaml.cs">
@@ -148,6 +150,9 @@
     </Compile>
     <Compile Include="Views\LoginUC.xaml.cs">
       <DependentUpon>LoginUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LogWindow.xaml.cs">
       <DependentUpon>LogWindow.xaml</DependentUpon>
@@ -184,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LoginUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

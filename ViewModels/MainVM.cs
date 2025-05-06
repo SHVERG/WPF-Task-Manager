@@ -6,9 +6,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Security;
 using System.Windows;
-using System.Windows.Controls;
 using System.Xml.Linq;
 
 namespace WpfTaskManager
@@ -38,27 +36,17 @@ namespace WpfTaskManager
         RelayCommand importProjCommand;
 
         RelayCommand changeLanguageCommand;
-
-        private RelayCommand loginNavCommand;
-        private RelayCommand loginCommand;
-        private RelayCommand logoutCommand;
-        private RelayCommand signupNavCommand;
-        private RelayCommand signupCommand;
+        RelayCommand logoutCommand;
 
         private bool isLangRussian;
         private double opacity = 1;
-        private UserControl selectedViewModel;
         private Project selectedProj;
         private Task selectedTask;
-        private string username;
-        private string name;
-        private string email;
-        private bool incorrectPassword;
         private User user;
-        private bool isLogged;
 
         public ObservableCollection<Project> Projects { get; set; }
         public ObservableCollection<Task> ProjTasks { get; set; }
+        public ObservableCollection<User> Users { get; set; }
 
         // Конструктор
         public MainVM()
@@ -66,114 +54,12 @@ namespace WpfTaskManager
             db = new AppContext();
             Projects = new ObservableCollection<Project>(db.Projects);
             ProjTasks = new ObservableCollection<Task>();
+            Users = new ObservableCollection<User>(db.Users);
             isLangRussian = App.Language.Equals(new CultureInfo("ru-RU"));
-
-            SelectedViewModel = new LoginUC()
-            {
-                DataContext = this
-            };
-
-            IncorrectPassword = false;
+            //User = user;
         }
 
         //Свойства
-
-        public bool IsLogged
-        {
-            get
-            {
-                return isLogged;
-            }
-            set
-            {
-                isLogged = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Username
-        {
-            get
-            {
-                return username;
-            }
-            set
-            {
-                username = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Email
-        {
-            get
-            {
-                return email;
-            }
-            set
-            {
-                email = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public User User
-        {
-            get
-            {
-                return user;
-            }
-            set
-            {
-                user = value;
-
-                if (user != null)
-                    IsLogged = true;
-                else
-                    IsLogged = false;
-
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IncorrectPassword
-        {
-            get
-            {
-                return incorrectPassword;
-            }
-            set
-            {
-                incorrectPassword = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public UserControl SelectedViewModel
-        {
-            get
-            {
-                return selectedViewModel;
-            }
-            set
-            {
-                selectedViewModel = value;
-                OnPropertyChanged();
-            }
-        }
 
         public double Opacity
         {
@@ -213,6 +99,19 @@ namespace WpfTaskManager
             set
             {
                 selectedTask = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public User User
+        {
+            get
+            {
+                return user;
+            }
+            set
+            {
+                user = value;
                 OnPropertyChanged();
             }
         }
@@ -914,6 +813,28 @@ namespace WpfTaskManager
             }
         }
 
+        // Выход из аккаунта
+        public RelayCommand LogOutCommand
+        {
+            get
+            {
+                return logoutCommand ?? (logoutCommand = new RelayCommand((o) =>
+                {
+                    Properties.Settings.Default.SavedUsername = string.Empty;
+                    Properties.Settings.Default.AutoLogin = false;
+                    Properties.Settings.Default.Save();
+
+                    var loginWindow = new LoginWindow();
+
+                    loginWindow.Show();
+                    Application.Current.MainWindow = loginWindow;
+
+                    Window w = o as Window;
+                    w.Close();
+                }));
+            }
+        }
+
         // Экспорт всех проектов
         private void ExportAllProjsExecute()
         {
@@ -1079,107 +1000,6 @@ namespace WpfTaskManager
                 {
                     ImportProjExecute();
                 }));
-            }
-        }
-
-        // Команда открытия окна авторизации
-        public RelayCommand LogInNavCommand
-        {
-            get
-            {
-                return loginNavCommand ?? (loginNavCommand = new RelayCommand((o) =>
-                {
-                    SelectedViewModel = new LoginUC()
-                    {
-                        DataContext = this
-                    };
-                }));
-            }
-        }
-
-        // Команда авторизации
-        public RelayCommand LogInCommand
-        {
-            get
-            {
-                return loginCommand ?? (loginCommand = new RelayCommand((o) =>
-                {
-                    User user = db.Users.FirstOrDefault(u => u.Username == Username);
-                    if (user.Password == Encode(((PasswordBox)o).SecurePassword))
-                    {
-                        IncorrectPassword = false;
-                        User = user;
-                        SelectedViewModel = null;
-                        Username = null;
-                    }
-                    else
-                    {
-                        IncorrectPassword = true;
-                    }
-                }, o => db.Users.Any(u => u.Username == Username)));
-            }
-        }
-
-        // Команда выхода из аккаунта
-        public RelayCommand LogOutCommand
-        {
-            get
-            {
-                return logoutCommand ?? (logoutCommand = new RelayCommand((o) =>
-                {
-                    User = null;
-
-                    SelectedViewModel = new LoginUC()
-                    {
-                        DataContext = this
-                    };
-                }, o => User != null));
-            }
-        }
-
-        // Команда открытия окна регистрации
-        public RelayCommand SignUpNavCommand
-        {
-            get
-            {
-                return signupNavCommand ?? (signupNavCommand = new RelayCommand((o) =>
-                {
-                    SelectedViewModel = new SignupUC()
-                    {
-                        DataContext = this
-                    };
-                }));
-            }
-        }
-
-        // Хэширование пароля
-        public static string Encode(SecureString value)
-        {
-            var hash = System.Security.Cryptography.SHA1.Create();
-            var encoder = new System.Text.ASCIIEncoding();
-            var combined = encoder.GetBytes(value.ToString() ?? "");
-            return BitConverter.ToString(hash.ComputeHash(combined)).ToLower().Replace("-", "");
-
-        }
-
-        // Команда регистрации
-        public RelayCommand SignUpCommand
-        {
-            get
-            {
-                return signupCommand ?? (signupCommand = new RelayCommand((o) =>
-                {
-                    User user = new User(Username, Name, Email, Encode(((PasswordBox)o).SecurePassword));
-
-                    db.Users.Add(user);
-                    db.SaveChanges();
-                    User = user;
-
-                    SelectedViewModel = null;
-                    Username = null;
-                    Name = null;
-                    Email = null;
-                }, o => Username != null && !db.Users.Any(u => u.Username == Username) && Username.Length > 5 && ((PasswordBox)o).SecurePassword != null && ((PasswordBox)o).SecurePassword.Length > 5));
             }
         }
 

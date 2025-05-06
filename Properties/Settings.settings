@@ -5,5 +5,11 @@
     <Setting Name="DefaultLanguage" Type="System.Globalization.CultureInfo" Scope="User">
       <Value Profile="(Default)">ru-RU</Value>
     </Setting>
+    <Setting Name="SavedUsername" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="AutoLogin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

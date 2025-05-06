@@ -24,7 +24,9 @@
     <Window.Resources>
         <ResourceDictionary>
             <local:InvertBooleanConverter x:Key="BoolConvert"/>
-            <local:BoolToVisibilityConverter x:Key="BoolToVis" TrueValue="Visible" FalseValue="Hidden"/>
+            <local:BoolToVisibilityConverter x:Key="BoolToVis" 
+                                             TrueValue="Visible" 
+                                             FalseValue="Hidden"/>
             <local:BindingProxy x:Key="VisProxy" Data="{Binding Path=IsProj, Converter={StaticResource BoolConvert}}"/>
         </ResourceDictionary>
     </Window.Resources>
@@ -74,7 +76,8 @@
                               AutoGenerateColumns="False"
                               ItemsSource="{Binding DGSource}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="{DynamicResource name}" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="{DynamicResource name}" 
+                                                Binding="{Binding Name}"/>
                             <DataGridTextColumn Header="{DynamicResource report_proj_name}" 
                                                 Visibility="{Binding Data, Source={StaticResource VisProxy}, Converter={StaticResource BoolToVis}}"
                                                 Binding="{Binding ProjectName}"/>

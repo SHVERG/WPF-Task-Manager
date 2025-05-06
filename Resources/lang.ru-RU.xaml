@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:v="clr-namespace:System;assembly=mscorlib">
+    <v:String x:Key="app_name">Менеджер Проектов</v:String>
+    
     <v:String x:Key="main_menu_file">Файл</v:String>
     <v:String x:Key="main_menu_add_project">Добавить Проект</v:String>
     <v:String x:Key="main_menu_add_task">Добавить Задачу</v:String>
@@ -35,6 +37,7 @@
     <v:String x:Key="name_caps">НАЗВАНИЕ</v:String>
     <v:String x:Key="desc">Описание</v:String>
     <v:String x:Key="desc_caps">ОПИСАНИЕ</v:String>
+    <v:String x:Key="start_date">Начато</v:String>
     <v:String x:Key="deadline">Крайний срок</v:String>
     <v:String x:Key="deadline_caps">КРАЙНИЙ СРОК</v:String>
     <v:String x:Key="comp">Выполнение</v:String>
@@ -47,6 +50,8 @@
     <v:String x:Key="all">Все</v:String>
     <v:String x:Key="color">Цвет</v:String>
     <v:String x:Key="color_caps">ЦВЕТ</v:String>
+    <v:String x:Key="reliable">Ответственный</v:String>
+    <v:String x:Key="reliable_caps">ОТВЕТСТВЕННЫЙ</v:String>
 
     <v:String x:Key="main_add_proj">ДОБАВИТЬ ПРОЕКТ</v:String>
     <v:String x:Key="main_add_task">ДОБАВИТЬ ЗАДАЧУ</v:String>
@@ -75,10 +80,12 @@
     <v:String x:Key="login_title">Вход</v:String>
     <v:String x:Key="login_username">Имя пользователя</v:String>
     <v:String x:Key="login_password">Пароль</v:String>
-    <v:String x:Key="login_inc_password">Неверный пароль</v:String>
+    <v:String x:Key="login_inc_user_or_pass">Неверное имя пользователя или пароль</v:String>
+    <v:String x:Key="login_inc_username">Данное имя пользователя занято, попробуйте использовать другое</v:String>
     <v:String x:Key="login_login_btn">Войти</v:String>
     <v:String x:Key="login_register_btn">Зарегистрироваться</v:String>
     <v:String x:Key="login_not_reg">Не зарегистрированы?</v:String>
+    <v:String x:Key="login_remember">Запомнить меня</v:String>
 
     <v:String x:Key="register_title">Регистрация</v:String>
     <v:String x:Key="register_name">Имя</v:String>
