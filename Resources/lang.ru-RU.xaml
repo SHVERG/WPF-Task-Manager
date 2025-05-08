@@ -88,7 +88,7 @@
     <v:String x:Key="login_username">Имя пользователя</v:String>
     <v:String x:Key="login_password">Пароль</v:String>
     <v:String x:Key="login_inc_user_or_pass">Неверное имя пользователя или пароль</v:String>
-    <v:String x:Key="login_inc_username">Данное имя пользователя занято, попробуйте использовать другое</v:String>
+    <v:String x:Key="login_inc_username">Данное имя пользователя занято, попробуйте другое</v:String>
     <v:String x:Key="login_login_btn">Войти</v:String>
     <v:String x:Key="login_register_btn">Зарегистрироваться</v:String>
     <v:String x:Key="login_not_reg">Не зарегистрированы?</v:String>

@@ -89,7 +89,7 @@
     <v:String x:Key="login_username">Username</v:String>
     <v:String x:Key="login_password">Password</v:String>
     <v:String x:Key="login_inc_user_or_pass">Incorrect username or password</v:String>
-    <v:String x:Key="login_inc_username">This username is busy, try use another</v:String>
+    <v:String x:Key="login_inc_username">This username is busy, try another</v:String>
     <v:String x:Key="login_login_btn">Log In</v:String>
     <v:String x:Key="login_register_btn">Register</v:String>
     <v:String x:Key="login_not_reg">Not registered?</v:String>

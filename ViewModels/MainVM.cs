@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows;
 using System.Xml.Linq;
 
@@ -703,6 +704,7 @@ namespace WpfTaskManager
             }
 
             MBWindow conf = new MBWindow();
+
             if (conf.Show(title, description, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 db.ProjectsLogs.RemoveRange(db.ProjectsLogs.ToList());
@@ -742,6 +744,7 @@ namespace WpfTaskManager
             XAttribute p_id = new XAttribute("id", SelectedProj.IdProject);
             XElement p_name = new XElement("name", SelectedProj.Name);
             XElement p_desc = new XElement("desc", SelectedProj.Description);
+            XElement p_start = new XElement("start", SelectedProj.StartDate);
             XElement p_dead = new XElement("deadline", SelectedProj.Deadline);
             XElement p_comp = new XElement("completed", selectedProj.Completed);
             XElement p_tasks = new XElement("tasks");
@@ -753,18 +756,20 @@ namespace WpfTaskManager
                     XElement task = new XElement("task");
                     XAttribute t_id = new XAttribute("id", t.IdTask);
                     XAttribute t_pid = new XAttribute("p_id", t.IdProject);
+                    XAttribute t_uid = new XAttribute ("u_id", t.IdUser);
                     XElement t_name = new XElement("name", t.Name);
                     XElement t_desc = new XElement("desc", t.Description);
+                    XElement t_start = new XElement("start", t.StartDate);
                     XElement t_dead = new XElement("deadline", t.Deadline);
                     XElement t_comp = new XElement("completed", t.Completed);
                     XElement t_time = new XElement("timespent", t.Timespent);
 
-                    task.Add(t_id, t_pid, t_name, t_desc, t_dead, t_comp, t_time);
+                    task.Add(t_id, t_pid, t_uid, t_name, t_desc, t_start, t_dead, t_comp, t_time);
                     p_tasks.Add(task);
                 }
             }
 
-            proj.Add(p_id, p_name, p_desc, p_dead, p_comp, p_tasks);
+            proj.Add(p_id, p_name, p_desc, p_start, p_dead, p_comp, p_tasks);
 
             SaveFileDialog save = new SaveFileDialog();
             save.Filter = "XML file|*.xml";
@@ -846,6 +851,7 @@ namespace WpfTaskManager
                 XAttribute p_id = new XAttribute("id", p.IdProject);
                 XElement p_name = new XElement("name", p.Name);
                 XElement p_desc = new XElement("desc", p.Description);
+                XElement p_start = new XElement("start", p.StartDate);
                 XElement p_dead = new XElement("deadline", p.Deadline);
                 XElement p_comp = new XElement("completed", p.Completed);
                 XElement p_tasks = new XElement("tasks");
@@ -857,18 +863,20 @@ namespace WpfTaskManager
                         XElement task = new XElement("task");
                         XAttribute t_id = new XAttribute("id", t.IdTask);
                         XAttribute t_pid = new XAttribute("p_id", t.IdProject);
+                        XAttribute t_uid = new XAttribute("u_id", t.IdUser);
                         XElement t_name = new XElement("name", t.Name);
                         XElement t_desc = new XElement("desc", t.Description);
+                        XElement t_start = new XElement("start", t.StartDate);
                         XElement t_dead = new XElement("deadline", t.Deadline);
                         XElement t_comp = new XElement("completed", t.Completed);
                         XElement t_time = new XElement("timespent", t.Timespent);
 
-                        task.Add(t_id, t_pid, t_name, t_desc, t_dead, t_comp, t_time);
+                        task.Add(t_id, t_pid, t_uid, t_name, t_desc, t_start, t_dead, t_comp, t_time);
                         p_tasks.Add(task);
                     }
                 }
 
-                proj.Add(p_id, p_name, p_desc, p_dead, p_comp, p_tasks);
+                proj.Add(p_id, p_name, p_desc, p_start, p_dead, p_comp, p_tasks);
                 projs.Add(proj);
             }
 
@@ -932,6 +940,7 @@ namespace WpfTaskManager
 
                     p_add.Name = proj.Element("name").Value;
                     p_add.Description = proj.Element("desc").Value;
+                    p_add.StartDate = DateTime.Parse(proj.Element("start").Value);
                     p_add.Deadline = DateTime.Parse(proj.Element("deadline").Value);
 
                     if (DateTime.TryParse(proj.Element("completed").Value, out p_comp))
@@ -948,7 +957,9 @@ namespace WpfTaskManager
 
                         t_add.IdProject = p_add.IdProject;
                         t_add.Name = task.Element("name").Value;
+                        t_add.IdUser = int.Parse(task.Attribute("u_id").Value);
                         t_add.Description = task.Element("desc").Value;
+                        t_add.StartDate = DateTime.Parse(task.Element("start").Value);
                         t_add.Deadline = DateTime.Parse(task.Element("deadline").Value);
                         t_add.Timespent = int.Parse(task.Element("timespent").Value);
 
