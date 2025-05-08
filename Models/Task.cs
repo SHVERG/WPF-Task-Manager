@@ -62,11 +62,12 @@ namespace WpfTaskManager
 
         public Task() { }
 
-        public Task(int idProject, string name, string description, DateTime deadline, int idUser)
+        public Task(int idProject, string name, string description, DateTime startdate, DateTime deadline, int idUser)
         {
             IdProject = idProject;
             Name = name;
             Description = description;
+            StartDate = startdate;
             Deadline = deadline;
             IdUser = idUser;
         }

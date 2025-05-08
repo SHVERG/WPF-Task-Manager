@@ -114,6 +114,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CompletionConverter.cs" />
+    <Compile Include="Converters\DateTimeToBoolConverter.cs" />
     <Compile Include="Converters\DateTimeToStringConverter.cs" />
     <Compile Include="Converters\IdUserToNameConverter.cs" />
     <Compile Include="Converters\IntToTimespanConverter.cs" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Net;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -39,10 +38,6 @@ namespace WpfTaskManager
 
             IncorrectUserOrPass = false;
             IncorrectUsername = false;
-
-            /*User = db.Users.Where(u => u.Username == Properties.Settings.Default.SavedUsername).FirstOrDefault();
-            if (User != null)
-                OpenMainWindow();*/
         }
 
         public string Username
@@ -239,16 +234,6 @@ namespace WpfTaskManager
                 }));
             }
         }
-
-        // Хэширование пароля
-        /*public static string Encode(SecureString value)
-        {
-            var hash = System.Security.Cryptography.SHA1.Create();
-            var encoder = new System.Text.ASCIIEncoding();
-            var combined = encoder.GetBytes(value.ToString() ?? "");
-            return BitConverter.ToString(hash.ComputeHash(combined)).ToLower().Replace("-", "");
-
-        }*/
 
         String SecureStringToString(SecureString value)
         {

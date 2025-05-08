@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -14,27 +15,39 @@ namespace WpfTaskManager
     {
         private bool isProj;
         private string title;
-        private string choice_label;
+        private string choiceLabel;
+        private bool isReliableChecked;
 
-        private int choice_index = 0;
+        private int groupChoiceIndex = 0;
+        private int byChoiceIndex = 0;
         private DateTime? startDate;
         private DateTime? endDate;
+        private User reliable;
+
         public ObservableCollection<Report> DGSource { get; set; }
+        public ObservableCollection<User> Users { get; set; }
 
         private RelayCommand closeCommand;
         private RelayCommand showCommand;
         private RelayCommand saveCommand;
+        private RelayCommand clearCommand;
 
         // Конструкторы
         public ReportVM()
         {
             DGSource = new ObservableCollection<Report>();
+            Users = new ObservableCollection<User>();
         }
 
         public ReportVM(bool isProj)
         {
             this.isProj = isProj;
             DGSource = new ObservableCollection<Report>();
+
+            using (AppContext db = new AppContext())
+            {
+                Users = new ObservableCollection<User>(db.Users);
+            }
 
             if (isProj)
             {
@@ -61,13 +74,13 @@ namespace WpfTaskManager
                     case "ru-RU":
                         {
                             title = "ОТЧЕТ ПО ЗАДАЧАМ";
-                            choice_label = "Задачи";
+                            choiceLabel = "Задачи";
                             break;
                         }
                     default:
                         {
                             title = "TASKS REPORT";
-                            choice_label = "Tasks";
+                            choiceLabel = "Tasks";
                             break;
                         }
                 }
@@ -105,24 +118,50 @@ namespace WpfTaskManager
         {
             get
             {
-                return choice_label;
+                return choiceLabel;
             }
             set
             {
-                choice_label = value;
+                choiceLabel = value;
                 OnPropertyChanged();
             }
         }
 
-        public int ChoiceIndex
+        public int GroupChoiceIndex
         {
             get
             {
-                return choice_index;
+                return groupChoiceIndex;
             }
             set
             {
-                choice_index = value;
+                groupChoiceIndex = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int ByChoiceIndex
+        {
+            get
+            {
+                return byChoiceIndex;
+            }
+            set
+            {
+                byChoiceIndex = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsReliableChecked
+        {
+            get
+            {
+                return isReliableChecked;
+            }
+            set
+            {
+                isReliableChecked = value;
                 OnPropertyChanged();
             }
         }
@@ -153,6 +192,19 @@ namespace WpfTaskManager
             }
         }
 
+        public User Reliable
+        {
+            get
+            {
+                return reliable;
+            }
+            set
+            {
+                reliable = value; 
+                OnPropertyChanged();
+            }
+        }
+
         // Команда закрытия окна
         public RelayCommand CloseCommand
         {
@@ -179,84 +231,153 @@ namespace WpfTaskManager
         // Показ отчета
         public void ShowExecute()
         {
-            string S_Completed;
-            string S_Completed_ru;
+            string Result;
+            string Result_ru;
 
             DGSource.Clear();
 
             using (AppContext db = new AppContext())
             {
+                DateTime NNStartDate = StartDate!=null?StartDate.Value:DateTime.MinValue;
+                DateTime NNEndDate = EndDate!=null?EndDate.Value:DateTime.MaxValue;
+
                 if (IsProj)
                 {
-                    foreach (Project p in db.Projects.Where(p => ((p.Completed == null && ChoiceIndex == 2) || (p.Completed != null && ChoiceIndex == 1) || ChoiceIndex == 0) && p.Deadline >= ((DateTime)StartDate) && p.Deadline <= ((DateTime)EndDate)))
+                    List<Project> projs = new List<Project>();
+
+                    if (GroupChoiceIndex == 2)
                     {
-                        TimeSpan ts = new TimeSpan();
 
-                        foreach (Task t in db.Tasks.Where(t => t.IdProject == p.IdProject))
-                        {
-                            ts = ts.Add(SecondsToTimeSpan(t.Timespent));
-                        }
+                        if (ByChoiceIndex == 0)
+                            projs = db.Projects.Where(p => p.Completed == null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                        else
+                            projs = db.Projects.Where(p => p.Completed == null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                    }
+                    else if (GroupChoiceIndex == 1)
+                    {
 
-                        if (p.Completed != null)
+                        if (ByChoiceIndex == 0)
+                            projs = db.Projects.Where(p => p.Completed != null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                        else
+                            projs = db.Projects.Where(p => p.Completed != null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                    }
+                    else
+                    {
+                        if (ByChoiceIndex == 0)
+                            projs = db.Projects.Where(p => p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                        else
+                            projs = db.Projects.Where(p => p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                    }
+
+                    foreach (Project p in projs)
                         {
-                            if (p.Completed <= p.Deadline)
+                            TimeSpan ts = new TimeSpan();
+
+                            foreach (Task t in db.Tasks.Where(t => t.IdProject == p.IdProject))
                             {
-                                S_Completed = "Completed in time";
-                                S_Completed_ru = "Выполнен вовремя";
+                                ts = ts.Add(SecondsToTimeSpan(t.Timespent));
+                            }
+
+                            if (p.Completed != null)
+                            {
+                                if (p.Completed <= p.Deadline)
+                                {
+                                    Result = "Completed in time";
+                                    Result_ru = "Выполнен вовремя";
+                                }
+                                else
+                                {
+                                    Result = "Completed in bad time";
+                                    Result_ru = "Выполнен невовремя";
+                                }
                             }
                             else
                             {
-                                S_Completed = "Completed in bad time";
-                                S_Completed_ru = "Выполнен невовремя";
+                                Result = "Not completed";
+                                Result_ru = "Не выполнен";
+                            }
+
+                            string comp;
+                            if (p.Completed != null)
+                                comp = p.Completed.Value.ToString("dd.MM.yyyy");
+                            else
+                                comp = "-";
+
+                            switch (App.Language.Name)
+                            {
+                                case "ru-RU":
+                                    DGSource.Add(new Report(p.Name, null, null, p.StartDate, p.Deadline, comp, Result_ru, ts));
+                                    break;
+                                default:
+                                    DGSource.Add(new Report(p.Name, null, null, p.StartDate, p.Deadline, comp, Result, ts));
+                                    break;
                             }
                         }
-                        else
-                        {
-                            S_Completed = "Not completed";
-                            S_Completed_ru = "Не выполнен";
-                        }
-
-                        switch (App.Language.Name)
-                        {
-                            case "ru-RU":
-                                DGSource.Add(new Report(p.Name, null, p.Deadline, S_Completed_ru, ts));
-                                break;
-                            default:
-                                DGSource.Add(new Report(p.Name, null, p.Deadline, S_Completed, ts));
-                                break;
-                        }
-                    }
                 }
                 else
                 {
-                    foreach (Task t in db.Tasks.Where(t => ((t.Completed == null && ChoiceIndex == 2) || (t.Completed != null && ChoiceIndex == 1) || ChoiceIndex == 0) && t.Deadline >= ((DateTime)StartDate) && t.Deadline <= ((DateTime)EndDate)))
+                    List<Task> tasks = new List<Task>();
+
+                    if (GroupChoiceIndex == 2)
+                    {
+                        if (ByChoiceIndex == 0)
+                            tasks = db.Tasks.Where(p => p.Completed == null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                        else
+                            tasks = db.Tasks.Where(p => p.Completed == null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                    }
+                    else if (GroupChoiceIndex == 1)
+                    {
+
+                        if (ByChoiceIndex == 0)
+                            tasks = db.Tasks.Where(p => p.Completed != null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                        else
+                            tasks = db.Tasks.Where(p => p.Completed != null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                    }
+                    else
+                    {
+                        if (ByChoiceIndex == 0)
+                            tasks = db.Tasks.Where(p => p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                        else
+                            tasks = db.Tasks.Where(p => p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                    }
+
+                    if (IsReliableChecked == true)
+                        tasks = tasks.Where(t => t.IdUser == Reliable.IdUser).ToList();
+
+                    foreach (Task t in tasks)
                     {
                         if (t.Completed != null)
                         {
                             if (t.Completed <= t.Deadline)
                             {
-                                S_Completed = "Completed in time";
-                                S_Completed_ru = "Выполнена вовремя";
+                                Result = "Completed in time";
+                                Result_ru = "Выполнена вовремя";
                             }
                             else
                             {
-                                S_Completed = "Completed in bad time";
-                                S_Completed_ru = "Выполнена невовремя";
+                                Result = "Completed in bad time";
+                                Result_ru = "Выполнена невовремя";
                             }
                         }
                         else
                         {
-                            S_Completed = "Not completed";
-                            S_Completed_ru = "Не выполнена";
+                            Result = "Not completed";
+                            Result_ru = "Не выполнена";
                         }
+
+                        string comp;
+                        if (t.Completed != null)
+                            comp = t.Completed.Value.ToString("dd.MM.yyyy");
+                        else
+                            comp = "-";
 
                         switch (App.Language.Name)
                         {
                             case "ru-RU":
-                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, S_Completed_ru, SecondsToTimeSpan(t.Timespent)));
+                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, db.Users.Find(t.IdUser).Name, t.StartDate, t.Deadline, comp, Result_ru, SecondsToTimeSpan(t.Timespent)));
                                 break;
                             default:
-                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, t.Deadline, S_Completed, SecondsToTimeSpan(t.Timespent)));
+                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, db.Users.Find(t.IdUser).Name, t.StartDate, t.Deadline, comp, Result, SecondsToTimeSpan(t.Timespent)));
                                 break;
                         }
                     }
@@ -272,7 +393,7 @@ namespace WpfTaskManager
                 return showCommand ?? (showCommand = new RelayCommand((o) =>
                 {
                     ShowExecute();
-                }, o => StartDate != null && EndDate != null));
+                }, o => (!IsProj && ((IsReliableChecked && Reliable != null) || !IsReliableChecked)) || IsProj ));
             }
         }
 
@@ -292,17 +413,17 @@ namespace WpfTaskManager
                     switch (App.Language.Name)
                     {
                         case "ru-RU":
-                            str = "Название;Крайний срок;Затрачено времени;Готовность\n";
+                            str = "Название;Начат;Крайний срок;Выполнен;Затрачено времени;Результат\n";
                             break;
                         default:
 
-                            str = "Name;Deadline;Timespent;Completed\n";
+                            str = "Name;Start;Deadline;Completed;Timespent;Result\n";
                             break;
                     }
 
                     foreach (Report r in DGSource)
                     {
-                        str += $"\"{r.Name}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.S_Completed}\"\n";
+                        str += $"\"{r.Name}\";\"{r.StartDate.ToString()}\";\"{r.Deadline.ToString()}\";\"{r.S_Completed.ToString()}\";\"{r.Timespent}\";\"{r.Result}\"\n";
                     }
                 }
                 else
@@ -310,17 +431,17 @@ namespace WpfTaskManager
                     switch (App.Language.Name)
                     {
                         case "ru-RU":
-                            str = "Название;Название проекта;Крайний срок;Затрачено времени;Готовность\n";
+                            str = "Название;Название проекта;Ответственный;Начата;Крайний срок;Выполнена;Затрачено времени;Результат\n";
                             break;
                         default:
 
-                            str = "Name;Project Name;Deadline;Timespent;Completed\n";
+                            str = "Name;Project Name;Reliable;Start;Deadline;Completed;Timespent;Result\n";
                             break;
                     }
 
                     foreach (Report r in DGSource)
                     {
-                        str += $"\"{r.Name}\";\"{r.ProjectName}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.S_Completed}\"\n";
+                        str += $"\"{r.Name}\";\"{r.ProjectName}\";\"{r.Reliable}\";\"{r.StartDate}\";\"{r.Deadline.ToString()}\";\"{r.S_Completed}\";\"{r.Timespent}\";\"{r.Result}\"\n";
                     }
                 }
 
@@ -348,6 +469,19 @@ namespace WpfTaskManager
                 {
                     SaveExecute();
                 }, o => DGSource.Count > 0));
+            }
+        }
+
+        // Команда очистки дат
+        public RelayCommand ClearCommand
+        {
+            get
+            {
+                return clearCommand ?? (clearCommand = new RelayCommand((o) => 
+                {
+                    StartDate = null;
+                    EndDate = null;
+                }));
             }
         }
 

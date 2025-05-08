@@ -267,8 +267,7 @@
                                                             Binding="{Binding Name}"
                                                             Width="120"/>
                                         <DataGridTextColumn Header="{DynamicResource start_date}"
-                                                            Binding="{Binding StartDate}"
-                                                            Width="120"/>
+                                                            Binding="{Binding StartDate, StringFormat={}{0:dd.MM.yyyy}}"/>
                                         <DataGridTextColumn Header="{DynamicResource deadline}" 
                                                             Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
                                         <DataGridTextColumn Header="{DynamicResource state}"

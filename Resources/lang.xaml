@@ -38,6 +38,7 @@
     <v:String x:Key="desc">Description</v:String>
     <v:String x:Key="desc_caps">DESCRIPTION</v:String>
     <v:String x:Key="start_date">Started</v:String>
+    <v:String x:Key="start_date_caps">START DATE</v:String>
     <v:String x:Key="deadline">Deadline</v:String>
     <v:String x:Key="deadline_caps">DEADLINE</v:String>
     <v:String x:Key="comp">Completed</v:String>
@@ -59,11 +60,17 @@
     <v:String x:Key="main_comp_task">COMPLETE TASK</v:String>
     <v:String x:Key="main_start_task">START TASK</v:String>
 
-    <v:String x:Key="report_deadline_start">Deadline Start</v:String>
-    <v:String x:Key="report_deadline_end">Deadline End</v:String>
+    <v:String x:Key="report_from">From</v:String>
+    <v:String x:Key="report_to">To</v:String>
+
     <v:String x:Key="report_proj_name">Project Name</v:String>
     <v:String x:Key="report_comp">Completed</v:String>
     <v:String x:Key="report_uncomp">Uncompleted</v:String>
+    <v:String x:Key="report_result">Result</v:String>
+    <v:String x:Key="report_by">By</v:String>
+    <v:String x:Key="report_by_start">Start</v:String>
+    <v:String x:Key="report_by_deadline">Deadline</v:String>
+    <v:String x:Key="report_by_reliable">By reliable</v:String>
 
     <v:String x:Key="close">CLOSE</v:String>
     <v:String x:Key="show">SHOW</v:String>

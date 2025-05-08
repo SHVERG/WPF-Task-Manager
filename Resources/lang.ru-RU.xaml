@@ -38,6 +38,7 @@
     <v:String x:Key="desc">Описание</v:String>
     <v:String x:Key="desc_caps">ОПИСАНИЕ</v:String>
     <v:String x:Key="start_date">Начато</v:String>
+    <v:String x:Key="start_date_caps">НАЧАЛО</v:String>
     <v:String x:Key="deadline">Крайний срок</v:String>
     <v:String x:Key="deadline_caps">КРАЙНИЙ СРОК</v:String>
     <v:String x:Key="comp">Выполнение</v:String>
@@ -58,11 +59,17 @@
     <v:String x:Key="main_comp_task">ЗАВЕРШИТЬ ЗАДАЧУ</v:String>
     <v:String x:Key="main_start_task">НАЧАТЬ ЗАДАЧУ</v:String>
 
-    <v:String x:Key="report_deadline_start">Начальная дата крайнего срока</v:String>
-    <v:String x:Key="report_deadline_end">Конечная дата крайнего срока</v:String>
+    <v:String x:Key="report_from">С</v:String>
+    <v:String x:Key="report_to">До</v:String>
+    
     <v:String x:Key="report_proj_name">Название проекта</v:String>
     <v:String x:Key="report_comp">Завершенные</v:String>
     <v:String x:Key="report_uncomp">Незавершенные</v:String>
+    <v:String x:Key="report_result">Результат</v:String>
+    <v:String x:Key="report_by">По</v:String>
+    <v:String x:Key="report_by_start">Началу</v:String>
+    <v:String x:Key="report_by_deadline">Крайнему сроку</v:String>
+    <v:String x:Key="report_by_reliable">По ответственному</v:String>
 
     <v:String x:Key="close">ЗАКРЫТЬ</v:String>
     <v:String x:Key="show">ПОКАЗАТЬ</v:String>

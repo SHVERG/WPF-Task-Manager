@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 
 namespace WpfTaskManager
@@ -129,35 +132,31 @@ namespace WpfTaskManager
         // Сохранение отчета
         private void SaveExecute()
         {
-            /*SaveFileDialog save = new SaveFileDialog();
+            SaveFileDialog save = new SaveFileDialog();
             save.Filter = "CSV file|*.csv";
 
             if (save.ShowDialog() == true)
             {
-                string str;
-
-                if (IsProj)
+                string str = "Message;Date\n";
+                foreach (LogBase log in DGSource)
                 {
-                    str = "Name;Deadline;Timespent;Completed\n";
-                    foreach (Report r in DGSource)
-                    {
-                        str += $"\"{r.Name}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.S_Completed}\"\n";
-                    }
+                    str += $"\"{log.Message}\";\"{log.Date}\"\n";
                 }
-                else
-                {
-                    str = "Name;Project Name;Deadline;Timespent;Completed\n";
-                    foreach (Report r in DGSource)
-                    {
-                        str += $"\"{r.Name}\";\"{r.ProjectName}\";\"{r.Deadline.ToString()}\";\"{r.Timespent}\";\"{r.S_Completed}\"\n";
-                    }
-                }
-
+                
                 File.WriteAllText(save.FileName, str, Encoding.UTF8);
 
                 MBWindow mb = new MBWindow();
-                mb.Show("Saving successful!", "All records saved successfully.", MessageBoxButton.OK);
-            }*/
+
+                switch (App.Language.Name)
+                {
+                    case "ru-RU":
+                        mb.Show("Файл сохранен успешно!", "Все записи сохранены.", MessageBoxButton.OK);
+                        break;
+                    default:
+                        mb.Show("Saving successful!", "All records saved successfully.", MessageBoxButton.OK);
+                        break;
+                }
+            }
         }
 
         // Команда сохранения отчета

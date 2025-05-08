@@ -25,13 +25,13 @@ namespace WpfTaskManager
             LanguageChanged += App_LanguageChanged;
 
             m_Languages.Clear();
-            m_Languages.Add(new CultureInfo("en-US")); //Нейтральная культура для этого проекта
+            m_Languages.Add(new CultureInfo("en-US"));
             m_Languages.Add(new CultureInfo("ru-RU"));
 
             Language = WpfTaskManager.Properties.Settings.Default.DefaultLanguage;
         }
 
-        //Евент для оповещения всех окон приложения
+        //Ивент для оповещения всех окон приложения
         public static event EventHandler LanguageChanged;
 
         public static CultureInfo Language
@@ -45,10 +45,10 @@ namespace WpfTaskManager
                 if (value == null) throw new ArgumentNullException("value");
                 if (value == System.Threading.Thread.CurrentThread.CurrentUICulture) return;
 
-                //1. Меняем язык приложения:
+                // Меняем язык приложения:
                 System.Threading.Thread.CurrentThread.CurrentUICulture = value;
 
-                //2. Создаём ResourceDictionary для новой культуры
+                // Создаём ResourceDictionary для новой культуры
                 ResourceDictionary dict = new ResourceDictionary();
                 switch (value.Name)
                 {
@@ -60,7 +60,7 @@ namespace WpfTaskManager
                         break;
                 }
 
-                //3. Находим старую ResourceDictionary и удаляем его и добавляем новую ResourceDictionary
+                // Находим старую ResourceDictionary и удаляем его и добавляем новую ResourceDictionary
                 ResourceDictionary oldDict = (from d in Current.Resources.MergedDictionaries
                                               where d.Source != null && d.Source.OriginalString.StartsWith("Resources/lang.")
                                               select d).First();
@@ -75,7 +75,7 @@ namespace WpfTaskManager
                     Current.Resources.MergedDictionaries.Add(dict);
                 }
 
-                //4. Вызываем евент для оповещения всех окон.
+                // Вызываем ивент для оповещения всех окон
                 LanguageChanged(Current, new EventArgs());
             }
         }
@@ -88,25 +88,24 @@ namespace WpfTaskManager
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            
-            if (WpfTaskManager.Properties.Settings.Default.AutoLogin && !string.IsNullOrWhiteSpace(WpfTaskManager.Properties.Settings.Default.SavedUsername))
-            {
-                using (AppContext db = new AppContext()) { 
-                    var main = new MainWindow()
-                    {
-                        DataContext = new MainVM()
+            using (AppContext db = new AppContext()) { 
+                if (WpfTaskManager.Properties.Settings.Default.AutoLogin && !string.IsNullOrWhiteSpace(WpfTaskManager.Properties.Settings.Default.SavedUsername) && db.Users.FirstOrDefault(u => u.Username == WpfTaskManager.Properties.Settings.Default.SavedUsername) != null)
+                {
+                        var main = new MainWindow()
                         {
-                            User = db.Users.FirstOrDefault(u => u.Username == WpfTaskManager.Properties.Settings.Default.SavedUsername)
-                        }
-                    };
-                    main.Show();
-                    Current.MainWindow = main;
+                            DataContext = new MainVM()
+                            {
+                                User = db.Users.FirstOrDefault(u => u.Username == WpfTaskManager.Properties.Settings.Default.SavedUsername)
+                            }
+                        };
+                        main.Show();
+                        Current.MainWindow = main;
                 }
-            }
-            else
-            {
-                var loginWindow = new LoginWindow();
-                loginWindow.Show();
+                else
+                {
+                    var loginWindow = new LoginWindow();
+                    loginWindow.Show();
+                }
             }
         }
     }

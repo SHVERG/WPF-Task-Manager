@@ -10,7 +10,7 @@ namespace WpfTaskManager
     {
         private string name;
         private string description;
-        private DateTime? start_date;
+        private DateTime start_date;
         private DateTime deadline;
         private DateTime? completed;
 
@@ -47,7 +47,7 @@ namespace WpfTaskManager
         }
 
         [DataType(DataType.Date)]
-        public DateTime? StartDate
+        public DateTime StartDate
         {
             get
             {

@@ -10,11 +10,14 @@ namespace WpfTaskManager
     public class AddVM : INotifyPropertyChanged
     {
         public Project proj { get; private set; }
-        private DateTime startDate;
-        private DateTime endDate;
+        private DateTime startDateLimitStart;
+        private DateTime deadlineLimitStart;
+        private DateTime startDateLimitEnd;
+        private DateTime deadlineLimitEnd;
         private string name = "";
         private string description = "";
         private DateTime? deadline = null;
+        private DateTime? startDate = null;
         private User selected_user = null;
         private DateTime? time = null;
         private int? idCat = null;
@@ -31,46 +34,79 @@ namespace WpfTaskManager
 
         public AddVM(int? id)
         {
-            StartDate = DateTime.Now;
 
             if (id.HasValue)
             {
                 using (AppContext db = new AppContext())
                 {
                     proj = db.Projects.Find(id);
-                    EndDate = db.Projects.Find(id).Deadline;
+
+                    StartDateLimitStart = db.Projects.Find(id).StartDate;
+                    DeadlineLimitStart = db.Projects.Find(id).StartDate;
+
+                    StartDateLimitEnd = db.Projects.Find(id).Deadline.AddDays(-1);
+                    DeadlineLimitEnd = db.Projects.Find(id).Deadline;
                     Users = new ObservableCollection<User>(db.Users.Where(p => p.IdRole==3));
                 }
             }
             else
             {
-                EndDate = DateTime.MaxValue;
+                StartDateLimitStart = DateTime.Now;
+                DeadlineLimitStart = DateTime.Now;
+
+                StartDateLimitEnd = DateTime.MaxValue;
+                DeadlineLimitEnd = DateTime.MaxValue;
             }
         }
 
         // Свойства
-        public DateTime StartDate
+        public DateTime StartDateLimitStart
         {
             get
             {
-                return startDate;
+                return startDateLimitStart;
             }
             set
             {
-                startDate = value;
+                startDateLimitStart = value;
+                OnPropertyChanged();
+            }
+        }
+        public DateTime DeadlineLimitStart
+        {
+            get
+            {
+                return deadlineLimitStart;
+            }
+            set
+            {
+                deadlineLimitStart = value;
                 OnPropertyChanged();
             }
         }
 
-        public DateTime EndDate
+        public DateTime StartDateLimitEnd
         {
             get
             {
-                return endDate;
+                return startDateLimitEnd;
             }
             set
             {
-                endDate = value;
+                startDateLimitEnd = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public DateTime DeadlineLimitEnd
+        {
+            get
+            {
+                return deadlineLimitEnd;
+            }
+            set
+            {
+                deadlineLimitEnd = value;
                 OnPropertyChanged();
             }
         }
@@ -110,6 +146,19 @@ namespace WpfTaskManager
             set
             {
                 deadline = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public DateTime? StartDate
+        {
+            get
+            {
+                return startDate;
+            }
+            set
+            {
+                startDate = value;
                 OnPropertyChanged();
             }
         }

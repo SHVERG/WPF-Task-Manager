@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Report"
         Height="600"
-        Width="800"
+        Width="1000"
         x:Name="reportWindow"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
@@ -48,7 +48,7 @@
                            FontWeight="SemiBold"
                            FontSize="14"/>
 
-                    <ComboBox SelectedIndex="{Binding ChoiceIndex}"
+                    <ComboBox SelectedIndex="{Binding GroupChoiceIndex}"
                               FontWeight="SemiBold"
                               FontSize="12">
                         
@@ -57,21 +57,60 @@
                         <ComboBoxItem Content="{DynamicResource report_uncomp}"/>
                     </ComboBox>
 
-                    <Label Content="{DynamicResource report_deadline_start}"
+                    <Label Content="{DynamicResource report_by}"
                            Foreground="{StaticResource PrimaryHueMidBrush}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
+                    
+                    <ComboBox SelectedIndex="{Binding ByChoiceIndex}"
+                              FontWeight="SemiBold"
+                              FontSize="12">
+                        <ComboBoxItem Content="{DynamicResource report_by_start}"/>
+                        <ComboBoxItem Content="{DynamicResource report_by_deadline}"/>
+                    </ComboBox>
+                    
+                    <Label Content="{DynamicResource report_from}"
+                           Foreground="{StaticResource PrimaryHueMidBrush}"
+                           FontWeight="SemiBold"
+                           FontSize="14"/>
+                    
                     <DatePicker x:Name="StartDate" SelectedDate="{Binding StartDate}"/>
 
-                    <Label Content="{DynamicResource report_deadline_end}"
+                    <Label Content="{DynamicResource report_to}"
                            Foreground="{StaticResource PrimaryHueMidBrush}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
                     <DatePicker x:Name="EndDate" SelectedDate="{Binding EndDate}"/>
+
+                    <Button Content="{DynamicResource main_menu_log_clear}"
+                            Foreground="{StaticResource PrimaryHueMidBrush}"
+                            FontWeight="SemiBold"
+                            FontSize="14"
+                            Style="{StaticResource MaterialDesignToolForegroundButton}"
+                            Command="{Binding ClearCommand}" Cursor="Hand"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <CheckBox IsChecked="{Binding IsReliableChecked}"
+                              Content="{DynamicResource report_by_reliable}"
+                              Foreground="{StaticResource PrimaryHueMidBrush}"
+                              FontWeight="SemiBold"
+                              FontSize="14"
+                              Margin="10,0,0,0"
+                              Visibility="{Binding Data, Source={StaticResource VisProxy}, Converter={StaticResource BoolToVis}}"/>
+                    <ComboBox FontWeight="SemiBold"
+                              FontSize="12"
+                              Margin="5,0,0,0"
+                              IsEnabled="{Binding IsReliableChecked}"
+                              ItemsSource="{Binding Users}"
+                              SelectedItem="{Binding Reliable}"
+                              DisplayMemberPath="Name"
+                              Visibility="{Binding Data, Source={StaticResource VisProxy}, Converter={StaticResource BoolToVis}}"/>
                 </StackPanel>
 
                 <ScrollViewer Margin="10"
-                              Height="463">
+                              Height="430" Cursor="">
                     <DataGrid IsReadOnly="True"
                               AutoGenerateColumns="False"
                               ItemsSource="{Binding DGSource}">
@@ -81,12 +120,19 @@
                             <DataGridTextColumn Header="{DynamicResource report_proj_name}" 
                                                 Visibility="{Binding Data, Source={StaticResource VisProxy}, Converter={StaticResource BoolToVis}}"
                                                 Binding="{Binding ProjectName}"/>
+                            <DataGridTextColumn Header="{DynamicResource reliable}" 
+                                                Visibility="{Binding Data, Source={StaticResource VisProxy}, Converter={StaticResource BoolToVis}}"
+                                                Binding="{Binding Reliable}"/>
+                            <DataGridTextColumn Header="{DynamicResource start_date}"
+                                                Binding="{Binding StartDate, StringFormat={}{0:dd.MM.yyyy}}"/>
                             <DataGridTextColumn Header="{DynamicResource deadline}"
                                                 Binding="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"/>
                             <DataGridTextColumn Header="{DynamicResource comp}"
                                                 Binding="{Binding S_Completed}"/>
                             <DataGridTextColumn Header="{DynamicResource time_spent}" 
                                                 Binding="{Binding Timespent}"/>
+                            <DataGridTextColumn Header="{DynamicResource report_result}"
+                                                Binding="{Binding Result}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </ScrollViewer>
