@@ -37,17 +37,17 @@ namespace WpfTaskManager
 
             if (id.HasValue)
             {
-                using (AppContext db = new AppContext())
-                {
-                    proj = db.Projects.Find(id);
+                //using (AppContext db = new AppContext())
+                //{
+                    proj = App.db.Projects.Find(id);
 
-                    StartDateLimitStart = db.Projects.Find(id).StartDate;
-                    DeadlineLimitStart = db.Projects.Find(id).StartDate;
+                    StartDateLimitStart = App.db.Projects.Find(id).StartDate;
+                    DeadlineLimitStart = App.db.Projects.Find(id).StartDate;
 
-                    StartDateLimitEnd = db.Projects.Find(id).Deadline.AddDays(-1);
-                    DeadlineLimitEnd = db.Projects.Find(id).Deadline;
-                    Users = new ObservableCollection<User>(db.Users.Where(p => p.IdRole==3));
-                }
+                    StartDateLimitEnd = App.db.Projects.Find(id).Deadline.AddDays(-1);
+                    DeadlineLimitEnd = App.db.Projects.Find(id).Deadline;
+                    Users = new ObservableCollection<User>(App.db.Users.Where(p => p.IdRole==3));
+                //}
             }
             else
             {
@@ -220,9 +220,9 @@ namespace WpfTaskManager
         {
             if (proj != null) return true;
 
-            using (AppContext db = new AppContext())
-            {
-                foreach (Project pr in db.Projects)
+            //using (AppContext db = new AppContext())
+            //{
+                foreach (Project pr in App.db.Projects)
                 {
                     if (pr.Name == Name.Trim())
                     {
@@ -230,7 +230,7 @@ namespace WpfTaskManager
                     }
 
                 }
-            }
+            //}
 
             return true;
         }

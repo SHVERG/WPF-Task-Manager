@@ -73,9 +73,9 @@ namespace WpfTaskManager
                 if (p.Name == Name && p.Description == Description)
                     return false;
 
-                using (AppContext db = new AppContext())
-                {
-                    foreach (Project pr in db.Projects)
+                //using (AppContext db = new AppContext())
+                //{
+                    foreach (Project pr in App.db.Projects)
                     {
                         if (pr.Name == Name.Trim() && pr.IdProject != p.IdProject)
                         {
@@ -83,7 +83,7 @@ namespace WpfTaskManager
                         }
 
                     }
-                }
+                //}
 
                 return true;
             }

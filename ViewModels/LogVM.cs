@@ -88,10 +88,10 @@ namespace WpfTaskManager
             List<LogBase> temp = new List<LogBase>();
             DGSource.Clear();
 
-            using (AppContext db = new AppContext())
-            {
+            //using (AppContext db = new AppContext())
+            //{
                 if (ChoiceIndex == 0 || ChoiceIndex == 1)
-                    foreach (ProjectsActivityLogs log in db.ProjectsLogs.Where(l => l.Date >= ((DateTime)StartDate) && l.Date <= ((DateTime)EndDate)))
+                    foreach (ProjectsActivityLogs log in App.db.ProjectsLogs.Where(l => l.Date >= ((DateTime)StartDate) && l.Date <= ((DateTime)EndDate)))
                     {
                         temp.Add(
                             new LogBase(log.Action, log.Message)
@@ -102,7 +102,7 @@ namespace WpfTaskManager
                     }
 
                 if (ChoiceIndex == 0 || ChoiceIndex == 2)
-                    foreach (TasksActivityLogs log in db.TasksLogs.Where(l => l.Date >= ((DateTime)StartDate) && l.Date <= ((DateTime)EndDate)))
+                    foreach (TasksActivityLogs log in App.db.TasksLogs.Where(l => l.Date >= ((DateTime)StartDate) && l.Date <= ((DateTime)EndDate)))
                     {
                         temp.Add(
                             new LogBase(log.Action, log.Message)
@@ -113,7 +113,7 @@ namespace WpfTaskManager
                     }
 
                 DGSource.AddRange(temp.OrderBy(t => t.Date));
-            }
+            //}
         }
 
         // Команда показа отчета

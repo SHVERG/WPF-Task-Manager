@@ -19,9 +19,12 @@ namespace WpfTaskManager
             }
         }
 
+        public static AppContext db;
+
         public App()
         {
             InitializeComponent();
+            db = new AppContext();
             LanguageChanged += App_LanguageChanged;
 
             m_Languages.Clear();
@@ -88,7 +91,7 @@ namespace WpfTaskManager
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            using (AppContext db = new AppContext()) { 
+            //using (AppContext db = new AppContext()) { 
                 if (WpfTaskManager.Properties.Settings.Default.AutoLogin && !string.IsNullOrWhiteSpace(WpfTaskManager.Properties.Settings.Default.SavedUsername) && db.Users.FirstOrDefault(u => u.Username == WpfTaskManager.Properties.Settings.Default.SavedUsername) != null)
                 {
                         var main = new MainWindow()
@@ -106,7 +109,7 @@ namespace WpfTaskManager
                     var loginWindow = new LoginWindow();
                     loginWindow.Show();
                 }
-            }
+            //}
         }
     }
 }

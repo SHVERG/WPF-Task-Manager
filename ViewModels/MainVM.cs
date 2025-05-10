@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Windows;
 using System.Xml.Linq;
 
@@ -14,7 +13,7 @@ namespace WpfTaskManager
 {
     public class MainVM : INotifyPropertyChanged
     {
-        AppContext db;
+        //AppContext db;
         RelayCommand refreshCommand;
 
         RelayCommand addProjCommand;
@@ -52,10 +51,10 @@ namespace WpfTaskManager
         // Конструктор
         public MainVM()
         {
-            db = new AppContext();
-            Projects = new ObservableCollection<Project>(db.Projects);
+            //db = new AppContext();
+            Projects = new ObservableCollection<Project>(App.db.Projects);
             ProjTasks = new ObservableCollection<Task>();
-            Users = new ObservableCollection<User>(db.Users);
+            Users = new ObservableCollection<User>(App.db.Users);
             isLangRussian = App.Language.Equals(new CultureInfo("ru-RU"));
             //User = user;
         }
@@ -143,7 +142,7 @@ namespace WpfTaskManager
         {
             if (selectedProj != null)
             {
-                foreach (Task t in db.Tasks)
+                foreach (Task t in App.db.Tasks)
                 {
                     if (t.IdProject == SelectedProj.IdProject && !ProjTasks.Contains(t))
                         ProjTasks.Insert(0, t);
@@ -156,7 +155,7 @@ namespace WpfTaskManager
         // Обновление контекста БД приложения
         private void RefreshExecute()
         {
-            db = new AppContext();
+            App.db = new AppContext();
 
             int p_id = -1;
             int t_id = -1;
@@ -171,13 +170,13 @@ namespace WpfTaskManager
                 }
 
                 ProjTasks.Clear();
-                ProjTasks.AddRange(db.Tasks.Where(t => t.IdProject == SelectedProj.IdProject));
+                ProjTasks.AddRange(App.db.Tasks.Where(t => t.IdProject == SelectedProj.IdProject));
 
                 SelectedTask = ProjTasks.FirstOrDefault(t => t_id != -1 && t.IdTask == t_id);
             }
 
             Projects.Clear();
-            Projects.AddRange(db.Projects);
+            Projects.AddRange(App.db.Projects);
 
             SelectedProj = Projects.FirstOrDefault(p => p_id != -1 && p.IdProject == p_id);
         }
@@ -233,11 +232,11 @@ namespace WpfTaskManager
         private void AddLog(bool isProject, int id, int action, string message)
         {
             if (isProject)
-                db.ProjectsLogs.Add(new ProjectsActivityLogs(id, action, message));
+                App.db.ProjectsLogs.Add(new ProjectsActivityLogs(id, action, message));
             else
-                db.TasksLogs.Add(new TasksActivityLogs(id, action, message));
+                App.db.TasksLogs.Add(new TasksActivityLogs(id, action, message));
 
-            db.SaveChanges();
+            App.db.SaveChanges();
         }
 
         // Добавление проекта
@@ -262,8 +261,8 @@ namespace WpfTaskManager
                 return;
             }
 
-            db.Projects.Add(p);
-            db.SaveChanges();
+            App.db.Projects.Add(p);
+            App.db.SaveChanges();
 
             AddLog(true, p.IdProject, 0, $"Project \"{p.Name}\" added.");
 
@@ -309,8 +308,8 @@ namespace WpfTaskManager
         // Добавление категории проекта
         public void AddProjCat(AddCatVM vm)
         {
-            db.Categories.Add(new Category(vm.Name, vm.Color.R, vm.Color.G, vm.Color.B));
-            db.SaveChanges();
+            App.db.Categories.Add(new Category(vm.Name, vm.Color.R, vm.Color.G, vm.Color.B));
+            App.db.SaveChanges();
         }
 
         private void AddProjCatExecute(object o)
@@ -364,7 +363,7 @@ namespace WpfTaskManager
 
             if (w.DialogResult.Value)
             {
-                Project edit = db.Projects.Find(selectedProj.IdProject);
+                Project edit = App.db.Projects.Find(selectedProj.IdProject);
 
                 if (edit.Name != editVM.Name.Trim())
                 {
@@ -378,7 +377,7 @@ namespace WpfTaskManager
                     edit.Description = editVM.Description.Trim();
                 }
 
-                db.SaveChanges();
+                App.db.SaveChanges();
             }
         }
 
@@ -419,13 +418,13 @@ namespace WpfTaskManager
             MBWindow conf = new MBWindow();
             if (conf.Show(title, description, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                foreach (Task t in db.Tasks)
+                foreach (Task t in App.db.Tasks)
                     if (t.IdProject == selectedProj.IdProject)
-                        db.Tasks.Remove(t);
+                        App.db.Tasks.Remove(t);
 
                 ProjTasks.Clear();
-                db.Projects.Remove(SelectedProj);
-                db.SaveChanges();
+                App.db.Projects.Remove(SelectedProj);
+                App.db.SaveChanges();
                 AddLog(true, SelectedProj.IdProject, 3, $"Project \"{SelectedProj.Name}\" deleted.");
                 Projects.Remove(SelectedProj);
             }
@@ -446,7 +445,7 @@ namespace WpfTaskManager
         // Добавление задачи
         public void AddTask(AddVM addVM)
         {
-            Project p = db.Projects.Find(SelectedProj.IdProject);
+            Project p = App.db.Projects.Find(SelectedProj.IdProject);
             TaskCreator tc = new TaskCreator();
             Task t = (Task)tc.Create(addVM);
 
@@ -467,7 +466,7 @@ namespace WpfTaskManager
                 return;
             }
 
-            db.Tasks.Add(t);
+            App.db.Tasks.Add(t);
 
             if (p.Completed != null)
             {
@@ -475,7 +474,7 @@ namespace WpfTaskManager
                 AddLog(true, p.IdProject, 2, $"Project \"{p.Name}\" turned to incompleted.");
             }
 
-            db.SaveChanges();
+            App.db.SaveChanges();
             AddLog(false, t.IdTask, 0, $"Task \"{t.Name}\" added.");
             ProjTasks.Add(t);
             SelectedTask = t;
@@ -535,7 +534,7 @@ namespace WpfTaskManager
 
             if (w.DialogResult.Value)
             {
-                Task edit = db.Tasks.Find(SelectedTask.IdTask);
+                Task edit = App.db.Tasks.Find(SelectedTask.IdTask);
 
                 if (edit.Name != editVM.Name.Trim())
                 {
@@ -549,7 +548,7 @@ namespace WpfTaskManager
                     edit.Description = editVM.Description.Trim();
                 }
 
-                db.SaveChanges();
+                App.db.SaveChanges();
             }
         }
 
@@ -580,24 +579,24 @@ namespace WpfTaskManager
         // Выполнение задачи
         private void CompleteTaskExecute()
         {
-            Task t = db.Tasks.Find(SelectedTask.IdTask);
+            Task t = App.db.Tasks.Find(SelectedTask.IdTask);
             t.Completed = DateTime.Now;
             AddLog(false, t.IdTask, 2, $"Task \"{t.Name}\" completed.");
 
             bool compProj = true;
 
-            foreach (Task task in db.Tasks.Where(task => task.IdProject == selectedProj.IdProject))
+            foreach (Task task in App.db.Tasks.Where(task => task.IdProject == selectedProj.IdProject))
                 if (task.Completed == null)
                     compProj = false;
 
             if (compProj)
             {
-                Project p = db.Projects.Find(selectedProj.IdProject);
+                Project p = App.db.Projects.Find(selectedProj.IdProject);
                 p.Completed = DateTime.Now;
                 AddLog(true, p.IdProject, 2, $"Project \"{p.Name}\" completed.");
             }
 
-            db.SaveChanges();
+            App.db.SaveChanges();
         }
 
         // Команда выполнения задачи
@@ -637,8 +636,8 @@ namespace WpfTaskManager
             MBWindow conf = new MBWindow();
             if (conf.Show(title, description, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                db.Tasks.Remove(SelectedTask);
-                db.SaveChanges();
+                App.db.Tasks.Remove(SelectedTask);
+                App.db.SaveChanges();
                 AddLog(false, SelectedTask.IdTask, 3, $"Task \"{SelectedTask.Name}\" deleted.");
                 ProjTasks.Remove(SelectedTask);
             }
@@ -707,9 +706,9 @@ namespace WpfTaskManager
 
             if (conf.Show(title, description, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                db.ProjectsLogs.RemoveRange(db.ProjectsLogs.ToList());
-                db.TasksLogs.RemoveRange(db.TasksLogs.ToList());
-                db.SaveChanges();
+                App.db.ProjectsLogs.RemoveRange(App.db.ProjectsLogs.ToList());
+                App.db.TasksLogs.RemoveRange(App.db.TasksLogs.ToList());
+                App.db.SaveChanges();
 
                 MBWindow mb = new MBWindow();
 
@@ -749,7 +748,7 @@ namespace WpfTaskManager
             XElement p_comp = new XElement("completed", selectedProj.Completed);
             XElement p_tasks = new XElement("tasks");
 
-            foreach (Task t in db.Tasks)
+            foreach (Task t in App.db.Tasks)
             {
                 if (t.IdProject == SelectedProj.IdProject)
                 {
@@ -845,7 +844,7 @@ namespace WpfTaskManager
         {
             XElement projs = new XElement("projects");
 
-            foreach (Project p in db.Projects)
+            foreach (Project p in App.db.Projects)
             {
                 XElement proj = new XElement("project");
                 XAttribute p_id = new XAttribute("id", p.IdProject);
@@ -856,7 +855,7 @@ namespace WpfTaskManager
                 XElement p_comp = new XElement("completed", p.Completed);
                 XElement p_tasks = new XElement("tasks");
 
-                foreach (Task t in db.Tasks)
+                foreach (Task t in App.db.Tasks)
                 {
                     if (t.IdProject == p.IdProject)
                     {
@@ -909,7 +908,7 @@ namespace WpfTaskManager
                 return exportAllProjsCommand ?? (exportAllProjsCommand = new RelayCommand((o) =>
                 {
                     ExportAllProjsExecute();
-                }, o => db.Projects.Count() > 0));
+                }, o => App.db.Projects.Count() > 0));
             }
         }
 
@@ -929,7 +928,7 @@ namespace WpfTaskManager
                 {
                     string name = proj.Element("name").Value;
 
-                    if (db.Projects.Any(p => p.Name == name))
+                    if (App.db.Projects.Any(p => p.Name == name))
                     {
                         names += $"\n\"{name}\"";
                         continue;
@@ -946,8 +945,8 @@ namespace WpfTaskManager
                     if (DateTime.TryParse(proj.Element("completed").Value, out p_comp))
                         p_add.Completed = p_comp;
 
-                    db.Projects.Add(p_add);
-                    db.SaveChanges();
+                    App.db.Projects.Add(p_add);
+                    App.db.SaveChanges();
 
                     foreach (XElement task in proj.Element("tasks").Elements())
                     {
@@ -966,8 +965,8 @@ namespace WpfTaskManager
                         if (DateTime.TryParse(task.Element("completed").Value, out t_comp))
                             t_add.Completed = t_comp;
 
-                        db.Tasks.Add(t_add);
-                        db.SaveChanges();
+                        App.db.Tasks.Add(t_add);
+                        App.db.SaveChanges();
                     }
 
                     Projects.Add(p_add);

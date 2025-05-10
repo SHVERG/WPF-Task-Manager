@@ -44,10 +44,10 @@ namespace WpfTaskManager
             this.isProj = isProj;
             DGSource = new ObservableCollection<Report>();
 
-            using (AppContext db = new AppContext())
-            {
-                Users = new ObservableCollection<User>(db.Users);
-            }
+            //using (AppContext db = new AppContext())
+            //{
+                Users = new ObservableCollection<User>(App.db.Users);
+            //}
 
             if (isProj)
             {
@@ -236,8 +236,8 @@ namespace WpfTaskManager
 
             DGSource.Clear();
 
-            using (AppContext db = new AppContext())
-            {
+            //using (AppContext db = new AppContext())
+            //{
                 DateTime NNStartDate = StartDate!=null?StartDate.Value:DateTime.MinValue;
                 DateTime NNEndDate = EndDate!=null?EndDate.Value:DateTime.MaxValue;
 
@@ -249,31 +249,31 @@ namespace WpfTaskManager
                     {
 
                         if (ByChoiceIndex == 0)
-                            projs = db.Projects.Where(p => p.Completed == null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                            projs = App.db.Projects.Where(p => p.Completed == null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
                         else
-                            projs = db.Projects.Where(p => p.Completed == null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                            projs = App.db.Projects.Where(p => p.Completed == null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
                     }
                     else if (GroupChoiceIndex == 1)
                     {
 
                         if (ByChoiceIndex == 0)
-                            projs = db.Projects.Where(p => p.Completed != null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                            projs = App.db.Projects.Where(p => p.Completed != null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
                         else
-                            projs = db.Projects.Where(p => p.Completed != null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                            projs = App.db.Projects.Where(p => p.Completed != null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
                     }
                     else
                     {
                         if (ByChoiceIndex == 0)
-                            projs = db.Projects.Where(p => p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                            projs = App.db.Projects.Where(p => p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
                         else
-                            projs = db.Projects.Where(p => p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                            projs = App.db.Projects.Where(p => p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
                     }
 
                     foreach (Project p in projs)
                         {
                             TimeSpan ts = new TimeSpan();
 
-                            foreach (Task t in db.Tasks.Where(t => t.IdProject == p.IdProject))
+                            foreach (Task t in App.db.Tasks.Where(t => t.IdProject == p.IdProject))
                             {
                                 ts = ts.Add(SecondsToTimeSpan(t.Timespent));
                             }
@@ -321,24 +321,24 @@ namespace WpfTaskManager
                     if (GroupChoiceIndex == 2)
                     {
                         if (ByChoiceIndex == 0)
-                            tasks = db.Tasks.Where(p => p.Completed == null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                            tasks = App.db.Tasks.Where(p => p.Completed == null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
                         else
-                            tasks = db.Tasks.Where(p => p.Completed == null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                            tasks = App.db.Tasks.Where(p => p.Completed == null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
                     }
                     else if (GroupChoiceIndex == 1)
                     {
 
                         if (ByChoiceIndex == 0)
-                            tasks = db.Tasks.Where(p => p.Completed != null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                            tasks = App.db.Tasks.Where(p => p.Completed != null && p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
                         else
-                            tasks = db.Tasks.Where(p => p.Completed != null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                            tasks = App.db.Tasks.Where(p => p.Completed != null && p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
                     }
                     else
                     {
                         if (ByChoiceIndex == 0)
-                            tasks = db.Tasks.Where(p => p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
+                            tasks = App.db.Tasks.Where(p => p.StartDate >= NNStartDate && p.StartDate <= NNEndDate).ToList();
                         else
-                            tasks = db.Tasks.Where(p => p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
+                            tasks = App.db.Tasks.Where(p => p.Deadline >= NNStartDate && p.Deadline <= NNEndDate).ToList();
                     }
 
                     if (IsReliableChecked == true)
@@ -374,15 +374,15 @@ namespace WpfTaskManager
                         switch (App.Language.Name)
                         {
                             case "ru-RU":
-                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, db.Users.Find(t.IdUser).Name, t.StartDate, t.Deadline, comp, Result_ru, SecondsToTimeSpan(t.Timespent)));
+                                DGSource.Add(new Report(t.Name, App.db.Projects.Find(t.IdProject).Name, App.db.Users.Find(t.IdUser).Name, t.StartDate, t.Deadline, comp, Result_ru, SecondsToTimeSpan(t.Timespent)));
                                 break;
                             default:
-                                DGSource.Add(new Report(t.Name, db.Projects.Find(t.IdProject).Name, db.Users.Find(t.IdUser).Name, t.StartDate, t.Deadline, comp, Result, SecondsToTimeSpan(t.Timespent)));
+                                DGSource.Add(new Report(t.Name, App.db.Projects.Find(t.IdProject).Name, App.db.Users.Find(t.IdUser).Name, t.StartDate, t.Deadline, comp, Result, SecondsToTimeSpan(t.Timespent)));
                                 break;
                         }
                     }
                 }
-            }
+            //}
         }
 
         // Команда показа отчета

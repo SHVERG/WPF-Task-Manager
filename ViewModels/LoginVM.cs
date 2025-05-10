@@ -11,7 +11,7 @@ namespace WpfTaskManager
 {
     public class LoginVM : INotifyPropertyChanged
     {
-        AppContext db;
+        //AppContext db;
 
         private RelayCommand loginNavCommand;
         private RelayCommand loginCommand;
@@ -30,7 +30,7 @@ namespace WpfTaskManager
 
         public LoginVM()
         {
-            db = new AppContext();
+            //db = new AppContext();
             SelectedViewModel = new LoginUC()
             {
                 DataContext = this
@@ -201,7 +201,7 @@ namespace WpfTaskManager
             {
                 return loginCommand ?? (loginCommand = new RelayCommand((o) =>
                 {
-                    User user = db.Users.FirstOrDefault(u => u.Username == Username);
+                    User user = App.db.Users.FirstOrDefault(u => u.Username == Username);
                     if (user == null)
                     {
                         IncorrectUserOrPass = true;
@@ -256,15 +256,15 @@ namespace WpfTaskManager
             {
                 return signupCommand ?? (signupCommand = new RelayCommand((o) =>
                 {
-                    if (db.Users.FirstOrDefault(u => u.Username == Username) != null)
+                    if (App.db.Users.FirstOrDefault(u => u.Username == Username) != null)
                     {
                         IncorrectUsername = true;
                     }
                     else
                     {
                         User user = new User(Username, Name, Email, SecureStringToString(((PasswordBox)o).SecurePassword));
-                        db.Users.Add(user);
-                        db.SaveChanges();
+                        App.db.Users.Add(user);
+                        App.db.SaveChanges();
                         User = user;
                         SaveAutoLogin();
                         OpenMainWindow();
