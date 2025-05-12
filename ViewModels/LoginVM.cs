@@ -142,10 +142,7 @@ namespace WpfTaskManager
         {
             Window main = new MainWindow()
             {
-                DataContext = new MainVM()
-                {
-                    User = User
-                }
+                DataContext = new MainVM(User)
             };
 
             main.Show();

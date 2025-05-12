@@ -22,19 +22,24 @@ namespace WpfTaskManager
         private Project selectedProj;
         private Task selectedTask;
         private User user;
+        private bool isLangRussian;
 
         // Конструктор
-        public MainVM()
+        public MainVM(User user)
         {
-            Projects = new ObservableCollection<Project>(App.db.Projects);
+            IsLangRussian = App.Language.Equals(new CultureInfo("ru-RU"));
+
+            User = user;
+
+            Projects = new ObservableCollection<Project>();
             ProjTasks = new ObservableCollection<Task>();
-            Users = new ObservableCollection<User>(App.db.Users);
+
+            RefreshExecute();
         }
 
         //Свойства
         public ObservableCollection<Project> Projects { get; set; }
         public ObservableCollection<Task> ProjTasks { get; set; }
-        public ObservableCollection<User> Users { get; set; }
 
         public double Opacity
         {
@@ -90,6 +95,18 @@ namespace WpfTaskManager
                 OnPropertyChanged();
             }
         }
+        public bool IsLangRussian
+        {
+            get
+            {
+                return isLangRussian;
+            }
+            set
+            {
+                isLangRussian = value;
+                OnPropertyChanged();
+            }
+        }
 
         public List<CultureInfo> Languages
         {
@@ -104,20 +121,15 @@ namespace WpfTaskManager
         {
             if (selectedProj != null)
             {
-                foreach (Task t in App.db.Tasks)
-                {
-                    if (t.IdProject == SelectedProj.IdProject && !ProjTasks.Contains(t))
-                        ProjTasks.Insert(0, t);
-                    else if (t.IdProject != SelectedProj.IdProject && ProjTasks.Contains(t))
-                        ProjTasks.Remove(t);
-                }
+                ProjTasks.Clear();
+                ProjTasks.AddRange(App.db.Tasks.Where(t => (User.IdRole != App.db.Roles.FirstOrDefault(r => r.Name == "Member").IdRole || t.IdUser == User.IdUser) && t.IdProject == SelectedProj.IdProject));
             }
         }
 
         // Обновление контекста БД приложения
         private void RefreshExecute()
         {
-            App.db = new AppContext();
+            //App.db = new AppContext();
 
             int p_id = -1;
             int t_id = -1;
@@ -131,14 +143,27 @@ namespace WpfTaskManager
                     t_id = SelectedTask.IdTask;
                 }
 
-                ProjTasks.Clear();
-                ProjTasks.AddRange(App.db.Tasks.Where(t => t.IdProject == SelectedProj.IdProject));
+                RefreshTasks();
 
                 SelectedTask = ProjTasks.FirstOrDefault(t => t_id != -1 && t.IdTask == t_id);
             }
 
             Projects.Clear();
-            Projects.AddRange(App.db.Projects);
+
+            if (User != null && User.IdRole == App.db.Roles.FirstOrDefault(r => r.Name == "Member").IdRole)
+            {
+                //Projects = new ObservableCollection<Project>();
+
+                foreach (Task task in App.db.Tasks.Where(t => t.IdUser == User.IdUser))
+                {
+                    if (Projects.FirstOrDefault(p => p.IdProject == task.IdProject) == null)
+                    {
+                        Projects.Add(App.db.Projects.FirstOrDefault(p => p.IdProject == task.IdProject));
+                    }
+                }
+            }
+            else
+                Projects.AddRange(App.db.Projects);
 
             SelectedProj = Projects.FirstOrDefault(p => p_id != -1 && p.IdProject == p_id);
         }

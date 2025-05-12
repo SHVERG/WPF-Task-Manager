@@ -12,6 +12,7 @@ namespace WpfTaskManager
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+
             if (value == null || parameter == null)
                 return Visibility.Collapsed;
 
@@ -40,6 +41,8 @@ namespace WpfTaskManager
             {
                 hasPermission = boolValue;
             }
+
+            System.Diagnostics.Debug.WriteLine($"RoleId: {roleId}, Perm: {permissionName}, Visible: {hasPermission}");
 
             if (Invert)
                 hasPermission = !hasPermission;

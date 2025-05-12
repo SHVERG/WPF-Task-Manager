@@ -92,14 +92,11 @@ namespace WpfTaskManager
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (Settings.Default.AutoLogin && db.Users.FirstOrDefault(u => u.Username == Settings.Default.SavedUsername && u.IdRole == db.Roles.FirstOrDefault(r => r.HasAccess == 1).IdRole) != null)
+            if (Settings.Default.AutoLogin && db.Users.FirstOrDefault(u => u.Username == Settings.Default.SavedUsername && u.IdRole != db.Roles.FirstOrDefault(r => r.Name == "Unregistered").IdRole) != null)
             {
                 var main = new MainWindow()
                 {
-                    DataContext = new MainVM()
-                    {
-                        User = db.Users.FirstOrDefault(u => u.Username == Settings.Default.SavedUsername)
-                    }
+                    DataContext = new MainVM(db.Users.FirstOrDefault(u => u.Username == Settings.Default.SavedUsername))
                 };
                 main.Show();
                 Current.MainWindow = main;

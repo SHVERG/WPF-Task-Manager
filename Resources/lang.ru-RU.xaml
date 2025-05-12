@@ -88,7 +88,7 @@
     <v:String x:Key="save_as">СОХРАНИТЬ КАК...</v:String>
     <v:String x:Key="edit">РЕДАКТИРОВАТЬ</v:String>
     <v:String x:Key="add">ДОБАВИТЬ</v:String>
-    <v:String x:Key="set_role">НАЗНАЧИТЬ РОЛЬ</v:String>
+    <v:String x:Key="set_role">ДАТЬ РОЛЬ</v:String>
 
     <v:String x:Key="import_fail_body">Невозможно импортировать проекты:</v:String>
     <v:String x:Key="import_success_header">Успешное импортирование!</v:String>
