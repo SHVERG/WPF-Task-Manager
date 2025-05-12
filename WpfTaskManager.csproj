@@ -135,6 +135,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Proxies\BindingProxy.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="ViewModels\MainVM.cs" />
     <Compile Include="ViewModels\ManageUsersVM.cs" />
     <Compile Include="ViewModels\AddCatVM.cs" />
     <Compile Include="ViewModels\AddVM.cs" />
@@ -152,7 +153,6 @@
       <DependentUpon>AddWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AppContext.cs" />
-    <Compile Include="ViewModels\MainVM.cs" />
     <Compile Include="Views\EditWindow.xaml.cs">
       <DependentUpon>EditWindow.xaml</DependentUpon>
     </Compile>

@@ -24,7 +24,9 @@ namespace WpfTaskManager
         private User user;
         private bool isLangRussian;
 
-        // Конструктор
+        // Конструкторы
+        public MainVM() { }
+
         public MainVM(User user)
         {
             IsLangRussian = App.Language.Equals(new CultureInfo("ru-RU"));
@@ -223,7 +225,7 @@ namespace WpfTaskManager
             {
                 DataContext = new ManageUsersVM(bool.Parse(o.ToString()))
             };
-            
+
             Opacity = 0.5;
             w.ShowDialog();
 
@@ -693,7 +695,7 @@ namespace WpfTaskManager
                     XElement task = new XElement("task");
                     XAttribute t_id = new XAttribute("id", t.IdTask);
                     XAttribute t_pid = new XAttribute("p_id", t.IdProject);
-                    XAttribute t_uid = new XAttribute ("u_id", t.IdUser);
+                    XAttribute t_uid = new XAttribute("u_id", t.IdUser);
                     XElement t_name = new XElement("name", t.Name);
                     XElement t_desc = new XElement("desc", t.Description);
                     XElement t_start = new XElement("start", t.StartDate);

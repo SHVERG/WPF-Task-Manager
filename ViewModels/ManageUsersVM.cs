@@ -16,7 +16,10 @@ namespace WpfTaskManager
 
         private bool showOnlyRequests;
 
-        // Конструктор
+        // Конструкторы
+
+        public ManageUsersVM() { }
+
         public ManageUsersVM(bool showOnlyRequests = false)
         {
             ShowOnlyRequests = showOnlyRequests;

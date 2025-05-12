@@ -24,6 +24,10 @@
         <local:BindingProxy x:Key="VisProxy" Data="{Binding Path=ShowOnlyRequests}"/>
     </Window.Resources>
 
+    <Window.DataContext>
+        <local:ManageUsersVM/>
+    </Window.DataContext>
+
     <Grid>
         <Border CornerRadius="5"
                 Background="{StaticResource MaterialDesignBackground}">

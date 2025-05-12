@@ -31,10 +31,7 @@
             <local:PermissionToVisibilityConverter x:Key="PermToVis"/>
             <local:BindingProxy x:Key="OwnerProxy" Data="{Binding ElementName=mainWindow}"/>
             
-            <local:BoolToVisibilityConverter x:Key="BoolToVis" 
-                                             TrueValue="Visible" 
-                                             FalseValue="Collapsed"/>
-            <local:BindingProxy x:Key="VisProxy" Data="{Binding Path=User, Converter={StaticResource PermToVis}, ConverterParameter=CanCreateTasks}"/>
+            <local:BindingProxy x:Key="VisProxy" Data="{Binding Path=User.IdRole}"/>
             
             <Style TargetType="{x:Type Button}" x:Key="WindowButtonStyle">
                 <Setter Property="Template">
@@ -73,6 +70,10 @@
         </ResourceDictionary>
     </Window.Resources>
 
+    <Window.DataContext>
+        <local:MainVM/>
+    </Window.DataContext>
+    
     <Grid>
         <Grid Background="{StaticResource MaterialDesignDarkBackground}">
 
@@ -450,18 +451,10 @@
                                         <DataGridTextColumn Header="{DynamicResource name}" 
                                                             Binding="{Binding Name}"
                                                             Width="100"/>
-                                        <DataGridTemplateColumn Header="{DynamicResource reliable}"
-                                                                Width="100">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding IdUser, Converter={StaticResource IdToUser}}"
-                                                               Visibility="{Binding User.IdRole, RelativeSource={RelativeSource AncestorType=MainVM}, Converter={StaticResource PermToVis}, ConverterParameter=CanCreateTasks}" />
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                        <!--DataGridTextColumn Header="{DynamicResource reliable}"
-                                                            Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanCreateTasks}"
-                                                            Binding="{Binding IdUser, Converter={StaticResource IdToUser}}"/!-->
+
+                                        <DataGridTextColumn Header="{DynamicResource reliable}"
+                                                            Visibility="{Binding Data, Source={StaticResource VisProxy}, Converter={StaticResource PermToVis}, ConverterParameter=CanCreateTasks}"
+                                                            Binding="{Binding IdUser, Converter={StaticResource IdToUser}}"/>
                                         <DataGridTextColumn Header="{DynamicResource start_date}" 
                                                             Binding="{Binding StartDate, StringFormat={}{0:dd.MM.yyyy}}"/>
                                         <DataGridTextColumn Header="{DynamicResource deadline}" 

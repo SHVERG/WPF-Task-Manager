@@ -42,8 +42,6 @@ namespace WpfTaskManager
                 hasPermission = boolValue;
             }
 
-            System.Diagnostics.Debug.WriteLine($"RoleId: {roleId}, Perm: {permissionName}, Visible: {hasPermission}");
-
             if (Invert)
                 hasPermission = !hasPermission;
 
