@@ -6,19 +6,16 @@ namespace WpfTaskManager
 {
     public class EditVM : INotifyPropertyChanged
     {
-        private string name;
-        private string description;
+        private string name, description;
         private bool isProject = true;
         private Task t;
         private Project p;
 
-        private RelayCommand closeCommand;
-        private RelayCommand editCommand;
+        private RelayCommand closeCommand, editCommand;
 
         // Конструкторы
         public EditVM()
         {
-
         }
 
         public EditVM(object obj)
@@ -73,17 +70,14 @@ namespace WpfTaskManager
                 if (p.Name == Name && p.Description == Description)
                     return false;
 
-                //using (AppContext db = new AppContext())
-                //{
-                    foreach (Project pr in App.db.Projects)
+                foreach (Project pr in App.db.Projects)
+                {
+                    if (pr.Name == Name.Trim() && pr.IdProject != p.IdProject)
                     {
-                        if (pr.Name == Name.Trim() && pr.IdProject != p.IdProject)
-                        {
-                            return false;
-                        }
-
+                        return false;
                     }
-                //}
+
+                }
 
                 return true;
             }

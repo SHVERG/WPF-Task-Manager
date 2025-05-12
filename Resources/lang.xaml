@@ -15,10 +15,13 @@
     <v:String x:Key="main_menu_edit">Edit</v:String>
     <v:String x:Key="main_menu_edit_sub">Edit</v:String>
     <v:String x:Key="main_menu_delete">Delete</v:String>
-    <v:String x:Key="main_menu_report">Report</v:String>
+    <v:String x:Key="main_menu_report">Reports</v:String>
     <v:String x:Key="main_menu_log">Log</v:String>
     <v:String x:Key="main_menu_log_show">Show</v:String>
     <v:String x:Key="main_menu_log_clear">Clear</v:String>
+    <v:String x:Key="main_menu_manage">Manage</v:String>
+    <v:String x:Key="main_menu_requests">Requests</v:String>
+    <v:String x:Key="main_menu_users">Users</v:String>
     <v:String x:Key="main_menu_settings">Settings</v:String>
     <v:String x:Key="main_menu_lang">Language</v:String>
     <v:String x:Key="main_menu_lang_ru">Русский</v:String>
@@ -53,12 +56,17 @@
     <v:String x:Key="color_caps">COLOR</v:String>
     <v:String x:Key="reliable">Reliable</v:String>
     <v:String x:Key="reliable_caps">RELIABLE</v:String>
-    
 
     <v:String x:Key="main_add_proj">ADD PROJECT</v:String>
     <v:String x:Key="main_add_task">ADD TASK</v:String>
     <v:String x:Key="main_comp_task">COMPLETE TASK</v:String>
     <v:String x:Key="main_start_task">START TASK</v:String>
+    <v:String x:Key="main_error_header">Error!</v:String>
+    <v:String x:Key="main_warning_header">Warning!</v:String>
+    <v:String x:Key="main_deadline_expired_body">Can't set Deadline:\nDeadline is expired!</v:String>
+    <v:String x:Key="main_delete_conf_header">Delete Confirmation</v:String>
+    <v:String x:Key="main_delete_conf_body">Do you really want to delete Project</v:String>
+    <v:String x:Key="main_task_delete_conf_body">Do you really want to delete Task</v:String>
 
     <v:String x:Key="report_from">From</v:String>
     <v:String x:Key="report_to">To</v:String>
@@ -71,19 +79,37 @@
     <v:String x:Key="report_by_start">Start</v:String>
     <v:String x:Key="report_by_deadline">Deadline</v:String>
     <v:String x:Key="report_by_reliable">By reliable</v:String>
+    <v:String x:Key="report_projects_title">PROJECTS REPORT</v:String>
+    <v:String x:Key="report_tasks_title">TASKS REPORT</v:String>
 
     <v:String x:Key="close">CLOSE</v:String>
+    <v:String x:Key="delete">DELETE</v:String>
     <v:String x:Key="show">SHOW</v:String>
     <v:String x:Key="save_as">SAVE AS...</v:String>
     <v:String x:Key="edit">EDIT</v:String>
     <v:String x:Key="add">ADD</v:String>
+    <v:String x:Key="set_role">SET ROLE</v:String>
 
+    <v:String x:Key="import_fail_body">Can't import Projects:</v:String>
+    <v:String x:Key="import_success_header">Import Successful!</v:String>
+    <v:String x:Key="import_success_body">All Projects imported successfully.</v:String>
+
+    <v:String x:Key="export_success_header">Export Successful!</v:String>
+    <v:String x:Key="export_success_body">exported successfully.</v:String>
+    <v:String x:Key="export_all_success_body">All Projects exported successfully.</v:String>
+    
     <v:String x:Key="log_start_date">Start Date</v:String>
     <v:String x:Key="log_end_date">End Date</v:String>
     <v:String x:Key="log_logs">Logs</v:String>
     <v:String x:Key="log_logs_caps">LOG</v:String>
     <v:String x:Key="log_message">Message</v:String>
     <v:String x:Key="log_date">Date</v:String>
+    <v:String x:Key="log_file_save_success_header">Saving successful!</v:String>
+    <v:String x:Key="log_file_save_success_body">All records saved successfully.</v:String>
+    <v:String x:Key="log_clear_header">Clear confirmation</v:String>
+    <v:String x:Key="log_clear_body">Do you really want to clear Actions Log?</v:String>
+    <v:String x:Key="log_clear_success_header">Clear Successful!</v:String>
+    <v:String x:Key="log_clear_success_body">Actions Log cleared successfully.</v:String>
 
     <v:String x:Key="login_title">Logging In</v:String>
     <v:String x:Key="login_username">Username</v:String>
@@ -91,10 +117,16 @@
     <v:String x:Key="login_inc_user_or_pass">Incorrect username or password</v:String>
     <v:String x:Key="login_inc_username">This username is busy, try another</v:String>
     <v:String x:Key="login_login_btn">Log In</v:String>
-    <v:String x:Key="login_register_btn">Register</v:String>
+    <v:String x:Key="login_register_btn">Send a request</v:String>
     <v:String x:Key="login_not_reg">Not registered?</v:String>
     <v:String x:Key="login_remember">Remember me</v:String>
+    <v:String x:Key="login_request_sent_header">The request was sent successfully!</v:String>
+    <v:String x:Key="login_request_sent_body">After its confirmation you will be able to log in.\nAn email with confirmation will be sent to the address you provided.</v:String>
+    <v:String x:Key="login_request_not_confirmed_header">The request has not been confirmed yet!</v:String>
+    <v:String x:Key="login_request_not_confirmed_body">Wait for the request to be confirmed by the Administrator.\nWhen the request is confirmed, you will receive an email to the address you specified.</v:String>
 
+    <v:String x:Key="register_new_role">New role:</v:String>
+    <v:String x:Key="register_role">Role</v:String>
     <v:String x:Key="register_title">Registration</v:String>
     <v:String x:Key="register_name">Name</v:String>
     <v:String x:Key="register_name_hint">Your name</v:String>

@@ -19,6 +19,9 @@
     <v:String x:Key="main_menu_log">Журнал</v:String>
     <v:String x:Key="main_menu_log_show">Показать</v:String>
     <v:String x:Key="main_menu_log_clear">Очистить</v:String>
+    <v:String x:Key="main_menu_manage">Управление</v:String>
+    <v:String x:Key="main_menu_requests">Заявки</v:String>
+    <v:String x:Key="main_menu_users">Пользователи</v:String>
     <v:String x:Key="main_menu_settings">Настройки</v:String>
     <v:String x:Key="main_menu_lang">Язык</v:String>
     <v:String x:Key="main_menu_lang_ru">Русский</v:String>
@@ -58,6 +61,12 @@
     <v:String x:Key="main_add_task">ДОБАВИТЬ ЗАДАЧУ</v:String>
     <v:String x:Key="main_comp_task">ЗАВЕРШИТЬ ЗАДАЧУ</v:String>
     <v:String x:Key="main_start_task">НАЧАТЬ ЗАДАЧУ</v:String>
+    <v:String x:Key="main_error_header">Ошибка!</v:String>
+    <v:String x:Key="main_warning_header">Внимание!</v:String>
+    <v:String x:Key="main_deadline_expired_body">Невозможно установить крайний срок:\nКрайний срок просрочен!</v:String>
+    <v:String x:Key="main_delete_conf_header">Подтверждение удаления</v:String>
+    <v:String x:Key="main_delete_conf_body">Вы действительно хотите удалить Проект</v:String>
+    <v:String x:Key="main_task_delete_conf_body">Вы действительно хотите удалить Задачу</v:String>
 
     <v:String x:Key="report_from">С</v:String>
     <v:String x:Key="report_to">До</v:String>
@@ -70,12 +79,24 @@
     <v:String x:Key="report_by_start">Началу</v:String>
     <v:String x:Key="report_by_deadline">Крайнему сроку</v:String>
     <v:String x:Key="report_by_reliable">По ответственному</v:String>
+    <v:String x:Key="report_projects_title">ОТЧЕТ ПО ПРОЕКТАМ</v:String>
+    <v:String x:Key="report_tasks_title">ОТЧЕТ ПО ЗАДАЧАМ</v:String>
 
     <v:String x:Key="close">ЗАКРЫТЬ</v:String>
+    <v:String x:Key="delete">УДАЛИТЬ</v:String>
     <v:String x:Key="show">ПОКАЗАТЬ</v:String>
     <v:String x:Key="save_as">СОХРАНИТЬ КАК...</v:String>
     <v:String x:Key="edit">РЕДАКТИРОВАТЬ</v:String>
     <v:String x:Key="add">ДОБАВИТЬ</v:String>
+    <v:String x:Key="set_role">НАЗНАЧИТЬ РОЛЬ</v:String>
+
+    <v:String x:Key="import_fail_body">Невозможно импортировать проекты:</v:String>
+    <v:String x:Key="import_success_header">Успешное импортирование!</v:String>
+    <v:String x:Key="import_success_body">Все проекты успешно импортированы.</v:String>
+    
+    <v:String x:Key="export_success_header">Успешное экспортирование!</v:String>
+    <v:String x:Key="export_success_body">экспортирован успешно.</v:String>
+    <v:String x:Key="export_all_success_body">Все проекты экспортированы успешно.</v:String>
 
     <v:String x:Key="log_start_date">Начальная дата</v:String>
     <v:String x:Key="log_end_date">Начальная дата</v:String>
@@ -83,6 +104,12 @@
     <v:String x:Key="log_logs_caps">ЖУРНАЛ</v:String>
     <v:String x:Key="log_message">Сообщение</v:String>
     <v:String x:Key="log_date">Дата</v:String>
+    <v:String x:Key="log_file_save_success_header">Файл сохранен успешно!</v:String>
+    <v:String x:Key="log_file_save_success_body">Все записи сохранены.</v:String>
+    <v:String x:Key="log_clear_header">Подтверждение очистки</v:String>
+    <v:String x:Key="log_clear_body">Вы действительно хотите очитстить журнал активности?</v:String>
+    <v:String x:Key="log_clear_success_header">Успешная очистка!</v:String>
+    <v:String x:Key="log_clear_success_body">Журнал активности успешно очищен.</v:String>
 
     <v:String x:Key="login_title">Вход</v:String>
     <v:String x:Key="login_username">Имя пользователя</v:String>
@@ -90,10 +117,16 @@
     <v:String x:Key="login_inc_user_or_pass">Неверное имя пользователя или пароль</v:String>
     <v:String x:Key="login_inc_username">Данное имя пользователя занято, попробуйте другое</v:String>
     <v:String x:Key="login_login_btn">Войти</v:String>
-    <v:String x:Key="login_register_btn">Зарегистрироваться</v:String>
+    <v:String x:Key="login_register_btn">Подать заявку</v:String>
     <v:String x:Key="login_not_reg">Не зарегистрированы?</v:String>
     <v:String x:Key="login_remember">Запомнить меня</v:String>
+    <v:String x:Key="login_request_sent_header">Заявка подана успешно!</v:String>
+    <v:String x:Key="login_request_sent_body">После ее одобрения вы сможете авторизоваться.\nЭлекронное письмо с одобрением прийдет на указанный вами адрес.</v:String>
+    <v:String x:Key="login_request_not_confirmed_header">Заявка еще не одобрена!</v:String>
+    <v:String x:Key="login_request_not_confirmed_body">Дождитесь одобрения завявки администратором.\nКогда заявка будет одобрена, вы получите письмо на указанный вами EMail.</v:String>
 
+    <v:String x:Key="register_new_role">Новая роль:</v:String>
+    <v:String x:Key="register_role">Роль</v:String>
     <v:String x:Key="register_title">Регистрация</v:String>
     <v:String x:Key="register_name">Имя</v:String>
     <v:String x:Key="register_name_hint">Ваше имя</v:String>

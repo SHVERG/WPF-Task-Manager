@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Globalization;
+using WpfTaskManager.Properties;
 
 namespace WpfTaskManager
 {
@@ -31,7 +32,7 @@ namespace WpfTaskManager
             m_Languages.Add(new CultureInfo("en-US"));
             m_Languages.Add(new CultureInfo("ru-RU"));
 
-            Language = WpfTaskManager.Properties.Settings.Default.DefaultLanguage;
+            Language = Settings.Default.DefaultLanguage;
         }
 
         //Ивент для оповещения всех окон приложения
@@ -85,31 +86,29 @@ namespace WpfTaskManager
 
         private void App_LanguageChanged(Object sender, EventArgs e)
         {
-            WpfTaskManager.Properties.Settings.Default.DefaultLanguage = Language;
-            WpfTaskManager.Properties.Settings.Default.Save();
+            Settings.Default.DefaultLanguage = Language;
+            Settings.Default.Save();
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            //using (AppContext db = new AppContext()) { 
-                if (WpfTaskManager.Properties.Settings.Default.AutoLogin && !string.IsNullOrWhiteSpace(WpfTaskManager.Properties.Settings.Default.SavedUsername) && db.Users.FirstOrDefault(u => u.Username == WpfTaskManager.Properties.Settings.Default.SavedUsername) != null)
+            if (Settings.Default.AutoLogin && db.Users.FirstOrDefault(u => u.Username == Settings.Default.SavedUsername && u.IdRole == db.Roles.FirstOrDefault(r => r.HasAccess == 1).IdRole) != null)
+            {
+                var main = new MainWindow()
                 {
-                        var main = new MainWindow()
-                        {
-                            DataContext = new MainVM()
-                            {
-                                User = db.Users.FirstOrDefault(u => u.Username == WpfTaskManager.Properties.Settings.Default.SavedUsername)
-                            }
-                        };
-                        main.Show();
-                        Current.MainWindow = main;
-                }
-                else
-                {
-                    var loginWindow = new LoginWindow();
-                    loginWindow.Show();
-                }
-            //}
+                    DataContext = new MainVM()
+                    {
+                        User = db.Users.FirstOrDefault(u => u.Username == Settings.Default.SavedUsername)
+                    }
+                };
+                main.Show();
+                Current.MainWindow = main;
+            }
+            else
+            {
+                var loginWindow = new LoginWindow();
+                loginWindow.Show();
+            }
         }
     }
 }

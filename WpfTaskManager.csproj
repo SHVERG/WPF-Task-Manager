@@ -119,10 +119,13 @@
     <Compile Include="Converters\IdUserToNameConverter.cs" />
     <Compile Include="Converters\IntToTimespanConverter.cs" />
     <Compile Include="Converters\InvertBooleanConverter.cs" />
+    <Compile Include="Converters\PermissionToVisibilityConverter.cs" />
+    <Compile Include="Converters\RoleIdToNameConverter.cs" />
     <Compile Include="Factories\Creator.cs" />
     <Compile Include="Factories\ProjectCreator.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\LogBase.cs" />
+    <Compile Include="Models\PasswordHelper.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\TasksActivityLogs.cs" />
     <Compile Include="Models\ProjectsActivityLogs.cs" />
@@ -132,12 +135,16 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Proxies\BindingProxy.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="ViewModels\ManageUsersVM.cs" />
     <Compile Include="ViewModels\AddCatVM.cs" />
     <Compile Include="ViewModels\AddVM.cs" />
     <Compile Include="ViewModels\EditVM.cs" />
     <Compile Include="ViewModels\LoginVM.cs" />
     <Compile Include="ViewModels\LogVM.cs" />
     <Compile Include="ViewModels\ReportVM.cs" />
+    <Compile Include="Views\ManageUsersWindow.xaml.cs">
+      <DependentUpon>ManageUsersWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AddCatWindow.xaml.cs">
       <DependentUpon>AddCatWindow.xaml</DependentUpon>
     </Compile>
@@ -174,6 +181,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\lang.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ManageUsersWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

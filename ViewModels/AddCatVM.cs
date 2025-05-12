@@ -9,9 +9,9 @@ namespace WpfTaskManager
     {
         private string name;
         private Color color;
-        private RelayCommand closeCommand;
-        public RelayCommand addCommand;
+        private RelayCommand closeCommand, addCommand;
 
+        // Конструктор
         public AddCatVM()
         {
             color = new Color();
@@ -65,16 +65,13 @@ namespace WpfTaskManager
         // Проверка на уникальность названия создаваемого проекта
         private bool isUnique()
         {
-            //using (AppContext db = new AppContext())
-            //{
-                foreach (Category c in App.db.Categories)
+            foreach (Category c in App.db.Categories)
+            {
+                if (c.Name == Name.Trim() || (c.Color_R == Color.R && c.Color_G == Color.G && c.Color_B == Color.B))
                 {
-                    if (c.Name == Name.Trim() || (c.Color_R == Color.R && c.Color_G == Color.G && c.Color_B == Color.B))
-                    {
-                        return false;
-                    }
+                    return false;
                 }
-            //}
+            }
 
             return true;
         }

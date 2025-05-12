@@ -14,13 +14,8 @@ namespace WpfTaskManager
     public class LogVM : INotifyPropertyChanged
     {
         private int choice_index = 0;
-        private DateTime? startDate;
-        private DateTime? endDate;
-        public ObservableCollection<LogBase> DGSource { get; set; }
-
-        private RelayCommand closeCommand;
-        private RelayCommand showCommand;
-        private RelayCommand saveCommand;
+        private DateTime? startDate, endDate;
+        private RelayCommand closeCommand, showCommand, saveCommand;
 
         // Конструктор
         public LogVM()
@@ -29,6 +24,8 @@ namespace WpfTaskManager
         }
 
         // Свойства
+        public ObservableCollection<LogBase> DGSource { get; set; }
+
         public int ChoiceIndex
         {
             get
@@ -88,32 +85,29 @@ namespace WpfTaskManager
             List<LogBase> temp = new List<LogBase>();
             DGSource.Clear();
 
-            //using (AppContext db = new AppContext())
-            //{
-                if (ChoiceIndex == 0 || ChoiceIndex == 1)
-                    foreach (ProjectsActivityLogs log in App.db.ProjectsLogs.Where(l => l.Date >= ((DateTime)StartDate) && l.Date <= ((DateTime)EndDate)))
-                    {
-                        temp.Add(
-                            new LogBase(log.Action, log.Message)
-                            {
-                                Date = log.Date
-                            }
-                        );
-                    }
+            if (ChoiceIndex == 0 || ChoiceIndex == 1)
+                foreach (ProjectsActivityLogs log in App.db.ProjectsLogs.Where(l => l.Date >= ((DateTime)StartDate) && l.Date <= ((DateTime)EndDate)))
+                {
+                    temp.Add(
+                        new LogBase(log.Action, log.Message)
+                        {
+                            Date = log.Date
+                        }
+                    );
+                }
 
-                if (ChoiceIndex == 0 || ChoiceIndex == 2)
-                    foreach (TasksActivityLogs log in App.db.TasksLogs.Where(l => l.Date >= ((DateTime)StartDate) && l.Date <= ((DateTime)EndDate)))
-                    {
-                        temp.Add(
-                            new LogBase(log.Action, log.Message)
-                            {
-                                Date = log.Date
-                            }
-                        );
-                    }
+            if (ChoiceIndex == 0 || ChoiceIndex == 2)
+                foreach (TasksActivityLogs log in App.db.TasksLogs.Where(l => l.Date >= ((DateTime)StartDate) && l.Date <= ((DateTime)EndDate)))
+                {
+                    temp.Add(
+                        new LogBase(log.Action, log.Message)
+                        {
+                            Date = log.Date
+                        }
+                    );
+                }
 
-                DGSource.AddRange(temp.OrderBy(t => t.Date));
-            //}
+            DGSource.AddRange(temp.OrderBy(t => t.Date));
         }
 
         // Команда показа отчета
@@ -146,16 +140,7 @@ namespace WpfTaskManager
                 File.WriteAllText(save.FileName, str, Encoding.UTF8);
 
                 MBWindow mb = new MBWindow();
-
-                switch (App.Language.Name)
-                {
-                    case "ru-RU":
-                        mb.Show("Файл сохранен успешно!", "Все записи сохранены.", MessageBoxButton.OK);
-                        break;
-                    default:
-                        mb.Show("Saving successful!", "All records saved successfully.", MessageBoxButton.OK);
-                        break;
-                }
+                mb.Show(Application.Current.TryFindResource("log_file_save_success_header").ToString(), Application.Current.TryFindResource("log_file_save_success_body").ToString(), MessageBoxButton.OK);
             }
         }
 

@@ -28,6 +28,7 @@
             <local:DateTimeToStringConverter x:Key="DatetimeToString"/>
             <local:CompletionConverter x:Key="Completion"/>
             <local:IdUserToNameConverter x:Key="IdToUser"/>
+            <local:PermissionToVisibilityConverter x:Key="PermToVis"/>
             <local:BindingProxy x:Key="OwnerProxy" Data="{Binding ElementName=mainWindow}"/>
             <Style TargetType="{x:Type Button}" x:Key="WindowButtonStyle">
                 <Setter Property="Template">
@@ -98,15 +99,18 @@
                                       FontWeight="SemiBold">
 
                                 <MenuItem Header="{DynamicResource main_menu_add_project}"
+                                          Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanCreateTasks}"
                                           Command="{Binding AddProjCommand}"
                                           CommandParameter="{Binding ElementName=mainWindow}"/>
 
                                 <MenuItem Header="{DynamicResource main_menu_add_task}"
+                                          Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanCreateTasks}"
                                           Command="{Binding AddTaskCommand}"
                                           CommandParameter="{Binding ElementName=mainWindow}"/>
-                                <Separator/>
+                                <Separator Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanCreateTasks}"/>
 
-                                <MenuItem Header="{DynamicResource main_menu_export}">
+                                <MenuItem Header="{DynamicResource main_menu_export}"
+                                          Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanExportTasks}">
                                     <MenuItem Header="{DynamicResource main_menu_export_sel_proj}"
                                               Command="{Binding ExportProjCommand}"/>
                                     <MenuItem Header="{DynamicResource main_menu_export_all_proj}"
@@ -114,8 +118,9 @@
                                 </MenuItem>
 
                                 <MenuItem Header="{DynamicResource main_menu_import}"
+                                          Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanExportTasks}"
                                           Command="{Binding ImportProjCommand}"/>
-                                <Separator/>
+                                <Separator Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanExportTasks}"/>
 
                                 <MenuItem Header="{DynamicResource main_menu_refresh}"
                                           Command="{Binding RefreshCommand}"
@@ -127,8 +132,10 @@
                             </MenuItem>
 
                             <MenuItem Header="{DynamicResource main_menu_edit}" 
-                                      FontWeight="SemiBold">
-                                <MenuItem Header="{DynamicResource main_menu_edit_sub}">
+                                      FontWeight="SemiBold"
+                                      Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanEditTasks}">
+                                <MenuItem Header="{DynamicResource main_menu_edit_sub}"
+                                          Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanEditTasks}">
                                     <MenuItem Header="{DynamicResource project}"
                                               Command="{Binding EditProjCommand}"
                                               CommandParameter="{Binding ElementName=mainWindow}"/>
@@ -138,7 +145,8 @@
                                               CommandParameter="{Binding ElementName=mainWindow}"/>
                                 </MenuItem>
 
-                                <MenuItem Header="{DynamicResource main_menu_delete}">
+                                <MenuItem Header="{DynamicResource main_menu_delete}"
+                                          Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanDeleteTasks}">
                                     <MenuItem Header="{DynamicResource project}"
                                               Command="{Binding DeleteProjCommand}"/>
 
@@ -148,7 +156,8 @@
                             </MenuItem>
 
                             <MenuItem Header="{DynamicResource main_menu_report}" 
-                                      FontWeight="SemiBold">
+                                      FontWeight="SemiBold"
+                                      Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanCreateReports}">
 
                                 <MenuItem Header="{DynamicResource projects}"
                                           Command="{Binding ReportCommand}"
@@ -157,7 +166,8 @@
                                 <MenuItem Header="{DynamicResource tasks}"
                                           Command="{Binding ReportCommand}"
                                           CommandParameter="False"/>
-                                <MenuItem Header="{DynamicResource main_menu_log}">
+                                <MenuItem Header="{DynamicResource main_menu_log}"
+                                          Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanOpenLogs}">
                                     <MenuItem Header="{DynamicResource main_menu_log_show}"
                                               Command="{Binding ShowLogCommand}"/>
 
@@ -166,6 +176,21 @@
                                 </MenuItem>
                             </MenuItem>
 
+                            <MenuItem Header="{DynamicResource main_menu_manage}"
+                                      FontWeight="SemiBold"
+                                      Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanAcceptRegs}">
+                                <MenuItem Header="{DynamicResource main_menu_requests}"
+                                          Command="{Binding ManageUsersCommand}"
+                                          CommandParameter="true">
+                                    
+                                </MenuItem>
+                                <MenuItem Header="{DynamicResource main_menu_users}"
+                                          Command="{Binding ManageUsersCommand}"
+                                          CommandParameter="false">
+                                    
+                                </MenuItem>
+                            </MenuItem>
+                            
                             <MenuItem Header="{DynamicResource main_menu_settings}"
                                       FontWeight="SemiBold">
 
@@ -277,18 +302,22 @@
                                     <DataGrid.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="{DynamicResource main_menu_edit_sub}"
+                                                      Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanEditTasks}"
                                                       Command="{Binding EditProjCommand}"
                                                       CommandParameter="{Binding Data, Source={StaticResource OwnerProxy}}"/>
-                                            <Separator/>
+                                            <Separator Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanExportTasks}"/>
 
                                             <MenuItem Header="{DynamicResource main_menu_export}"
+                                                      Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanExportTasks}"
                                                       Command="{Binding ExportProjCommand}"/>
 
                                             <MenuItem Header="{DynamicResource main_menu_import}"
+                                                      Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanExportTasks}"
                                                       Command="{Binding ImportProjCommand}"/>
-                                            <Separator/>
+                                            <Separator Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanDeleteTasks}"/>
 
                                             <MenuItem Header="{DynamicResource main_menu_delete}"
+                                                      Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanDeleteTasks}"
                                                       Command="{Binding DeleteProjCommand}"/>
                                         </ContextMenu>
                                     </DataGrid.ContextMenu>
@@ -301,6 +330,7 @@
                             Content="{DynamicResource main_add_proj}" 
                             VerticalContentAlignment="Top" 
                             Margin="3"
+                            Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanCreateTasks}"
                             Command="{Binding AddProjCommand}"
                             CommandParameter="{Binding ElementName=mainWindow}"/>
                 </Grid>
@@ -433,17 +463,21 @@
                                     <DataGrid.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="{DynamicResource main_menu_start}"
+                                                      Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanPerformTasks}"
                                                       Command="{Binding StartTaskCommand}"/>
 
                                             <MenuItem Header="{DynamicResource main_menu_edit_sub}"
+                                                      Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanEditTasks}"
                                                       Command="{Binding EditTaskCommand}"
                                                       CommandParameter="{Binding Data, Source={StaticResource OwnerProxy}}"/>
 
                                             <MenuItem Header="{DynamicResource main_menu_complete}"
+                                                      Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanPerformTasks}"
                                                       Command="{Binding CompleteTaskCommand}"/>
-                                            <Separator/>
+                                            <Separator Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanDeleteTasks}"/>
 
                                             <MenuItem Header="{DynamicResource main_menu_delete}"
+                                                      Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanDeleteTasks}"
                                                       Command="{Binding DeleteTaskCommand}"/>
                                         </ContextMenu>
                                     </DataGrid.ContextMenu>
@@ -456,6 +490,7 @@
                             Content="{DynamicResource main_add_task}"
                             VerticalContentAlignment="Top" 
                             Margin="3"
+                            Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanCreateTasks}"
                             Command="{Binding AddTaskCommand}"
                             CommandParameter="{Binding ElementName=mainWindow}"/>
                 </Grid>
@@ -586,12 +621,14 @@
                                 VerticalContentAlignment="Top" 
                                 Grid.Column="0" 
                                 Margin="3"
+                                Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanPerformTasks}"
                                 Command="{Binding CompleteTaskCommand}"/>
 
                         <Button Content="{DynamicResource main_start_task}"
                                 VerticalContentAlignment="Top" 
                                 Grid.Column="1"
                                 Margin="3"
+                                Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanPerformTasks}"
                                 Command="{Binding StartTaskCommand}"/>
                     </Grid>
                 </Grid>

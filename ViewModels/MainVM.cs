@@ -13,53 +13,28 @@ namespace WpfTaskManager
 {
     public class MainVM : INotifyPropertyChanged
     {
-        //AppContext db;
-        RelayCommand refreshCommand;
+        private RelayCommand refreshCommand, addProjCommand, editProjCommand, addProjCatCommand, deleteProjCommand;
+        private RelayCommand addTaskCommand, editTaskCommand, startTaskCommand, completeTaskCommand, deleteTaskCommand;
+        private RelayCommand reportCommand, showLogCommand, clearLogCommand, manageUsersCommand;
+        private RelayCommand exportProjCommand, exportAllProjsCommand, importProjCommand, changeLanguageCommand, logoutCommand;
 
-        RelayCommand addProjCommand;
-        RelayCommand editProjCommand;
-        RelayCommand addProjCatCommand;
-        RelayCommand deleteProjCommand;
-
-        RelayCommand addTaskCommand;
-        RelayCommand editTaskCommand;
-        RelayCommand startTaskCommand;
-        RelayCommand completeTaskCommand;
-        RelayCommand deleteTaskCommand;
-
-        RelayCommand reportCommand;
-        RelayCommand showLogCommand;
-        RelayCommand clearLogCommand;
-
-        RelayCommand exportProjCommand;
-        RelayCommand exportAllProjsCommand;
-        RelayCommand importProjCommand;
-
-        RelayCommand changeLanguageCommand;
-        RelayCommand logoutCommand;
-
-        private bool isLangRussian;
         private double opacity = 1;
         private Project selectedProj;
         private Task selectedTask;
         private User user;
 
-        public ObservableCollection<Project> Projects { get; set; }
-        public ObservableCollection<Task> ProjTasks { get; set; }
-        public ObservableCollection<User> Users { get; set; }
-
         // Конструктор
         public MainVM()
         {
-            //db = new AppContext();
             Projects = new ObservableCollection<Project>(App.db.Projects);
             ProjTasks = new ObservableCollection<Task>();
             Users = new ObservableCollection<User>(App.db.Users);
-            isLangRussian = App.Language.Equals(new CultureInfo("ru-RU"));
-            //User = user;
         }
 
         //Свойства
+        public ObservableCollection<Project> Projects { get; set; }
+        public ObservableCollection<Task> ProjTasks { get; set; }
+        public ObservableCollection<User> Users { get; set; }
 
         public double Opacity
         {
@@ -121,19 +96,6 @@ namespace WpfTaskManager
             get
             {
                 return App.Languages;
-            }
-        }
-
-        public bool IsLangRussian
-        {
-            get
-            {
-                return isLangRussian;
-            }
-            set
-            {
-                isLangRussian = value;
-                OnPropertyChanged();
             }
         }
 
@@ -228,6 +190,34 @@ namespace WpfTaskManager
             }
         }
 
+        // Принятие заявок
+        private void ManageUsersExecute(object o)
+        {
+
+            var w = new ManageUsersWindow()
+            {
+                DataContext = new ManageUsersVM(bool.Parse(o.ToString()))
+            };
+            
+            Opacity = 0.5;
+            w.ShowDialog();
+
+            if (w.DialogResult.HasValue)
+                Opacity = 1;
+        }
+
+        // Команда принятия заявок
+        public RelayCommand ManageUsersCommand
+        {
+            get
+            {
+                return manageUsersCommand ?? (manageUsersCommand = new RelayCommand((o) =>
+                {
+                    ManageUsersExecute(o);
+                }));
+            }
+        }
+
         // Добавление записи в журнал
         private void AddLog(bool isProject, int id, int action, string message)
         {
@@ -249,15 +239,7 @@ namespace WpfTaskManager
             if (p == null)
             {
                 MBWindow mb = new MBWindow();
-                switch (App.Language.Name)
-                {
-                    case "ru-RU":
-                        mb.Show("Ошибка!", "Невозможно установить крайний срок:\nКрайний срок просрочен!", MessageBoxButton.OK);
-                        break;
-                    default:
-                        mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
-                        break;
-                }
+                mb.Show(Application.Current.TryFindResource("main_error_header").ToString(), Application.Current.TryFindResource("main_deadline_expired_body").ToString().Replace("\\n", Environment.NewLine), MessageBoxButton.OK);
                 return;
             }
 
@@ -305,7 +287,7 @@ namespace WpfTaskManager
             }
         }
 
-        // Добавление категории проекта
+        // Добавление категории проекта (НЕ РЕАЛИЗОВАНО!!!)
         public void AddProjCat(AddCatVM vm)
         {
             App.db.Categories.Add(new Category(vm.Name, vm.Color.R, vm.Color.G, vm.Color.B));
@@ -396,24 +378,8 @@ namespace WpfTaskManager
         // Удаление проекта
         public void DeleteProjExecute()
         {
-            string title, description;
-
-            switch (App.Language.Name)
-            {
-                case "ru-RU":
-                    {
-                        title = "Подтверждение удаления";
-                        description = $"Вы действительно хотите удалить Проект \"{SelectedProj.Name}\"?";
-                        break;
-                    }
-                default:
-                    {
-                        title = "Delete Confirmation";
-                        description = $"Do you really want to delete Project \"{SelectedProj.Name}\"?";
-                        break;
-                    }
-
-            }
+            string title = Application.Current.TryFindResource("main_delete_conf_header").ToString();
+            string description = Application.Current.TryFindResource("main_delete_conf_body").ToString() + $" \"{SelectedProj.Name}\"?";
 
             MBWindow conf = new MBWindow();
             if (conf.Show(title, description, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -452,16 +418,7 @@ namespace WpfTaskManager
             if (t == null)
             {
                 MBWindow mb = new MBWindow();
-
-                switch (App.Language.Name)
-                {
-                    case "ru-RU":
-                        mb.Show("Ошибка!", "Невозможно установить крайний срок:\nКрайний срок просрочен!", MessageBoxButton.OK);
-                        break;
-                    default:
-                        mb.Show("Error!", "Can't set Deadline:\nDeadline is expired!", MessageBoxButton.OK);
-                        break;
-                }
+                mb.Show(Application.Current.TryFindResource("main_error_header").ToString(), Application.Current.TryFindResource("main_deadline_expired_body").ToString().Replace("\\n", Environment.NewLine), MessageBoxButton.OK);
 
                 return;
             }
@@ -614,24 +571,8 @@ namespace WpfTaskManager
         // Удаление задачи
         public void DeleteTaskExecute()
         {
-            string title, description;
-
-            switch (App.Language.Name)
-            {
-                case "ru-RU":
-                    {
-                        title = "Подтверждение удаления";
-                        description = $"Вы действительно хотите удалить Задачу \"{SelectedTask.Name}\"?";
-                        break;
-                    }
-                default:
-                    {
-                        title = "Delete Confirmation";
-                        description = $"Do you really want to delete Task \"{SelectedTask.Name}\"?";
-                        break;
-                    }
-
-            }
+            string title = Application.Current.TryFindResource("main_delete_conf_header").ToString();
+            string description = Application.Current.TryFindResource("main_task_delete_conf_body").ToString() + $" \"{SelectedTask.Name}\"?";
 
             MBWindow conf = new MBWindow();
             if (conf.Show(title, description, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -683,44 +624,16 @@ namespace WpfTaskManager
         // Очистка журнала
         public void ClearLogExecute()
         {
-            string title, description;
-
-            switch (App.Language.Name)
-            {
-                case "ru-RU":
-                    {
-                        title = "Подтверждение очистки";
-                        description = "Вы действительно хотите очитстить журнал активности?";
-                        break;
-                    }
-                default:
-                    {
-                        title = "Clear confirmation";
-                        description = "Do you really want to clear Actions Log";
-                        break;
-                    }
-
-            }
-
             MBWindow conf = new MBWindow();
 
-            if (conf.Show(title, description, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (conf.Show(Application.Current.TryFindResource("log_clear_header").ToString(), Application.Current.TryFindResource("log_clear_body").ToString(), MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 App.db.ProjectsLogs.RemoveRange(App.db.ProjectsLogs.ToList());
                 App.db.TasksLogs.RemoveRange(App.db.TasksLogs.ToList());
                 App.db.SaveChanges();
 
                 MBWindow mb = new MBWindow();
-
-                switch (App.Language.Name)
-                {
-                    case "ru-RU":
-                        mb.Show("Успешная очистка!", "Журнал активности успешно очищен.", MessageBoxButton.OK);
-                        break;
-                    default:
-                        mb.Show("Clear Successful!", $"Actions Log cleared successfully.", MessageBoxButton.OK);
-                        break;
-                }
+                mb.Show(Application.Current.TryFindResource("log_clear_success_header").ToString(), Application.Current.TryFindResource("log_clear_success_body").ToString(), MessageBoxButton.OK);
             }
         }
 
@@ -778,16 +691,7 @@ namespace WpfTaskManager
                 proj.Save(save.FileName);
 
                 MBWindow mb = new MBWindow();
-
-                switch (App.Language.Name)
-                {
-                    case "ru-RU":
-                        mb.Show("Успешное экспортирование!", $"Проект \"{SelectedProj.Name}\" экспортирован успешно.", MessageBoxButton.OK);
-                        break;
-                    default:
-                        mb.Show("Export Successful!", $"Project \"{SelectedProj.Name}\" exported successfully.", MessageBoxButton.OK);
-                        break;
-                }
+                mb.Show(Application.Current.TryFindResource("export_success_header").ToString(), Application.Current.TryFindResource("project").ToString() + $" \"{SelectedProj.Name}\" " + Application.Current.TryFindResource("export_success_body").ToString(), MessageBoxButton.OK);
             }
         }
 
@@ -887,16 +791,7 @@ namespace WpfTaskManager
                 projs.Save(save.FileName);
 
                 MBWindow mb = new MBWindow();
-
-                switch (App.Language.Name)
-                {
-                    case "ru-RU":
-                        mb.Show("Успешное экспортирование!", $"Все проекты экспортированы успешно.", MessageBoxButton.OK);
-                        break;
-                    default:
-                        mb.Show("Export Successful!", $"All Projects exported successfully.", MessageBoxButton.OK);
-                        break;
-                }
+                mb.Show(Application.Current.TryFindResource("export_success_header").ToString(), Application.Current.TryFindResource("export_all_success_body").ToString(), MessageBoxButton.OK);
             }
         }
 
@@ -976,27 +871,11 @@ namespace WpfTaskManager
                 MBWindow mb = new MBWindow();
                 if (names.Length != 0)
                 {
-                    switch (App.Language.Name)
-                    {
-                        case "ru-RU":
-                            mb.Show("Внимание!", $"Невозможно импортировать проекты:{names}", MessageBoxButton.OK);
-                            break;
-                        default:
-                            mb.Show("Warning!", $"Can't import Projects:{names}", MessageBoxButton.OK);
-                            break;
-                    }
+                    mb.Show(Application.Current.TryFindResource("main_warning_header").ToString(), Application.Current.TryFindResource("import_fail_body").ToString() + $"{names}", MessageBoxButton.OK);
                 }
                 else
                 {
-                    switch (App.Language.Name)
-                    {
-                        case "ru-RU":
-                            mb.Show("Успешное импортирование!", $"Все проекты успешно импортированы.", MessageBoxButton.OK);
-                            break;
-                        default:
-                            mb.Show("Import Successful!", "All Projects imported successfully.", MessageBoxButton.OK);
-                            break;
-                    }
+                    mb.Show(Application.Current.TryFindResource("import_success_header").ToString(), Application.Current.TryFindResource("import_success_body").ToString(), MessageBoxButton.OK);
                 }
             }
         }

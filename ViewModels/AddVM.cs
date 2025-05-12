@@ -9,45 +9,37 @@ namespace WpfTaskManager
 {
     public class AddVM : INotifyPropertyChanged
     {
-        public Project proj { get; private set; }
-        private DateTime startDateLimitStart;
-        private DateTime deadlineLimitStart;
-        private DateTime startDateLimitEnd;
-        private DateTime deadlineLimitEnd;
+        private DateTime startDateLimitStart, deadlineLimitStart, startDateLimitEnd, deadlineLimitEnd;
         private string name = "";
         private string description = "";
         private DateTime? deadline = null;
         private DateTime? startDate = null;
-        private User selected_user = null;
         private DateTime? time = null;
+        private User selected_user = null;
         private int? idCat = null;
 
-        private RelayCommand closeCommand;
-        private RelayCommand addCommand;
+        private RelayCommand closeCommand, addCommand;
+
+        public ObservableCollection<User> Users { get; set; }
 
         // Конструкторы
         public AddVM()
         {
         }
 
-        public ObservableCollection<User> Users { get; set; }
-
         public AddVM(int? id)
         {
 
             if (id.HasValue)
             {
-                //using (AppContext db = new AppContext())
-                //{
-                    proj = App.db.Projects.Find(id);
+                proj = App.db.Projects.Find(id);
 
-                    StartDateLimitStart = App.db.Projects.Find(id).StartDate;
-                    DeadlineLimitStart = App.db.Projects.Find(id).StartDate;
+                StartDateLimitStart = App.db.Projects.Find(id).StartDate;
+                DeadlineLimitStart = App.db.Projects.Find(id).StartDate;
 
-                    StartDateLimitEnd = App.db.Projects.Find(id).Deadline.AddDays(-1);
-                    DeadlineLimitEnd = App.db.Projects.Find(id).Deadline;
-                    Users = new ObservableCollection<User>(App.db.Users.Where(p => p.IdRole==3));
-                //}
+                StartDateLimitEnd = App.db.Projects.Find(id).Deadline.AddDays(-1);
+                DeadlineLimitEnd = App.db.Projects.Find(id).Deadline;
+                Users = new ObservableCollection<User>(App.db.Users.Where(p => p.IdRole==3));
             }
             else
             {
@@ -60,6 +52,8 @@ namespace WpfTaskManager
         }
 
         // Свойства
+        public Project proj { get; private set; }
+
         public DateTime StartDateLimitStart
         {
             get
@@ -220,17 +214,14 @@ namespace WpfTaskManager
         {
             if (proj != null) return true;
 
-            //using (AppContext db = new AppContext())
-            //{
-                foreach (Project pr in App.db.Projects)
+            foreach (Project pr in App.db.Projects)
+            {
+                if (pr.Name == Name.Trim())
                 {
-                    if (pr.Name == Name.Trim())
-                    {
-                        return false;
-                    }
-
+                    return false;
                 }
-            //}
+
+            }
 
             return true;
         }

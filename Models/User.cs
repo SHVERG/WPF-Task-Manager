@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace WpfTaskManager
@@ -14,7 +15,8 @@ namespace WpfTaskManager
         private string username;
         private string name;
         private string email;
-        private string password;
+        private string passwordhash;
+        private string salt;
 
         public int IdRole
         {
@@ -68,28 +70,42 @@ namespace WpfTaskManager
             }
         }
 
-        public string Password
+        public string PasswordHash
         {
             get
             {
-                return password;
+                return passwordhash;
             }
             set
             {
-                password = value;
+                passwordhash = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Salt
+        {
+            get
+            {
+                return salt;
+            }
+            set
+            {
+                salt = value;
                 OnPropertyChanged();
             }
         }
 
         public User() { }
 
-        public User(string username, string name, string email, string password)
+        public User(string username, string name, string email, string passwordHash, string salt)
         {
-            IdRole = 3;
+            IdRole = App.db.Roles.FirstOrDefault(r => r.Name == "Unregistered").IdRole;
             Username = username;
             Name = name;
             Email = email;
-            Password = password;
+            PasswordHash = passwordHash;
+            Salt = salt;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

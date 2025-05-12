@@ -1,0 +1,103 @@
+﻿<Window x:Class="WpfTaskManager.ManageUsersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfTaskManager"
+        mc:Ignorable="d"
+        Title="Users Control" 
+        Height="600"
+        Width="1000"
+        x:Name="manageUsersWindow"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="{x:Null}"
+        WindowStyle="None"
+        ShowInTaskbar="False">
+
+    <Window.Resources>
+        <local:RoleIdToNameConverter x:Key="RoleIdToName"/>
+        <local:BoolToVisibilityConverter x:Key="BoolToVis"
+                                         TrueValue="Collapsed" 
+                                         FalseValue="Visible"/>
+        <local:BindingProxy x:Key="VisProxy" Data="{Binding Path=ShowOnlyRequests}"/>
+    </Window.Resources>
+
+    <Grid>
+        <Border CornerRadius="5"
+                Background="{StaticResource MaterialDesignBackground}">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <DataGrid Grid.Row="0"
+                          ItemsSource="{Binding Users}" 
+                          SelectedItem="{Binding SelectedUser}" 
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{DynamicResource login_username}" 
+                                            Binding="{Binding Username}" 
+                                            Width="*" />
+                        
+                        <DataGridTextColumn Header="{DynamicResource register_name}" 
+                                            Binding="{Binding Name}" 
+                                            Width="*" />
+                        
+                        <DataGridTextColumn Header="EMail" 
+                                            Binding="{Binding Email}" 
+                                            Width="*" />
+                        
+                        <DataGridTextColumn Header="{DynamicResource register_role}"
+                                            Width="*"
+                                            Visibility="{Binding Data, Source={StaticResource VisProxy}, Converter={StaticResource BoolToVis}}"
+                                            Binding="{Binding IdRole, Converter={StaticResource RoleIdToName}}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <StackPanel Grid.Row="1" 
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,10,0,10">
+                    
+                    <TextBlock Text="{DynamicResource register_new_role}" 
+                               VerticalAlignment="Center" 
+                               Margin="0,0,5,0"/>
+                    
+                    <ComboBox ItemsSource="{Binding AvailableRoles}" 
+                              SelectedItem="{Binding SelectedRole}" 
+                              DisplayMemberPath="Name" 
+                              Width="200"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2"
+                            VerticalAlignment="Center" 
+                            Orientation="Horizontal" 
+                            HorizontalAlignment="Center">
+                    
+                    <Button Content="{DynamicResource close}"
+                            Margin="20, 0"
+                            Width="150"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding ElementName=manageUsersWindow}"/>
+                    
+                    <Button Content="{DynamicResource set_role}" 
+                            Width="150"
+                            Margin="20, 0"
+                            Command="{Binding ApplyRoleCommand}"/>
+                    
+                    <Button Content="{DynamicResource delete}" 
+                            Width="150"
+                            Margin="20, 0"
+                            Command="{Binding DeleteUserCommand}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

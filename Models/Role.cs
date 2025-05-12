@@ -14,6 +14,7 @@ namespace WpfTaskManager
         public int CanOpenLogs { get; set; }
         public int CanEditTasks { get; set; }
         public int CanExportTasks { get; set; }
+        public int HasAccess {  get; set; }
 
     }
 }

@@ -2,35 +2,24 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Security;
 using System.Windows;
 using System.Windows.Controls;
+using WpfTaskManager.Properties;
 
 namespace WpfTaskManager
 {
     public class LoginVM : INotifyPropertyChanged
     {
-        //AppContext db;
-
-        private RelayCommand loginNavCommand;
-        private RelayCommand loginCommand;
-        private RelayCommand signupNavCommand;
-        private RelayCommand signupCommand;
+        private RelayCommand loginNavCommand, loginCommand, signupNavCommand, signupCommand;
         private UserControl selectedViewModel;
 
-        private string username;
-        private string name;
-        private string email;
-        private bool incorrectUserOrPass;
-        private bool incorrectUsername;
-        private bool rememberMe;
+        private string username, name, email;
+        private bool incorrectUserOrPass, incorrectUsername, rememberMe;
         private User user;
 
-
+        // Конструктор
         public LoginVM()
         {
-            //db = new AppContext();
             SelectedViewModel = new LoginUC()
             {
                 DataContext = this
@@ -40,6 +29,7 @@ namespace WpfTaskManager
             IncorrectUsername = false;
         }
 
+        // Свойства
         public string Username
         {
             get
@@ -150,13 +140,14 @@ namespace WpfTaskManager
         // Открытие основного окна
         private void OpenMainWindow()
         {
-            var main = new MainWindow()
+            Window main = new MainWindow()
             {
                 DataContext = new MainVM()
                 {
                     User = User
                 }
             };
+
             main.Show();
             Application.Current.MainWindow = main;
 
@@ -167,15 +158,15 @@ namespace WpfTaskManager
         {
             if (RememberMe)
             {
-                Properties.Settings.Default.SavedUsername = Username;
-                Properties.Settings.Default.AutoLogin = true;
-                Properties.Settings.Default.Save();
+                Settings.Default.SavedUsername = Username;
+                Settings.Default.AutoLogin = true;
+                Settings.Default.Save();
             }
             else
             {
-                Properties.Settings.Default.SavedUsername = string.Empty;
-                Properties.Settings.Default.AutoLogin = false;
-                Properties.Settings.Default.Save();
+                Settings.Default.SavedUsername = string.Empty;
+                Settings.Default.AutoLogin = false;
+                Settings.Default.Save();
             }
         }
 
@@ -206,11 +197,19 @@ namespace WpfTaskManager
                     {
                         IncorrectUserOrPass = true;
                     }
-                    else if (user.Password == SecureStringToString(((PasswordBox)o).SecurePassword))
+                    else if (PasswordHelper.VerifyPassword(((PasswordBox)o).Password, user.PasswordHash, user.Salt))
                     {
-                        User = user;
-                        SaveAutoLogin();
-                        OpenMainWindow();
+                        if (user.IdRole == App.db.Roles.FirstOrDefault(r => r.Name == "Unregistered").IdRole)
+                        {
+                            MBWindow mb = new MBWindow();
+                            mb.Show(Application.Current.TryFindResource("login_request_not_confirmed_header").ToString(), Application.Current.TryFindResource("login_request_not_confirmed_body").ToString().Replace("\\n", Environment.NewLine), MessageBoxButton.OK);
+                        }
+                        else
+                        {
+                            User = user;
+                            SaveAutoLogin();
+                            OpenMainWindow();
+                        }
                     }
                     else
                     {
@@ -235,20 +234,6 @@ namespace WpfTaskManager
             }
         }
 
-        String SecureStringToString(SecureString value)
-        {
-            IntPtr valuePtr = IntPtr.Zero;
-            try
-            {
-                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
-                return Marshal.PtrToStringUni(valuePtr);
-            }
-            finally
-            {
-                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
-            }
-        }
-
         // Команда регистрации
         public RelayCommand SignUpCommand
         {
@@ -262,14 +247,24 @@ namespace WpfTaskManager
                     }
                     else
                     {
-                        User user = new User(Username, Name, Email, SecureStringToString(((PasswordBox)o).SecurePassword));
+                        string pass = ((PasswordBox)o).Password;
+                        PasswordHelper.CreatePasswordHash(pass, out string hash, out string salt);
+
+
+                        User user = new User(Username, Name, Email, hash, salt);
                         App.db.Users.Add(user);
                         App.db.SaveChanges();
-                        User = user;
-                        SaveAutoLogin();
-                        OpenMainWindow();
-                    }
-                }, o => Username != null && Username.Length > 5 && ((PasswordBox)o).SecurePassword != null && ((PasswordBox)o).SecurePassword.Length > 5));
+
+                        MBWindow mb = new MBWindow();
+
+                        Username = null;
+                        Email = null;
+                        Name = null;
+                        ((PasswordBox)o).Password = null;
+
+                        mb.Show(Application.Current.TryFindResource("login_request_sent_header").ToString(), Application.Current.TryFindResource("login_request_sent_body").ToString().Replace("\\n", Environment.NewLine), MessageBoxButton.OK);
+                        }
+                }, o => Username != null && Username.Length >= 6 && ((PasswordBox)o).SecurePassword != null && ((PasswordBox)o).SecurePassword.Length >= 6));
             }
         }
 

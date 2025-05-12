@@ -72,9 +72,9 @@
                                      FontSize="24"
                                      materialDesign:HintAssist.Hint="{DynamicResource register_username_password_hint}"/>
 
-                        <CheckBox Content="{DynamicResource login_remember}"
+                        <!--CheckBox Content="{DynamicResource login_remember}"
                                   FontSize="24"
-                                  IsChecked="{Binding RememberMe}"/>
+                                  IsChecked="{Binding RememberMe}"/!-->
 
                         <Label Content="{DynamicResource login_inc_username}"
                                FontSize="24"

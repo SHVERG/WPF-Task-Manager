@@ -13,9 +13,8 @@
         ResizeMode="NoResize"
         AllowsTransparency="True"
         Background="{x:Null}"
-        Icon="/Images/icon.ico"
         WindowStyle="None"
-        ShowInTaskbar="True">
+        ShowInTaskbar="False">
 
     <Window.DataContext>
         <local:ReportVM/>
@@ -23,11 +22,11 @@
 
     <Window.Resources>
         <ResourceDictionary>
-            <local:InvertBooleanConverter x:Key="BoolConvert"/>
+            <!--local:InvertBooleanConverter x:Key="BoolConvert"/!-->
             <local:BoolToVisibilityConverter x:Key="BoolToVis" 
-                                             TrueValue="Visible" 
-                                             FalseValue="Hidden"/>
-            <local:BindingProxy x:Key="VisProxy" Data="{Binding Path=IsProj, Converter={StaticResource BoolConvert}}"/>
+                                             TrueValue="Collapsed" 
+                                             FalseValue="Visible"/>
+            <local:BindingProxy x:Key="VisProxy" Data="{Binding Path=IsProj}"/>
         </ResourceDictionary>
     </Window.Resources>
 
