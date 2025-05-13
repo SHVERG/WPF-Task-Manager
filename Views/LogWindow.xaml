@@ -27,14 +27,14 @@
             <StackPanel>
                 <Label Content="{DynamicResource log_logs_caps}" 
                        HorizontalAlignment="Center" 
-                       Foreground="{StaticResource PrimaryHueMidBrush}" 
+                       Foreground="{StaticResource MaterialDesign.Brush.Primary}" 
                        FontWeight="Bold"
                        FontSize="16"/>
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center">
                     <Label Content="{DynamicResource log_logs}"
-                           Foreground="{StaticResource PrimaryHueMidBrush}"
+                           Foreground="{StaticResource MaterialDesign.Brush.Primary}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
 
@@ -48,19 +48,19 @@
                     </ComboBox>
 
                     <Label Content="{DynamicResource log_start_date}"
-                           Foreground="{StaticResource PrimaryHueMidBrush}"
+                           Foreground="{StaticResource MaterialDesign.Brush.Primary}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
                     <DatePicker x:Name="StartDate" SelectedDate="{Binding StartDate}"/>
 
                     <Label Content="{DynamicResource log_end_date}"
-                           Foreground="{StaticResource PrimaryHueMidBrush}"
+                           Foreground="{StaticResource MaterialDesign.Brush.Primary}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
                     <DatePicker x:Name="EndDate" SelectedDate="{Binding EndDate}"/>
 
                     <Button Content="{DynamicResource main_menu_log_clear}"
-                            Foreground="{StaticResource PrimaryHueMidBrush}"
+                            Foreground="{StaticResource MaterialDesign.Brush.Primary}"
                             FontWeight="SemiBold"
                             FontSize="14"
                             Style="{StaticResource MaterialDesignToolForegroundButton}"

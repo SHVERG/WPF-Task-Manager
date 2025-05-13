@@ -22,9 +22,7 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <ResourceDictionary>
-            <local:BoolToVisibilityConverter x:Key="BoolToVis" TrueValue="Visible" FalseValue="Hidden"/>
-        </ResourceDictionary>
+        <local:BoolToVisibilityConverter x:Key="BoolToVis" TrueValue="Visible" FalseValue="Hidden"/>
     </Window.Resources>
 
     <Grid>
@@ -34,7 +32,7 @@
             <StackPanel>
                 <Label Content="{DynamicResource name_caps}" 
                        HorizontalAlignment="Center" 
-                       Foreground="{StaticResource PrimaryHueMidBrush}" 
+                       Foreground="{StaticResource MaterialDesign.Brush.Primary}" 
                        FontWeight="Bold"
                        FontSize="14"/>
 
@@ -46,7 +44,7 @@
 
                 <Label Content="{DynamicResource color_caps}" 
                        HorizontalAlignment="Center" 
-                       Foreground="{StaticResource PrimaryHueMidBrush}" 
+                       Foreground="{StaticResource MaterialDesign.Brush.Primary}" 
                        FontWeight="Bold"
                        FontSize="14"/>
 
