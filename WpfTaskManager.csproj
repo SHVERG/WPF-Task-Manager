@@ -125,7 +125,7 @@
     <Compile Include="Factories\ProjectCreator.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\LogBase.cs" />
-    <Compile Include="Models\PasswordHelper.cs" />
+    <Compile Include="Modules\PasswordHelper.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\TasksActivityLogs.cs" />
     <Compile Include="Models\ProjectsActivityLogs.cs" />
@@ -133,6 +133,7 @@
     <Compile Include="Factories\TaskCreator.cs" />
     <Compile Include="Models\Report.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Modules\TaskExecutionManager.cs" />
     <Compile Include="Proxies\BindingProxy.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\MainVM.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="ViewModels\EditVM.cs" />
     <Compile Include="ViewModels\LoginVM.cs" />
     <Compile Include="ViewModels\LogVM.cs" />
+    <Compile Include="ViewModels\ProjectSelectVM.cs" />
     <Compile Include="ViewModels\ReportVM.cs" />
     <Compile Include="Views\ManageUsersWindow.xaml.cs">
       <DependentUpon>ManageUsersWindow.xaml</DependentUpon>
@@ -168,7 +170,10 @@
     <Compile Include="Views\MBWindow.xaml.cs">
       <DependentUpon>MBWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\RelayCommand.cs" />
+    <Compile Include="Modules\RelayCommand.cs" />
+    <Compile Include="Views\ProjectSelectWindow.xaml.cs">
+      <DependentUpon>ProjectSelectWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReportWindow.xaml.cs">
       <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
@@ -225,6 +230,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\MBWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProjectSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

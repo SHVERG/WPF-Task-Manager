@@ -155,6 +155,14 @@
                                 </MenuItem>
                             </MenuItem>
 
+                            <MenuItem Header="{DynamicResource main_menu_view}" 
+                                      FontWeight="SemiBold">
+                                <MenuItem Header="{DynamicResource main_menu_view_default}"/>
+
+                                <MenuItem Header="{DynamicResource main_menu_view_gantt}"
+                                          Command="{Binding GanttViewCommand}"/>
+                            </MenuItem>
+
                             <MenuItem Header="{DynamicResource main_menu_report}" 
                                       FontWeight="SemiBold"
                                       Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanCreateReports}">
@@ -182,15 +190,15 @@
                                 <MenuItem Header="{DynamicResource main_menu_requests}"
                                           Command="{Binding ManageUsersCommand}"
                                           CommandParameter="true">
-                                    
+
                                 </MenuItem>
                                 <MenuItem Header="{DynamicResource main_menu_users}"
                                           Command="{Binding ManageUsersCommand}"
                                           CommandParameter="false">
-                                    
+
                                 </MenuItem>
                             </MenuItem>
-                            
+
                             <MenuItem Header="{DynamicResource main_menu_settings}"
                                       FontWeight="SemiBold">
 
@@ -216,13 +224,13 @@
                             <MenuItem Header="{DynamicResource main_menu_about}"
                                       FontWeight="SemiBold"/>
                         </Menu>
-                    </StackPanel>
 
-                    <Label Content="{DynamicResource app_name}" 
-                           HorizontalAlignment="Center" 
-                           VerticalAlignment="Center" 
-                           FontSize="16" 
-                           Foreground="DarkGray"/>
+                        <Label Content="{DynamicResource app_name}" 
+                               VerticalAlignment="Center" 
+                               FontSize="16" 
+                               Margin="100,0,0,0"
+                               Foreground="DarkSlateGray"/>
+                    </StackPanel>
 
                     <StackPanel HorizontalAlignment="Right" 
                                 Orientation="Horizontal">
@@ -627,12 +635,12 @@
                                 Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanPerformTasks}"
                                 Command="{Binding CompleteTaskCommand}"/>
 
-                        <Button Content="{DynamicResource main_start_task}"
+                        <Button Content="{Binding ToggleTaskHeader}"
                                 VerticalContentAlignment="Top" 
                                 Grid.Column="1"
                                 Margin="3"
                                 Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanPerformTasks}"
-                                Command="{Binding StartTaskCommand}"/>
+                                Command="{Binding ToggleTaskCommand}"/>
                     </Grid>
                 </Grid>
             </Grid>

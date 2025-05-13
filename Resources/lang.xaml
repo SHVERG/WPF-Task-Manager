@@ -15,6 +15,9 @@
     <v:String x:Key="main_menu_edit">Edit</v:String>
     <v:String x:Key="main_menu_edit_sub">Edit</v:String>
     <v:String x:Key="main_menu_delete">Delete</v:String>
+    <v:String x:Key="main_menu_view">View</v:String>
+    <v:String x:Key="main_menu_view_default">Default</v:String>
+    <v:String x:Key="main_menu_view_gantt">Gantt chart</v:String>
     <v:String x:Key="main_menu_report">Reports</v:String>
     <v:String x:Key="main_menu_log">Log</v:String>
     <v:String x:Key="main_menu_log_show">Show</v:String>
@@ -30,6 +33,7 @@
     <v:String x:Key="main_menu_about">About</v:String>
     <v:String x:Key="main_menu_complete">Complete</v:String>
     <v:String x:Key="main_menu_start">Start</v:String>
+    <v:String x:Key="main_menu_stop">Stop</v:String>
     <v:String x:Key="main_not_comp">Not Completed</v:String>
 
     <v:String x:Key="projects_caps">PROJECTS</v:String>
@@ -40,7 +44,7 @@
     <v:String x:Key="name_caps">NAME</v:String>
     <v:String x:Key="desc">Description</v:String>
     <v:String x:Key="desc_caps">DESCRIPTION</v:String>
-    <v:String x:Key="start_date">Started</v:String>
+    <v:String x:Key="start_date">Start date</v:String>
     <v:String x:Key="start_date_caps">START DATE</v:String>
     <v:String x:Key="deadline">Deadline</v:String>
     <v:String x:Key="deadline_caps">DEADLINE</v:String>
@@ -57,10 +61,12 @@
     <v:String x:Key="reliable">Reliable</v:String>
     <v:String x:Key="reliable_caps">RELIABLE</v:String>
 
+    <v:String x:Key="main_select_proj">SELECT PROJECT</v:String>
     <v:String x:Key="main_add_proj">ADD PROJECT</v:String>
     <v:String x:Key="main_add_task">ADD TASK</v:String>
-    <v:String x:Key="main_comp_task">COMPLETE TASK</v:String>
-    <v:String x:Key="main_start_task">START TASK</v:String>
+    <v:String x:Key="main_comp_task">COMPLETE</v:String>
+    <v:String x:Key="main_start_task">START</v:String>
+    <v:String x:Key="main_stop_task">STOP</v:String>
     <v:String x:Key="main_error_header">Error!</v:String>
     <v:String x:Key="main_warning_header">Warning!</v:String>
     <v:String x:Key="main_deadline_expired_body">Can't set Deadline:\nDeadline is expired!</v:String>

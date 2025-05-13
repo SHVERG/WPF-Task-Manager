@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Report"
         Height="600"
-        Width="1000"
+        Width="1100"
         x:Name="reportWindow"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"

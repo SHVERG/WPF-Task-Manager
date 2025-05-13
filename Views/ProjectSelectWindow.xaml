@@ -1,0 +1,63 @@
+﻿<Window x:Class="WpfTaskManager.ProjectSelectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfTaskManager"
+        mc:Ignorable="d"
+        Title="ProjectSelectWindow" 
+        Height="150" 
+        Width="400"
+        x:Name="projSelectWindow"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="{x:Null}"
+        WindowStyle="None"
+        ShowInTaskbar="False">
+
+    <Window.DataContext>
+        <local:ProjectSelectVM/>
+    </Window.DataContext>
+
+    <Grid>
+        <Border CornerRadius="5" 
+                Background="{StaticResource MaterialDesignBackground}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Content="{DynamicResource main_select_proj}" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{StaticResource PrimaryHueMidBrush}" 
+                       FontWeight="Bold"
+                       FontSize="14"/>
+
+                <ComboBox Margin="0,20,0,0"
+                          Grid.Row="0"
+                          ItemsSource="{Binding AvailableProjects}" 
+                          SelectedItem="{Binding SelectedProject}" 
+                          DisplayMemberPath="Name"/>
+                
+                <StackPanel Grid.Row="1" 
+                            Orientation="Horizontal" 
+                            HorizontalAlignment="Center">
+
+                    <Button Content="{DynamicResource close}" 
+                            Margin="20, 0" 
+                            Width="150"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding ElementName=projSelectWindow}"/>
+
+                    <Button Content="ОК" 
+                            Margin="20, 0" 
+                            Width="150"
+                            HorizontalAlignment="Center" 
+                            Command="{Binding ConfirmCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

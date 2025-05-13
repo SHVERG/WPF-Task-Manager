@@ -14,7 +14,8 @@ namespace WpfTaskManager
     public class MainVM : INotifyPropertyChanged
     {
         private RelayCommand refreshCommand, addProjCommand, editProjCommand, addProjCatCommand, deleteProjCommand;
-        private RelayCommand addTaskCommand, editTaskCommand, startTaskCommand, completeTaskCommand, deleteTaskCommand;
+        private RelayCommand addTaskCommand, editTaskCommand, toggleTaskCommand, completeTaskCommand, deleteTaskCommand;
+        private RelayCommand defaultViewCommand, ganttViewCommand;
         private RelayCommand reportCommand, showLogCommand, clearLogCommand, manageUsersCommand;
         private RelayCommand exportProjCommand, exportAllProjsCommand, importProjCommand, changeLanguageCommand, logoutCommand;
 
@@ -23,6 +24,7 @@ namespace WpfTaskManager
         private Task selectedTask;
         private User user;
         private bool isLangRussian;
+        private string toggleTaskHeader, toggleTaskContextHeader;
 
         // Конструкторы
         public MainVM() { }
@@ -30,6 +32,7 @@ namespace WpfTaskManager
         public MainVM(User user)
         {
             IsLangRussian = App.Language.Equals(new CultureInfo("ru-RU"));
+            ToggleTaskHeader = "main_start_task";
 
             User = user;
 
@@ -81,6 +84,8 @@ namespace WpfTaskManager
             set
             {
                 selectedTask = value;
+                ToggleTaskContextHeader = value == null || value.IsRunning != 1 ? "main_menu_start" : "main_menu_stop";
+                ToggleTaskHeader = value == null || value.IsRunning != 1 ? "main_start_task" : "main_stop_task";
                 OnPropertyChanged();
             }
         }
@@ -106,6 +111,32 @@ namespace WpfTaskManager
             set
             {
                 isLangRussian = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ToggleTaskHeader
+        {
+            get
+            {
+                return toggleTaskHeader;
+            }
+            set
+            {
+                toggleTaskHeader = App.Current.TryFindResource(value).ToString();
+                OnPropertyChanged();
+            }
+        }
+
+        public string ToggleTaskContextHeader
+        {
+            get
+            {
+                return toggleTaskContextHeader;
+            }
+            set
+            {
+                toggleTaskContextHeader = App.Current.TryFindResource(value).ToString();
                 OnPropertyChanged();
             }
         }
@@ -403,7 +434,7 @@ namespace WpfTaskManager
         }
 
         // Удаление проекта
-        public void DeleteProjExecute()
+        private void DeleteProjExecute()
         {
             string title = Application.Current.TryFindResource("main_delete_conf_header").ToString();
             string description = Application.Current.TryFindResource("main_delete_conf_body").ToString() + $" \"{SelectedProj.Name}\"?";
@@ -548,15 +579,34 @@ namespace WpfTaskManager
             }
         }
 
-        // Команда запуска задачи
-        public RelayCommand StartTaskCommand
+        // Запуск/остановка задачи
+        private void ToggleTaskExecute()
+        {
+
+            if (SelectedTask.IsRunning == 1)
+            {
+                App.TaskExecutionManager.StopTask(SelectedTask);
+                AddLog(false, SelectedTask.IdTask, 2, $"Task \"{SelectedTask.Name}\" stopped.");
+            }
+            else
+            {
+                App.TaskExecutionManager.StartTask(SelectedTask);
+                AddLog(false, SelectedTask.IdTask, 2, $"Task \"{SelectedTask.Name}\" started.");
+            }
+
+            ToggleTaskContextHeader = SelectedTask.IsRunning == 1 ? "main_menu_stop" : "main_menu_start";
+            ToggleTaskHeader = SelectedTask.IsRunning == 1 ? "main_stop_task" : "main_start_task";
+        }
+
+        // Команда запуска/остановки задачи
+        public RelayCommand ToggleTaskCommand
         {
             get
             {
-                return startTaskCommand ?? (startTaskCommand = new RelayCommand((o) =>
+                return toggleTaskCommand ?? (toggleTaskCommand = new RelayCommand((o) =>
                 {
-
-                }, o => SelectedTask != null && SelectedTask.Completed == null));
+                    ToggleTaskExecute();
+                }, o => SelectedTask != null && SelectedTask.Completed == null && SelectedTask.StartDate <= DateTime.Now));
             }
         }
 
@@ -564,6 +614,7 @@ namespace WpfTaskManager
         private void CompleteTaskExecute()
         {
             Task t = App.db.Tasks.Find(SelectedTask.IdTask);
+            App.TaskExecutionManager.StopTask(SelectedTask);
             t.Completed = DateTime.Now;
             AddLog(false, t.IdTask, 2, $"Task \"{t.Name}\" completed.");
 
@@ -591,12 +642,12 @@ namespace WpfTaskManager
                 return completeTaskCommand ?? (completeTaskCommand = new RelayCommand((o) =>
                 {
                     CompleteTaskExecute();
-                }, o => SelectedTask != null && SelectedTask.Completed == null));
+                }, o => SelectedTask != null && SelectedTask.Completed == null && SelectedTask.StartDate <= DateTime.Now));
             }
         }
 
         // Удаление задачи
-        public void DeleteTaskExecute()
+        private void DeleteTaskExecute()
         {
             string title = Application.Current.TryFindResource("main_delete_conf_header").ToString();
             string description = Application.Current.TryFindResource("main_task_delete_conf_body").ToString() + $" \"{SelectedTask.Name}\"?";
@@ -605,9 +656,22 @@ namespace WpfTaskManager
             if (conf.Show(title, description, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 App.db.Tasks.Remove(SelectedTask);
-                App.db.SaveChanges();
                 AddLog(false, SelectedTask.IdTask, 3, $"Task \"{SelectedTask.Name}\" deleted.");
                 ProjTasks.Remove(SelectedTask);
+
+                bool compProj = true;
+
+                foreach (Task task in App.db.Tasks.Where(task => task.IdProject == selectedProj.IdProject))
+                    if (task.Completed == null)
+                        compProj = false;
+
+                if (compProj)
+                {
+                    Project p = App.db.Projects.Find(selectedProj.IdProject);
+                    p.Completed = DateTime.Now;
+                    AddLog(true, p.IdProject, 2, $"Project \"{p.Name}\" completed.");
+                }
+                App.db.SaveChanges();
             }
         }
 
@@ -649,7 +713,7 @@ namespace WpfTaskManager
         }
 
         // Очистка журнала
-        public void ClearLogExecute()
+        private void ClearLogExecute()
         {
             MBWindow conf = new MBWindow();
 
@@ -735,7 +799,6 @@ namespace WpfTaskManager
         }
 
         // Смена языка
-
         public RelayCommand ChangeLanguageCommand
         {
             get
@@ -915,6 +978,42 @@ namespace WpfTaskManager
                 return importProjCommand ?? (importProjCommand = new RelayCommand((o) =>
                 {
                     ImportProjExecute();
+                }));
+            }
+        }
+
+        // Переключение на диаграмму Ганта
+        private void GanttViewExecute()
+        {
+            
+        }
+
+        // Команда переключения на диаграмму Ганта
+        public RelayCommand GanttViewCommand
+        {
+            get
+            {
+                return ganttViewCommand ?? (ganttViewCommand = new RelayCommand((o) =>
+                {
+                    GanttViewExecute();
+                }));
+            }
+        }
+
+        // Переключение на стандартный вид
+        private void DefaultViewExecute()
+        {
+
+        }
+
+        // Команда переключения на стандартный вид
+        public RelayCommand DefaultViewCommand
+        {
+            get
+            {
+                return defaultViewCommand ?? (defaultViewCommand = new RelayCommand((o) =>
+                {
+                    DefaultViewExecute();
                 }));
             }
         }

@@ -21,6 +21,7 @@ namespace WpfTaskManager
         }
 
         public static AppContext db;
+        public static TaskExecutionManager TaskExecutionManager { get; private set; }
 
         public App()
         {
@@ -106,6 +107,18 @@ namespace WpfTaskManager
                 var loginWindow = new LoginWindow();
                 loginWindow.Show();
             }
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            TaskExecutionManager = new TaskExecutionManager();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            TaskExecutionManager?.StopAllRunningTasks();
+            base.OnExit(e);
         }
     }
 }

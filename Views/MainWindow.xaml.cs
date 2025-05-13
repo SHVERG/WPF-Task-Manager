@@ -49,6 +49,5 @@ namespace WpfTaskManager
             else
                 Restore_button.Content = "2";
         }
-
     }
 }

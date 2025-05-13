@@ -15,7 +15,7 @@ namespace WpfTaskManager
     {
         private int choice_index = 0;
         private DateTime? startDate, endDate;
-        private RelayCommand closeCommand, showCommand, saveCommand;
+        private RelayCommand closeCommand, showCommand, saveCommand, clearCommand;
 
         // Конструктор
         public LogVM()
@@ -80,13 +80,15 @@ namespace WpfTaskManager
 
 
         // Показ отчета
-        public void ShowExecute()
+        private void ShowExecute()
         {
             List<LogBase> temp = new List<LogBase>();
             DGSource.Clear();
+            DateTime NNStartDate = StartDate == null ? DateTime.MinValue : StartDate.Value;
+            DateTime NNEndDate = EndDate == null ? DateTime.MaxValue : EndDate.Value;
 
             if (ChoiceIndex == 0 || ChoiceIndex == 1)
-                foreach (ProjectsActivityLogs log in App.db.ProjectsLogs.Where(l => l.Date >= ((DateTime)StartDate) && l.Date <= ((DateTime)EndDate)))
+                foreach (ProjectsActivityLogs log in App.db.ProjectsLogs.Where(l => l.Date >= NNStartDate && l.Date <= NNEndDate))
                 {
                     temp.Add(
                         new LogBase(log.Action, log.Message)
@@ -97,7 +99,7 @@ namespace WpfTaskManager
                 }
 
             if (ChoiceIndex == 0 || ChoiceIndex == 2)
-                foreach (TasksActivityLogs log in App.db.TasksLogs.Where(l => l.Date >= ((DateTime)StartDate) && l.Date <= ((DateTime)EndDate)))
+                foreach (TasksActivityLogs log in App.db.TasksLogs.Where(l => l.Date >= NNStartDate && l.Date <= NNEndDate))
                 {
                     temp.Add(
                         new LogBase(log.Action, log.Message)
@@ -118,7 +120,7 @@ namespace WpfTaskManager
                 return showCommand ?? (showCommand = new RelayCommand((o) =>
                 {
                     ShowExecute();
-                }, o => StartDate != null && EndDate != null));
+                }));
             }
         }
 
@@ -153,6 +155,19 @@ namespace WpfTaskManager
                 {
                     SaveExecute();
                 }, o => DGSource.Count > 0));
+            }
+        }
+
+        // Команда очистки дат
+        public RelayCommand ClearCommand
+        {
+            get
+            {
+                return clearCommand ?? (clearCommand = new RelayCommand((o) =>
+                {
+                    StartDate = null;
+                    EndDate = null;
+                }));
             }
         }
 

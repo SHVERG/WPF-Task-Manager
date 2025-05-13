@@ -201,8 +201,8 @@ namespace WpfTaskManager
 
             DGSource.Clear();
 
-            DateTime NNStartDate = StartDate!=null?StartDate.Value:DateTime.MinValue;
-            DateTime NNEndDate = EndDate!=null?EndDate.Value:DateTime.MaxValue;
+            DateTime NNStartDate = StartDate != null ? StartDate.Value : DateTime.MinValue;
+            DateTime NNEndDate = EndDate != null ? EndDate.Value : DateTime.MaxValue;
 
             if (IsProj)
             {

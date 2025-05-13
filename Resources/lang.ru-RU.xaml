@@ -15,6 +15,9 @@
     <v:String x:Key="main_menu_edit">Правка</v:String>
     <v:String x:Key="main_menu_edit_sub">Редактировать</v:String>
     <v:String x:Key="main_menu_delete">Удалить</v:String>
+    <v:String x:Key="main_menu_view">Вид</v:String>
+    <v:String x:Key="main_menu_view_default">По умолчанию</v:String>
+    <v:String x:Key="main_menu_view_gantt">Диаграмма Ганта</v:String>
     <v:String x:Key="main_menu_report">Отчеты</v:String>
     <v:String x:Key="main_menu_log">Журнал</v:String>
     <v:String x:Key="main_menu_log_show">Показать</v:String>
@@ -30,6 +33,7 @@
     <v:String x:Key="main_menu_about">О программе</v:String>
     <v:String x:Key="main_menu_complete">Завершить</v:String>
     <v:String x:Key="main_menu_start">Начать</v:String>
+    <v:String x:Key="main_menu_stop">Остановить</v:String>
     <v:String x:Key="main_not_comp">Не выполнен(а)</v:String>
 
     <v:String x:Key="projects_caps">ПРОЕКТЫ</v:String>
@@ -40,11 +44,11 @@
     <v:String x:Key="name_caps">НАЗВАНИЕ</v:String>
     <v:String x:Key="desc">Описание</v:String>
     <v:String x:Key="desc_caps">ОПИСАНИЕ</v:String>
-    <v:String x:Key="start_date">Начато</v:String>
+    <v:String x:Key="start_date">Начало</v:String>
     <v:String x:Key="start_date_caps">НАЧАЛО</v:String>
     <v:String x:Key="deadline">Крайний срок</v:String>
     <v:String x:Key="deadline_caps">КРАЙНИЙ СРОК</v:String>
-    <v:String x:Key="comp">Выполнение</v:String>
+    <v:String x:Key="comp">Завершен(а)</v:String>
     <v:String x:Key="state">Состояние</v:String>
     <v:String x:Key="task">Задача</v:String>
     <v:String x:Key="tasks">Задачи</v:String>
@@ -57,10 +61,12 @@
     <v:String x:Key="reliable">Ответственный</v:String>
     <v:String x:Key="reliable_caps">ОТВЕТСТВЕННЫЙ</v:String>
 
+    <v:String x:Key="main_select_proj">ВЫБРАТЬ ПРОЕКТ</v:String>
     <v:String x:Key="main_add_proj">ДОБАВИТЬ ПРОЕКТ</v:String>
     <v:String x:Key="main_add_task">ДОБАВИТЬ ЗАДАЧУ</v:String>
-    <v:String x:Key="main_comp_task">ЗАВЕРШИТЬ ЗАДАЧУ</v:String>
-    <v:String x:Key="main_start_task">НАЧАТЬ ЗАДАЧУ</v:String>
+    <v:String x:Key="main_comp_task">ЗАВЕРШИТЬ</v:String>
+    <v:String x:Key="main_start_task">НАЧАТЬ</v:String>
+    <v:String x:Key="main_stop_task">ОСТАНОВИТЬ</v:String>
     <v:String x:Key="main_error_header">Ошибка!</v:String>
     <v:String x:Key="main_warning_header">Внимание!</v:String>
     <v:String x:Key="main_deadline_expired_body">Невозможно установить крайний срок:\nКрайний срок просрочен!</v:String>

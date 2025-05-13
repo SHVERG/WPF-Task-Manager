@@ -9,8 +9,7 @@ namespace WpfTaskManager
         [Key] public int IdTask { get; set; }
         [ForeignKey("Projects")] private int idProject;
         [ForeignKey("Users")] private int idUser;
-        private int timespent;
-        //private User responsible;
+        private int timespent, isRunning;
 
         public int IdProject
         {
@@ -60,6 +59,19 @@ namespace WpfTaskManager
             }
         }
 
+        public int IsRunning
+        {
+            get
+            {
+                return isRunning;
+            }
+            set
+            {
+                isRunning = value;
+                OnPropertyChanged();
+            }
+        }
+
         public Task() { }
 
         public Task(int idProject, string name, string description, DateTime startdate, DateTime deadline, int idUser)
@@ -70,6 +82,7 @@ namespace WpfTaskManager
             StartDate = startdate;
             Deadline = deadline;
             IdUser = idUser;
+            //IsRunning = 0;
         }
     }
 }

@@ -58,6 +58,13 @@
                            FontWeight="SemiBold"
                            FontSize="14"/>
                     <DatePicker x:Name="EndDate" SelectedDate="{Binding EndDate}"/>
+
+                    <Button Content="{DynamicResource main_menu_log_clear}"
+                            Foreground="{StaticResource PrimaryHueMidBrush}"
+                            FontWeight="SemiBold"
+                            FontSize="14"
+                            Style="{StaticResource MaterialDesignToolForegroundButton}"
+                            Command="{Binding ClearCommand}" Cursor="Hand"/>
                 </StackPanel>
 
                 <ScrollViewer Margin="10"

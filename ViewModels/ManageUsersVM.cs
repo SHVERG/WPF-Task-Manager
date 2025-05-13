@@ -102,7 +102,7 @@ namespace WpfTaskManager
         }
 
         // Удаление пользователя
-        private void DeleteUser()
+        private void DeleteUserExecute()
         {
             if (SelectedUser == null) return;
 
@@ -121,7 +121,7 @@ namespace WpfTaskManager
             {
                 return deleteUserCommand ?? (deleteUserCommand = new RelayCommand((o) =>
                 {
-                    DeleteUser();
+                    DeleteUserExecute();
                 }, o => SelectedUser != null));
             }
         }

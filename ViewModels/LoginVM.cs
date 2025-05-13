@@ -182,6 +182,34 @@ namespace WpfTaskManager
             }
         }
 
+        // Авторизация
+        private void LogInExecute(object o)
+        {
+            User user = App.db.Users.FirstOrDefault(u => u.Username == Username);
+            if (user == null)
+            {
+                IncorrectUserOrPass = true;
+            }
+            else if (PasswordHelper.VerifyPassword(((PasswordBox)o).Password, user.PasswordHash, user.Salt))
+            {
+                if (user.IdRole == App.db.Roles.FirstOrDefault(r => r.Name == "Unregistered").IdRole)
+                {
+                    MBWindow mb = new MBWindow();
+                    mb.Show(Application.Current.TryFindResource("login_request_not_confirmed_header").ToString(), Application.Current.TryFindResource("login_request_not_confirmed_body").ToString().Replace("\\n", Environment.NewLine), MessageBoxButton.OK);
+                }
+                else
+                {
+                    User = user;
+                    SaveAutoLogin();
+                    OpenMainWindow();
+                }
+            }
+            else
+            {
+                IncorrectUserOrPass = true;
+            }
+        }
+
         // Команда авторизации
         public RelayCommand LogInCommand
         {
@@ -189,29 +217,7 @@ namespace WpfTaskManager
             {
                 return loginCommand ?? (loginCommand = new RelayCommand((o) =>
                 {
-                    User user = App.db.Users.FirstOrDefault(u => u.Username == Username);
-                    if (user == null)
-                    {
-                        IncorrectUserOrPass = true;
-                    }
-                    else if (PasswordHelper.VerifyPassword(((PasswordBox)o).Password, user.PasswordHash, user.Salt))
-                    {
-                        if (user.IdRole == App.db.Roles.FirstOrDefault(r => r.Name == "Unregistered").IdRole)
-                        {
-                            MBWindow mb = new MBWindow();
-                            mb.Show(Application.Current.TryFindResource("login_request_not_confirmed_header").ToString(), Application.Current.TryFindResource("login_request_not_confirmed_body").ToString().Replace("\\n", Environment.NewLine), MessageBoxButton.OK);
-                        }
-                        else
-                        {
-                            User = user;
-                            SaveAutoLogin();
-                            OpenMainWindow();
-                        }
-                    }
-                    else
-                    {
-                        IncorrectUserOrPass = true;
-                    }
+                    LogInExecute(o);
                 }));
             }
         }
@@ -231,6 +237,34 @@ namespace WpfTaskManager
             }
         }
 
+        // Регистрация
+        private void SignUpExecute(object o)
+        {
+            if (App.db.Users.FirstOrDefault(u => u.Username == Username) != null)
+            {
+                IncorrectUsername = true;
+            }
+            else
+            {
+                string pass = ((PasswordBox)o).Password;
+                PasswordHelper.CreatePasswordHash(pass, out string hash, out string salt);
+
+
+                User user = new User(Username, Name, Email, hash, salt);
+                App.db.Users.Add(user);
+                App.db.SaveChanges();
+
+                MBWindow mb = new MBWindow();
+
+                Username = null;
+                Email = null;
+                Name = null;
+                ((PasswordBox)o).Password = null;
+
+                mb.Show(Application.Current.TryFindResource("login_request_sent_header").ToString(), Application.Current.TryFindResource("login_request_sent_body").ToString().Replace("\\n", Environment.NewLine), MessageBoxButton.OK);
+            }
+        }
+
         // Команда регистрации
         public RelayCommand SignUpCommand
         {
@@ -238,29 +272,7 @@ namespace WpfTaskManager
             {
                 return signupCommand ?? (signupCommand = new RelayCommand((o) =>
                 {
-                    if (App.db.Users.FirstOrDefault(u => u.Username == Username) != null)
-                    {
-                        IncorrectUsername = true;
-                    }
-                    else
-                    {
-                        string pass = ((PasswordBox)o).Password;
-                        PasswordHelper.CreatePasswordHash(pass, out string hash, out string salt);
-
-
-                        User user = new User(Username, Name, Email, hash, salt);
-                        App.db.Users.Add(user);
-                        App.db.SaveChanges();
-
-                        MBWindow mb = new MBWindow();
-
-                        Username = null;
-                        Email = null;
-                        Name = null;
-                        ((PasswordBox)o).Password = null;
-
-                        mb.Show(Application.Current.TryFindResource("login_request_sent_header").ToString(), Application.Current.TryFindResource("login_request_sent_body").ToString().Replace("\\n", Environment.NewLine), MessageBoxButton.OK);
-                        }
+                    SignUpExecute(o);
                 }, o => Username != null && Username.Length >= 6 && ((PasswordBox)o).SecurePassword != null && ((PasswordBox)o).SecurePassword.Length >= 6));
             }
         }
