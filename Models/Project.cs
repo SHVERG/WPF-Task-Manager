@@ -31,5 +31,13 @@ namespace WpfTaskManager
             Deadline = deadline;
             IdCat = idCat;
         }
+
+        public AppContext AppContext
+        {
+            get => default;
+            set
+            {
+            }
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace WpfTaskManager
     {
         private RelayCommand refreshCommand, addProjCommand, editProjCommand, addProjCatCommand, deleteProjCommand;
         private RelayCommand addTaskCommand, editTaskCommand, toggleTaskCommand, completeTaskCommand, deleteTaskCommand;
-        private RelayCommand defaultViewCommand, ganttViewCommand;
+        //private RelayCommand defaultViewCommand, ganttViewCommand;
         private RelayCommand reportCommand, showLogCommand, clearLogCommand, manageUsersCommand;
         private RelayCommand exportProjCommand, exportAllProjsCommand, importProjCommand, changeLanguageCommand, logoutCommand;
 
@@ -223,7 +223,7 @@ namespace WpfTaskManager
 
                 ReportVM vm = new ReportVM(isProj);
 
-                var w = new ReportWindow()
+                Window w = new ReportWindow()
                 {
                     DataContext = vm
                 };
@@ -252,7 +252,7 @@ namespace WpfTaskManager
         private void ManageUsersExecute(object o)
         {
 
-            var w = new ManageUsersWindow()
+            Window w = new ManageUsersWindow()
             {
                 DataContext = new ManageUsersVM(bool.Parse(o.ToString()))
             };
@@ -315,7 +315,7 @@ namespace WpfTaskManager
         {
             AddVM addVM = new AddVM(null);
 
-            var w = new AddWindow()
+            Window w = new AddWindow()
             {
                 DataContext = addVM
             };
@@ -355,7 +355,7 @@ namespace WpfTaskManager
         private void AddProjCatExecute(object o)
         {
             AddCatVM vm = new AddCatVM();
-            var w = new AddCatWindow()
+            Window w = new AddCatWindow()
             {
                 DataContext = vm
             };
@@ -389,7 +389,7 @@ namespace WpfTaskManager
         {
             EditVM editVM = new EditVM(SelectedProj);
 
-            var w = new EditWindow()
+            Window w = new EditWindow()
             {
                 DataContext = editVM
             };
@@ -500,7 +500,7 @@ namespace WpfTaskManager
         {
             AddVM addVM = new AddVM(SelectedProj.IdProject);
 
-            var w = new AddWindow()
+            Window w = new AddWindow()
             {
                 DataContext = addVM
             };
@@ -535,7 +535,7 @@ namespace WpfTaskManager
         {
             EditVM editVM = new EditVM(SelectedTask);
 
-            var w = new EditWindow()
+            Window w = new EditWindow()
             {
                 DataContext = editVM
             };
@@ -659,7 +659,7 @@ namespace WpfTaskManager
                 AddLog(false, SelectedTask.IdTask, 3, $"Task \"{SelectedTask.Name}\" deleted.");
                 ProjTasks.Remove(SelectedTask);
 
-                bool compProj = true;
+                bool compProj = App.db.Tasks.FirstOrDefault(t => t.IdProject == SelectedProj.IdProject) == null ? false : true;
 
                 foreach (Task task in App.db.Tasks.Where(task => task.IdProject == selectedProj.IdProject))
                     if (task.Completed == null)
@@ -691,7 +691,7 @@ namespace WpfTaskManager
         // Создание журнала
         private void LogExecute(object o)
         {
-            var w = new LogWindow();
+            Window w = new LogWindow();
 
             Opacity = 0.5;
             w.ShowDialog();
@@ -822,7 +822,7 @@ namespace WpfTaskManager
                     Properties.Settings.Default.AutoLogin = false;
                     Properties.Settings.Default.Save();
 
-                    var loginWindow = new LoginWindow();
+                    Window loginWindow = new LoginWindow();
 
                     loginWindow.Show();
                     Application.Current.MainWindow = loginWindow;
@@ -906,7 +906,7 @@ namespace WpfTaskManager
             if (open.ShowDialog() == true)
             {
                 string names = "";
-                var doc = XDocument.Load(open.FileName);
+                XDocument doc = XDocument.Load(open.FileName);
                 IEnumerable<XElement> elements = doc.Descendants("project");
 
                 foreach (XElement proj in elements)
@@ -983,6 +983,7 @@ namespace WpfTaskManager
         }
 
         // Переключение на диаграмму Ганта
+        /*
         private void GanttViewExecute()
         {
             
@@ -1017,6 +1018,7 @@ namespace WpfTaskManager
                 }));
             }
         }
+        */
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -95,7 +95,7 @@ namespace WpfTaskManager
         {
             if (Settings.Default.AutoLogin && db.Users.FirstOrDefault(u => u.Username == Settings.Default.SavedUsername && u.IdRole != db.Roles.FirstOrDefault(r => r.Name == "Unregistered").IdRole) != null)
             {
-                var main = new MainWindow()
+                Window main = new MainWindow()
                 {
                     DataContext = new MainVM(db.Users.FirstOrDefault(u => u.Username == Settings.Default.SavedUsername))
                 };
@@ -104,7 +104,7 @@ namespace WpfTaskManager
             }
             else
             {
-                var loginWindow = new LoginWindow();
+                Window loginWindow = new LoginWindow();
                 loginWindow.Show();
             }
         }

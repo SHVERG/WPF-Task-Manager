@@ -112,5 +112,13 @@ namespace WpfTaskManager
 
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        public AppContext AppContext
+        {
+            get => default;
+            set
+            {
+            }
+        }
     }
 }

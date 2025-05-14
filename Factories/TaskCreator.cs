@@ -15,8 +15,8 @@ namespace WpfTaskManager
 
             //using (AppContext db = new AppContext())
             //{
-                if (App.db.Projects.Find(vm.proj.IdProject).Deadline.Date == vm.Deadline && time > App.db.Projects.Find(vm.proj.IdProject).Deadline.TimeOfDay)
-                    time = App.db.Projects.Find(vm.proj.IdProject).Deadline.TimeOfDay;
+                if (App.db.Projects.Find(vm.Project.IdProject).Deadline.Date == vm.Deadline && time > App.db.Projects.Find(vm.Project.IdProject).Deadline.TimeOfDay)
+                    time = App.db.Projects.Find(vm.Project.IdProject).Deadline.TimeOfDay;
 
                 if (vm.Deadline == DateTime.Now.Date && time < DateTime.Now.TimeOfDay)
                 {
@@ -25,7 +25,7 @@ namespace WpfTaskManager
             //}
 
             DateTime deadlineDate = ((DateTime)vm.Deadline).Add(time);
-            return new Task(vm.proj.IdProject, vm.Name.Trim(), vm.Description, vm.StartDate.Value, deadlineDate, vm.SelectedUser.IdUser);
+            return new Task(vm.Project.IdProject, vm.Name.Trim(), vm.Description, vm.StartDate.Value, deadlineDate, vm.SelectedUser.IdUser);
         }
     }
 }

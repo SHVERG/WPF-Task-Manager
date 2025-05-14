@@ -12,7 +12,6 @@ namespace WpfTaskManager
 
         public BoolToVisibilityConverter()
         {
-            // Set defaults
             TrueValue = Visibility.Visible;
             FalseValue = Visibility.Collapsed;
         }

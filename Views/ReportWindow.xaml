@@ -21,12 +21,10 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <ResourceDictionary>
-            <local:BoolToVisibilityConverter x:Key="BoolToVis" 
+        <local:BoolToVisibilityConverter x:Key="BoolToVis" 
                                              TrueValue="Collapsed" 
                                              FalseValue="Visible"/>
-            <local:BindingProxy x:Key="VisProxy" Data="{Binding Path=IsProj}"/>
-        </ResourceDictionary>
+        <local:BindingProxy x:Key="VisProxy" Data="{Binding Path=IsProj}"/>
     </Window.Resources>
 
     <Grid>
@@ -35,14 +33,14 @@
             <StackPanel>
                 <Label Content="{Binding Title}" 
                        HorizontalAlignment="Center" 
-                       Foreground="{StaticResource PrimaryHueMidBrush}" 
+                       Foreground="{StaticResource MaterialDesign.Brush.Primary}" 
                        FontWeight="Bold"
                        FontSize="16"/>
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center">
                     <Label Content="{Binding ChoiceLabel}"
-                           Foreground="{StaticResource PrimaryHueMidBrush}"
+                           Foreground="{StaticResource MaterialDesign.Brush.Primary}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
 
@@ -56,7 +54,7 @@
                     </ComboBox>
 
                     <Label Content="{DynamicResource report_by}"
-                           Foreground="{StaticResource PrimaryHueMidBrush}"
+                           Foreground="{StaticResource MaterialDesign.Brush.Primary}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
                     
@@ -68,20 +66,20 @@
                     </ComboBox>
                     
                     <Label Content="{DynamicResource report_from}"
-                           Foreground="{StaticResource PrimaryHueMidBrush}"
+                           Foreground="{StaticResource MaterialDesign.Brush.Primary}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
                     
                     <DatePicker x:Name="StartDate" SelectedDate="{Binding StartDate}"/>
 
                     <Label Content="{DynamicResource report_to}"
-                           Foreground="{StaticResource PrimaryHueMidBrush}"
+                           Foreground="{StaticResource MaterialDesign.Brush.Primary}"
                            FontWeight="SemiBold"
                            FontSize="14"/>
                     <DatePicker x:Name="EndDate" SelectedDate="{Binding EndDate}"/>
 
                     <Button Content="{DynamicResource main_menu_log_clear}"
-                            Foreground="{StaticResource PrimaryHueMidBrush}"
+                            Foreground="{StaticResource MaterialDesign.Brush.Primary}"
                             FontWeight="SemiBold"
                             FontSize="14"
                             Style="{StaticResource MaterialDesignToolForegroundButton}"
@@ -92,7 +90,7 @@
                             HorizontalAlignment="Center">
                     <CheckBox IsChecked="{Binding IsReliableChecked}"
                               Content="{DynamicResource report_by_reliable}"
-                              Foreground="{StaticResource PrimaryHueMidBrush}"
+                              Foreground="{StaticResource MaterialDesign.Brush.Primary}"
                               FontWeight="SemiBold"
                               FontSize="14"
                               Margin="10,0,0,0"

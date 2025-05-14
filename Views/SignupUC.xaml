@@ -7,6 +7,11 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
              mc:Ignorable="d" 
              d:DesignHeight="680" d:DesignWidth="1000">
+
+    <UserControl.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.InputBindings>
             <KeyBinding Key="Return"
@@ -14,7 +19,7 @@
         </Grid.InputBindings>
 
         <Border CornerRadius="10"
-                Background="{StaticResource PrimaryHueDarkBrush}"
+                Background="{StaticResource MaterialDesign.Brush.Primary}"
                 Grid.Column="1">
             <Grid Margin="5">
 
@@ -80,7 +85,7 @@
                                FontSize="24"
                                Foreground="{StaticResource MaterialDesignValidationErrorBrush}"
                                Margin="0,10,0,0"
-                               Visibility="{Binding IncorrectUsername, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Visibility="{Binding IncorrectUsername, Converter={StaticResource BoolToVis}}"
                                VerticalAlignment="Center"/>
                         
                         <StackPanel Orientation="Horizontal"

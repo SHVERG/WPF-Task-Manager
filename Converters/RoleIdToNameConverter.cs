@@ -11,7 +11,7 @@ namespace WpfTaskManager
         {
             if (value is int id)
             {
-                var role = App.db.Roles.FirstOrDefault(r => r.IdRole == id);
+                Role role = App.db.Roles.FirstOrDefault(r => r.IdRole == id);
                 return role?.Name ?? $"Роль {id}";
             }
 

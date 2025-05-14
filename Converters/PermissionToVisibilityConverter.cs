@@ -20,7 +20,7 @@ namespace WpfTaskManager
             if (!int.TryParse(value.ToString(), out roleId))
                 return Visibility.Collapsed;
 
-            var role = App.db.Roles.Find(roleId);
+            Role role = App.db.Roles.Find(roleId);
             if (role == null)
                 return Visibility.Collapsed;
 

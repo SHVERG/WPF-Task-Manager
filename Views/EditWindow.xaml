@@ -26,7 +26,7 @@
             <StackPanel>
                 <Label Content="{DynamicResource name_caps}" 
                        HorizontalAlignment="Center" 
-                       Foreground="{StaticResource PrimaryHueMidBrush}" 
+                       Foreground="{StaticResource MaterialDesign.Brush.Primary}" 
                        FontWeight="Bold"
                        FontSize="14"/>
 
@@ -38,7 +38,7 @@
 
                 <Label Content="{DynamicResource desc_caps}" 
                        HorizontalAlignment="Center" 
-                       Foreground="{StaticResource PrimaryHueMidBrush}" 
+                       Foreground="{StaticResource MaterialDesign.Brush.Primary}" 
                        FontWeight="Bold"
                        FontSize="14"/>
 

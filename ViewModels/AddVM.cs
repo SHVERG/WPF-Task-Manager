@@ -29,30 +29,27 @@ namespace WpfTaskManager
 
         public AddVM(int? id)
         {
+            StartDateLimitStart = DateTime.Now;
+            DeadlineLimitStart = DateTime.Now.AddDays(1);
 
             if (id.HasValue)
             {
-                proj = App.db.Projects.Find(id);
+                Project = App.db.Projects.Find(id);
 
-                StartDateLimitStart = App.db.Projects.Find(id).StartDate;
-                DeadlineLimitStart = App.db.Projects.Find(id).StartDate;
+                StartDateLimitEnd = Project.Deadline.AddDays(-1);
+                DeadlineLimitEnd = Project.Deadline;
 
-                StartDateLimitEnd = App.db.Projects.Find(id).Deadline.AddDays(-1);
-                DeadlineLimitEnd = App.db.Projects.Find(id).Deadline;
-                Users = new ObservableCollection<User>(App.db.Users.Where(p => p.IdRole==3));
+                Users = new ObservableCollection<User>(App.db.Users.Where(p => p.IdRole == App.db.Roles.FirstOrDefault(r => r.Name == "Member").IdRole));
             }
             else
             {
-                StartDateLimitStart = DateTime.Now;
-                DeadlineLimitStart = DateTime.Now;
-
                 StartDateLimitEnd = DateTime.MaxValue;
                 DeadlineLimitEnd = DateTime.MaxValue;
             }
         }
 
         // Свойства
-        public Project proj { get; private set; }
+        public Project Project { get; private set; }
 
         public DateTime StartDateLimitStart
         {
@@ -212,7 +209,7 @@ namespace WpfTaskManager
         // Проверка на уникальность названия создаваемого проекта
         private bool isUnique()
         {
-            if (proj != null) return true;
+            if (Project != null) return true;
 
             foreach (Project pr in App.db.Projects)
             {
@@ -229,7 +226,7 @@ namespace WpfTaskManager
         // Условие запуска команды добавления проекта/задачи
         private bool AddCanExecute()
         {
-            return Name != null && Deadline != null && (SelectedUser != null || proj == null) && Name.Trim().Length != 0 && Name.Trim().Length <= 30 && Description.Trim().Length <= 500 && isUnique();
+            return Name != null && StartDate != null && Deadline != null && (SelectedUser != null || Project == null) && Name.Trim().Length != 0 && Name.Trim().Length <= 30 && Description.Trim().Length <= 500 && isUnique();
         }
 
         // Команда добавления проекта/задачи

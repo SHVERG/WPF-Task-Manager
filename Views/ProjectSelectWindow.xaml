@@ -31,7 +31,7 @@
 
                 <Label Content="{DynamicResource main_select_proj}" 
                        HorizontalAlignment="Center" 
-                       Foreground="{StaticResource PrimaryHueMidBrush}" 
+                       Foreground="{StaticResource MaterialDesign.Brush.Primary}" 
                        FontWeight="Bold"
                        FontSize="14"/>
 

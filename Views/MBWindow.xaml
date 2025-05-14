@@ -12,6 +12,7 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="{x:Null}">
+    
     <Border Background="{StaticResource MaterialDesignBackground}" 
             CornerRadius="10" 
             BorderThickness="1" 
@@ -26,7 +27,7 @@
             <Label Name="CaptionContainer" 
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Center" 
-                   Foreground="{StaticResource PrimaryHueMidBrush}" 
+                   Foreground="{StaticResource MaterialDesign.Brush.Primary}" 
                    FontWeight="Bold" 
                    FontSize="16"/>
 

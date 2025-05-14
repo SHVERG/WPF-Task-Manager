@@ -82,7 +82,14 @@ namespace WpfTaskManager
             StartDate = startdate;
             Deadline = deadline;
             IdUser = idUser;
-            //IsRunning = 0;
+        }
+
+        public AppContext AppContext
+        {
+            get => default;
+            set
+            {
+            }
         }
     }
 }
