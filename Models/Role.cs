@@ -15,13 +15,5 @@ namespace WpfTaskManager
         public int CanEditTasks { get; set; }
         public int CanExportTasks { get; set; }
         public int HasAccess {  get; set; }
-
-        public AppContext AppContext
-        {
-            get => default;
-            set
-            {
-            }
-        }
     }
 }

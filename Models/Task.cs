@@ -83,13 +83,5 @@ namespace WpfTaskManager
             Deadline = deadline;
             IdUser = idUser;
         }
-
-        public AppContext AppContext
-        {
-            get => default;
-            set
-            {
-            }
-        }
     }
 }
