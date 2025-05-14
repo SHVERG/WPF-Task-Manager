@@ -156,13 +156,13 @@
                                 </MenuItem>
                             </MenuItem>
 
-                            <MenuItem Header="{DynamicResource main_menu_view}" 
+                            <!--MenuItem Header="{DynamicResource main_menu_view}" 
                                       FontWeight="SemiBold">
                                 <MenuItem Header="{DynamicResource main_menu_view_default}"/>
 
                                 <MenuItem Header="{DynamicResource main_menu_view_gantt}"
                                           Command="{Binding GanttViewCommand}"/>
-                            </MenuItem>
+                            </MenuItem!-->
 
                             <MenuItem Header="{DynamicResource main_menu_report}" 
                                       FontWeight="SemiBold"

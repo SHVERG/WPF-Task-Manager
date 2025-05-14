@@ -10,7 +10,7 @@ namespace WpfTaskManager
         {
             InitializeComponent();
 
-            var vm = new LoginVM();
+            LoginVM vm = new LoginVM();
             vm.LoginSucceeded += () =>
             {
                 Close();

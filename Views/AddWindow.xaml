@@ -84,7 +84,7 @@
                                 FontSize="12"
                                 FirstDayOfWeek="Monday"
                                 SelectedDate="{Binding Deadline}"
-                                DisplayDateStart="{Binding StartDate}"
+                                DisplayDateStart="{Binding DeadlineLimitStart}"
                                 DisplayDateEnd="{Binding DeadlineLimitEnd}"
                                 IsEnabled="{Binding StartDate, Converter={StaticResource DateToBool}}">
                     </DatePicker>
@@ -100,7 +100,7 @@
                 <StackPanel Orientation="Horizontal" 
                             HorizontalAlignment="Center" 
                             Margin="3"
-                            Visibility="{Binding proj, Converter={StaticResource NullToVis}}">
+                            Visibility="{Binding Project, Converter={StaticResource NullToVis}}">
 
                     <Label Content="{DynamicResource reliable_caps}" 
                            Foreground="{StaticResource MaterialDesign.Brush.Primary}" 
