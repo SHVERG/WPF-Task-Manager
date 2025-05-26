@@ -197,7 +197,6 @@ namespace WpfTaskManager
         public void ShowExecute()
         {
             string Result;
-            string Result_ru;
 
             DGSource.Clear();
 
@@ -233,49 +232,32 @@ namespace WpfTaskManager
                 }
 
                 foreach (Project p in projs)
+                {
+                    TimeSpan ts = new TimeSpan();
+
+                    foreach (Task t in App.db.Tasks.Where(t => t.IdProject == p.IdProject))
                     {
-                        TimeSpan ts = new TimeSpan();
-
-                        foreach (Task t in App.db.Tasks.Where(t => t.IdProject == p.IdProject))
-                        {
-                            ts = ts.Add(SecondsToTimeSpan(t.Timespent));
-                        }
-
-                        if (p.Completed != null)
-                        {
-                            if (p.Completed <= p.Deadline)
-                            {
-                                Result = "Completed in time";
-                                Result_ru = "Выполнен вовремя";
-                            }
-                            else
-                            {
-                                Result = "Completed in bad time";
-                                Result_ru = "Выполнен невовремя";
-                            }
-                        }
-                        else
-                        {
-                            Result = "Not completed";
-                            Result_ru = "Не выполнен";
-                        }
-
-                        string comp;
-                        if (p.Completed != null)
-                            comp = p.Completed.Value.ToString("dd.MM.yyyy");
-                        else
-                            comp = "-";
-
-                        switch (App.Language.Name)
-                        {
-                            case "ru-RU":
-                                DGSource.Add(new Report(p.Name, null, null, p.StartDate, p.Deadline, comp, Result_ru, ts));
-                                break;
-                            default:
-                                DGSource.Add(new Report(p.Name, null, null, p.StartDate, p.Deadline, comp, Result, ts));
-                                break;
-                        }
+                        ts = ts.Add(SecondsToTimeSpan(t.Timespent));
                     }
+
+                    if (p.Completed != null)
+                    {
+                        if (p.Completed <= p.Deadline)
+                            Result = App.Current.TryFindResource("report_comp_in_time").ToString();
+                        else
+                            Result = App.Current.TryFindResource("report_comp_in_bad_time").ToString();
+                    }
+                    else
+                        Result = App.Current.TryFindResource("report_not_comp").ToString();
+
+                    string comp;
+                    if (p.Completed != null)
+                        comp = p.Completed.Value.ToString("dd.MM.yyyy");
+                    else
+                        comp = "-";
+
+                    DGSource.Add(new Report(p.Name, null, null, p.StartDate, p.Deadline, comp, Result, ts));
+                }
             }
             else
             {
@@ -312,21 +294,12 @@ namespace WpfTaskManager
                     if (t.Completed != null)
                     {
                         if (t.Completed <= t.Deadline)
-                        {
-                            Result = "Completed in time";
-                            Result_ru = "Выполнена вовремя";
-                        }
+                            Result = App.Current.TryFindResource("report_comp_in_time").ToString();
                         else
-                        {
-                            Result = "Completed in bad time";
-                            Result_ru = "Выполнена невовремя";
-                        }
+                            Result = App.Current.TryFindResource("report_comp_in_bad_time").ToString();
                     }
                     else
-                    {
-                        Result = "Not completed";
-                        Result_ru = "Не выполнена";
-                    }
+                        Result = App.Current.TryFindResource("report_not_comp").ToString();
 
                     string comp;
                     if (t.Completed != null)
@@ -334,15 +307,9 @@ namespace WpfTaskManager
                     else
                         comp = "-";
 
-                    switch (App.Language.Name)
-                    {
-                        case "ru-RU":
-                            DGSource.Add(new Report(t.Name, App.db.Projects.Find(t.IdProject).Name, App.db.Users.Find(t.IdUser).Name, t.StartDate, t.Deadline, comp, Result_ru, SecondsToTimeSpan(t.Timespent)));
-                            break;
-                        default:
-                            DGSource.Add(new Report(t.Name, App.db.Projects.Find(t.IdProject).Name, App.db.Users.Find(t.IdUser).Name, t.StartDate, t.Deadline, comp, Result, SecondsToTimeSpan(t.Timespent)));
-                            break;
-                    }
+                    string name = App.db.Users.Find(t.IdUser) != null ? App.db.Users.Find(t.IdUser).Name : "-";
+
+                    DGSource.Add(new Report(t.Name, App.db.Projects.Find(t.IdProject).Name, name, t.StartDate, t.Deadline, comp, Result, SecondsToTimeSpan(t.Timespent)));
                 }
             }
         }
@@ -372,16 +339,7 @@ namespace WpfTaskManager
                 if (IsProj)
                 {
 
-                    switch (App.Language.Name)
-                    {
-                        case "ru-RU":
-                            str = "Название;Начат;Крайний срок;Выполнен;Затрачено времени;Результат\n";
-                            break;
-                        default:
-
-                            str = "Name;Start;Deadline;Completed;Timespent;Result\n";
-                            break;
-                    }
+                    str = App.Current.TryFindResource("report_saving_proj").ToString().Replace("\\n", Environment.NewLine);
 
                     foreach (Report r in DGSource)
                     {
@@ -390,16 +348,7 @@ namespace WpfTaskManager
                 }
                 else
                 {
-                    switch (App.Language.Name)
-                    {
-                        case "ru-RU":
-                            str = "Название;Название проекта;Ответственный;Начата;Крайний срок;Выполнена;Затрачено времени;Результат\n";
-                            break;
-                        default:
-
-                            str = "Name;Project Name;Reliable;Start;Deadline;Completed;Timespent;Result\n";
-                            break;
-                    }
+                    str = App.Current.TryFindResource("report_saving_task").ToString().Replace("\\n", Environment.NewLine);
 
                     foreach (Report r in DGSource)
                     {

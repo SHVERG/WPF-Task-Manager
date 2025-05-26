@@ -15,21 +15,8 @@ namespace WpfTaskManager
 
             string s_hrs, s_mins;
 
-            switch (App.Language.Name)
-            {
-                case "ru-RU":
-                    {
-                        s_hrs = "часов";
-                        s_mins = "минут";
-                        break;
-                    }
-                default:
-                    {
-                        s_hrs = "hours";
-                        s_mins = "minutes";
-                        break;
-                    }
-            }
+            s_hrs = App.Current.TryFindResource("hours").ToString();
+            s_mins = App.Current.TryFindResource("mins").ToString();
 
             return $"{hrs} {s_hrs} {mins} {s_mins}";
         }

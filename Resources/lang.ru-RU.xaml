@@ -34,7 +34,7 @@
     <v:String x:Key="main_menu_complete">Завершить</v:String>
     <v:String x:Key="main_menu_start">Начать</v:String>
     <v:String x:Key="main_menu_stop">Остановить</v:String>
-    <v:String x:Key="main_not_comp">Не выполнен(а)</v:String>
+    <v:String x:Key="main_not_comp">Не завершен(а)</v:String>
 
     <v:String x:Key="projects_caps">ПРОЕКТЫ</v:String>
     <v:String x:Key="project_info">ИНФОРМАЦИЯ О ПРОЕКТЕ</v:String>
@@ -61,6 +61,8 @@
     <v:String x:Key="reliable">Ответственный</v:String>
     <v:String x:Key="reliable_caps">ОТВЕТСТВЕННЫЙ</v:String>
     <v:String x:Key="no_reliable">-</v:String>
+    <v:String x:Key="hours">часов</v:String>
+    <v:String x:Key="mins">минут</v:String>
 
     <v:String x:Key="main_select_proj">ВЫБРАТЬ ПРОЕКТ</v:String>
     <v:String x:Key="main_add_proj">ДОБАВИТЬ ПРОЕКТ</v:String>
@@ -77,7 +79,6 @@
 
     <v:String x:Key="report_from">С</v:String>
     <v:String x:Key="report_to">До</v:String>
-    
     <v:String x:Key="report_proj_name">Название проекта</v:String>
     <v:String x:Key="report_comp">Завершенные</v:String>
     <v:String x:Key="report_uncomp">Незавершенные</v:String>
@@ -88,6 +89,11 @@
     <v:String x:Key="report_by_reliable">По ответственному</v:String>
     <v:String x:Key="report_projects_title">ОТЧЕТ ПО ПРОЕКТАМ</v:String>
     <v:String x:Key="report_tasks_title">ОТЧЕТ ПО ЗАДАЧАМ</v:String>
+    <v:String x:Key="report_comp_in_time">Завершен(а) вовремя</v:String>
+    <v:String x:Key="report_comp_in_bad_time">Завершен(а) невовремя</v:String>
+    <v:String x:Key="report_not_comp">Не завершен(а)</v:String>
+    <v:String x:Key="report_saving_proj">Название;Начат;Крайний срок;Выполнен;Затрачено времени;Результат\n</v:String>
+    <v:String x:Key="report_saving_task">Название;Название проекта;Ответственный;Начата;Крайний срок;Выполнена;Затрачено времени;Результат\n</v:String>
 
     <v:String x:Key="close">ЗАКРЫТЬ</v:String>
     <v:String x:Key="delete">УДАЛИТЬ</v:String>

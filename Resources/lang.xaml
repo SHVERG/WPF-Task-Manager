@@ -61,6 +61,8 @@
     <v:String x:Key="reliable">Reliable</v:String>
     <v:String x:Key="reliable_caps">RELIABLE</v:String>
     <v:String x:Key="no_reliable">-</v:String>
+    <v:String x:Key="hours">hours</v:String>
+    <v:String x:Key="mins">minutes</v:String>
 
     <v:String x:Key="main_select_proj">SELECT PROJECT</v:String>
     <v:String x:Key="main_add_proj">ADD PROJECT</v:String>
@@ -77,7 +79,6 @@
 
     <v:String x:Key="report_from">From</v:String>
     <v:String x:Key="report_to">To</v:String>
-
     <v:String x:Key="report_proj_name">Project Name</v:String>
     <v:String x:Key="report_comp">Completed</v:String>
     <v:String x:Key="report_uncomp">Uncompleted</v:String>
@@ -88,7 +89,12 @@
     <v:String x:Key="report_by_reliable">By reliable</v:String>
     <v:String x:Key="report_projects_title">PROJECTS REPORT</v:String>
     <v:String x:Key="report_tasks_title">TASKS REPORT</v:String>
-
+    <v:String x:Key="report_comp_in_time">Completed in time</v:String>
+    <v:String x:Key="report_comp_in_bad_time">Completed in bad time</v:String>
+    <v:String x:Key="report_not_comp">Not completed</v:String>
+    <v:String x:Key="report_saving_proj">Name;Start;Deadline;Completed;Timespent;Result\n</v:String>
+    <v:String x:Key="report_saving_task">Name;Project Name;Reliable;Start;Deadline;Completed;Timespent;Result\n</v:String>
+    
     <v:String x:Key="close">CLOSE</v:String>
     <v:String x:Key="delete">DELETE</v:String>
     <v:String x:Key="show">SHOW</v:String>

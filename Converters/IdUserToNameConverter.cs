@@ -21,7 +21,7 @@ namespace WpfTaskManager
                     return user.Name;
                 }
             }
-            return App.Current.TryFindResource("no_reliable");
+            return App.Current.TryFindResource("no_reliable").ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

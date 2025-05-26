@@ -9,17 +9,8 @@ namespace WpfTaskManager
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             DateTime? original = (DateTime?)value;
-            if (!original.HasValue)
-            {
-                switch (App.Language.Name)
-                {
-                    case "ru-RU":
-                        return "Не выполнен(а)";
-                    default:
-                        return "Not completed";
-                }
-            }
-            return original.ToString();
+
+            return !original.HasValue ? App.Current.TryFindResource("report_not_comp") : original.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

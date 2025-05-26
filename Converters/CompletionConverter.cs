@@ -10,23 +10,7 @@ namespace WpfTaskManager
         {
             DateTime? original = value as DateTime?;
 
-            if (!original.HasValue)
-                switch (App.Language.Name)
-                {
-                    case "ru-RU":
-                        return "Не завершено";
-                    default:
-                        return "Not Completed";
-
-                }
-            else
-                switch (App.Language.Name)
-                {
-                    case "ru-RU":
-                        return "Завершено";
-                    default:
-                        return "Completed";
-                }
+            return !original.HasValue ? App.Current.TryFindResource("report_not_comp").ToString() : App.Current.TryFindResource("comp").ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

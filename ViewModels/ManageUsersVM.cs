@@ -107,6 +107,10 @@ namespace WpfTaskManager
             if (SelectedUser == null) return;
 
             User user = App.db.Users.Find(SelectedUser.IdUser);
+
+            foreach (Task task in App.db.Tasks.Where(t => t.IdUser == user.IdUser))
+                task.IdUser = 0;
+
             App.db.Users.Remove(user);
             App.db.SaveChanges();
 
