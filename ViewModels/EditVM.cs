@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -7,11 +9,14 @@ namespace WpfTaskManager
     public class EditVM : INotifyPropertyChanged
     {
         private string name, description;
-        private bool isProject = true;
+        public bool isProject = true;
         private Task t;
         private Project p;
+        private User selected_user = null;
 
         private RelayCommand closeCommand, editCommand;
+
+        public ObservableCollection<User> Users { get; set; }
 
         // Конструкторы
         public EditVM()
@@ -21,6 +26,7 @@ namespace WpfTaskManager
         public EditVM(object obj)
         {
             p = obj as Project;
+
             if (p != null)
             {
                 Name = p.Name;
@@ -32,6 +38,9 @@ namespace WpfTaskManager
                 t = obj as Task;
                 Name = t.Name;
                 Description = t.Description;
+
+                Users = new ObservableCollection<User>(App.db.Users.Where(p => p.IdRole == App.db.Roles.FirstOrDefault(r => r.Name == "Member").IdRole));
+                SelectedUser = App.db.Users.Find(t.IdUser);
             }
         }
 
@@ -62,6 +71,19 @@ namespace WpfTaskManager
             }
         }
 
+        public User SelectedUser
+        {
+            get
+            {
+                return selected_user;
+            }
+            set
+            {
+                selected_user = value;
+                OnPropertyChanged();
+            }
+        }
+
         // Проверка на уникальность изменяемой задачи/проекта
         private bool isUnique()
         {
@@ -83,7 +105,7 @@ namespace WpfTaskManager
             }
             else
             {
-                return t.Name != Name || t.Description != Description;
+                return t.Name != Name || t.Description != Description || (SelectedUser != null && SelectedUser.IdUser != t.IdUser);
             }
 
         }

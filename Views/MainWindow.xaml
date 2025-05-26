@@ -474,9 +474,9 @@
 
                                     <DataGrid.ContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Header="{DynamicResource main_menu_start}"
+                                            <MenuItem Header="{Binding ToggleTaskContextHeader}"
                                                       Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanPerformTasks}"
-                                                      Command="{Binding StartTaskCommand}"/>
+                                                      Command="{Binding ToggleTaskCommand}"/>
 
                                             <MenuItem Header="{DynamicResource main_menu_edit_sub}"
                                                       Visibility="{Binding User.IdRole, Converter={StaticResource PermToVis}, ConverterParameter=CanEditTasks}"

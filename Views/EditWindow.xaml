@@ -20,6 +20,11 @@
         <local:EditVM/>
     </Window.DataContext>
 
+    <Window.Resources>
+        <local:DateTimeToBoolConverter x:Key="DateToBool"/>
+        <local:BoolToVisibilityConverter FalseValue="Visible" TrueValue="Collapsed" x:Key="BoolToVis"/>
+    </Window.Resources>
+    
     <Grid>
         <Border CornerRadius="5" 
                 Background="{StaticResource MaterialDesignBackground}">
@@ -49,8 +54,28 @@
                          AcceptsReturn="True"
                          AcceptsTab="True"
                          Margin="10, 0" 
-                         Height="265"
+                         Height="230"
                          Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <StackPanel Orientation="Horizontal" 
+                            HorizontalAlignment="Center" 
+                            Margin="3"
+                            Visibility="{Binding isProject, Converter={StaticResource BoolToVis}}">
+
+                    <Label Content="{DynamicResource reliable_caps}" 
+                           Foreground="{StaticResource MaterialDesign.Brush.Primary}" 
+                           FontWeight="Bold"
+                           FontSize="14"/>
+
+                    <ComboBox ItemsSource="{Binding Users}" 
+                              SelectedItem="{Binding SelectedUser}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
 
                 <StackPanel Grid.Row="1" 
                             VerticalAlignment="Center" 

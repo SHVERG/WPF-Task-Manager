@@ -60,6 +60,7 @@
     <v:String x:Key="color_caps">COLOR</v:String>
     <v:String x:Key="reliable">Reliable</v:String>
     <v:String x:Key="reliable_caps">RELIABLE</v:String>
+    <v:String x:Key="no_reliable">-</v:String>
 
     <v:String x:Key="main_select_proj">SELECT PROJECT</v:String>
     <v:String x:Key="main_add_proj">ADD PROJECT</v:String>

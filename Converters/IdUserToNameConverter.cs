@@ -16,9 +16,12 @@ namespace WpfTaskManager
             if (value is int userId && Users != null)
             {
                 User user = Users.FirstOrDefault(u => u.IdUser == userId);
-                return user.Name;
+                if (user != null)
+                {
+                    return user.Name;
+                }
             }
-            return "Unknown";
+            return App.Current.TryFindResource("no_reliable");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -35,7 +35,7 @@ namespace WpfTaskManager
             this.isProj = isProj;
             DGSource = new ObservableCollection<Report>();
 
-            Users = new ObservableCollection<User>(App.db.Users);
+            Users = new ObservableCollection<User>(App.db.Users.Where(p => p.IdRole == App.db.Roles.FirstOrDefault(r => r.Name == "Member").IdRole));
 
             if (isProj)
             {

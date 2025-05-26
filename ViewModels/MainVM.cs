@@ -15,7 +15,6 @@ namespace WpfTaskManager
     {
         private RelayCommand refreshCommand, addProjCommand, editProjCommand, addProjCatCommand, deleteProjCommand;
         private RelayCommand addTaskCommand, editTaskCommand, toggleTaskCommand, completeTaskCommand, deleteTaskCommand;
-        //private RelayCommand defaultViewCommand, ganttViewCommand;
         private RelayCommand reportCommand, showLogCommand, clearLogCommand, manageUsersCommand;
         private RelayCommand exportProjCommand, exportAllProjsCommand, importProjCommand, changeLanguageCommand, logoutCommand;
 
@@ -561,6 +560,12 @@ namespace WpfTaskManager
                 {
                     AddLog(false, edit.IdTask, 1, $"Task \"{edit.Name}\" description changed.");
                     edit.Description = editVM.Description.Trim();
+                }
+
+                if (edit.IdUser != editVM.SelectedUser.IdUser)
+                {
+                    AddLog(false, edit.IdTask, 1, $"Task \"{edit.Name}\" reliable changed.");
+                    edit.IdUser = editVM.SelectedUser.IdUser;
                 }
 
                 App.db.SaveChanges();

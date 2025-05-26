@@ -60,6 +60,7 @@
     <v:String x:Key="color_caps">ЦВЕТ</v:String>
     <v:String x:Key="reliable">Ответственный</v:String>
     <v:String x:Key="reliable_caps">ОТВЕТСТВЕННЫЙ</v:String>
+    <v:String x:Key="no_reliable">-</v:String>
 
     <v:String x:Key="main_select_proj">ВЫБРАТЬ ПРОЕКТ</v:String>
     <v:String x:Key="main_add_proj">ДОБАВИТЬ ПРОЕКТ</v:String>
